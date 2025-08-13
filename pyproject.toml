@@ -1,0 +1,6 @@
+[project]
+name = "fourward-intellioptics"
+version = "0.2.0"
+description = "4WardMotion’s custom visual AI SDK (Groundlight-compatible)"
+authors = [{ name = "4WardMotion", email = "dev@4wardmotions.com" }]
+dependencies = ["requests>=2.31.0"]
