@@ -1,5 +1,8 @@
 import os
+<<<<<<< HEAD
 import time
+=======
+>>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)
 import requests
 from .models import Detector, ImageQuery
 from .exceptions import APIError
@@ -25,6 +28,7 @@ class IntelliOptics:
             raise APIError(response)
         return Detector(**response.json())
 
+<<<<<<< HEAD
     def list_detectors(self):
         response = requests.get(f"{self.endpoint}/api/detectors", headers=get_headers(self.api_token), verify=self.verify_tls)
         if response.status_code != 200:
@@ -37,6 +41,8 @@ class IntelliOptics:
             raise APIError(response)
         return {"status": "deleted"}
 
+=======
+>>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)
     def submit_image_query(self, detector_id, image_path, wait=True):
         with open(image_path, "rb") as img_file:
             files = {"image": img_file}
@@ -58,6 +64,7 @@ class IntelliOptics:
         if response.status_code != 200:
             raise APIError(response)
         return {"status": "Label added"}
+<<<<<<< HEAD
 
     def wait_for_confident_result(self, query_id, timeout=10):
         start = time.time()
@@ -77,3 +84,5 @@ class IntelliOptics:
         if result and result.get("confidence", 0) >= threshold:
             return result
         raise ValueError("Result not confident enough")
+=======
+>>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)

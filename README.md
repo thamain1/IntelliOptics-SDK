@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # IntelliOptics SDK v0.2
 Now with ask(), list_detectors(), and more.
 
@@ -73,3 +74,7 @@ Azure Blob & SQL integration
 
 📄 License
 MIT License (c) 2025 4WardMotion
+=======
+# fourward-intellioptics SDK
+Custom visual inference SDK for 4WardMotion.
+>>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)
