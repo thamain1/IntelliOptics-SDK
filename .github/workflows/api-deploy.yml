@@ -1,4 +1,4 @@
-﻿name: Deploy API to Azure App Service
+name: Deploy API to Azure App Service
 
 on:
   push:
@@ -16,7 +16,8 @@ jobs:
 
       # Create a zip with the api/ directory at the root of the package
       - name: Package API
-        run: zip -r api-package.zip api
+        run: cd api
+zip -r ../api-package.zip .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
