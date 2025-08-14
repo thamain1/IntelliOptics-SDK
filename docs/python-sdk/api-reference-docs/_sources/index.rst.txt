@@ -1,0 +1,11 @@
+
+Welcome to IntelliOptics Python SDK's documentation!
+==================================================
+
+For a detailed view of the source code, visit the `IntelliOptics SDK GitHub Repository <https://github.com/thamain1/fourward-intellioptics/python-sdk>`_.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   models
