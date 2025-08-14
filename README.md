@@ -1,7 +1,7 @@
-# fourward-intellioptics SDK v0.2
+# Intelli)ptics SDK v0.2
 Now with ask(), list_detectors(), and more.
 
-An AI-powered computer vision SDK designed to mirror Groundlight's capabilities — but privately hosted and controlled by **4WardMotion**.
+An AI-powered computer vision SDK designed for IntelliOptics's capabilities — privately hosted and controlled by **4WardMotion**.
 
 ## 🚀 Features (v0.2)
 - ✅ `create_detector()`
