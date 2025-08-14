@@ -1,0 +1,34 @@
+﻿name: Deploy static site to Azure Storage
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: windows-latest   # uses robocopy in your build script
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build public site from docs
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+          .\tools\build-site.ps1
+          if (!(Test-Path .\site\index.html)) {
+            Write-Error "site/ was not generated. Check tools/build-site.ps1."
+          }
+
+      - name: Upload site to $web
+        uses: azure/cli@v2
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+        with:
+          inlineScript: |
+            az storage blob upload-batch `
+              --account-name $env:AZURE_STORAGE_ACCOUNT `
+              --account-key  $env:AZURE_STORAGE_KEY `
+              -s .\site -d '$web' --overwrite
