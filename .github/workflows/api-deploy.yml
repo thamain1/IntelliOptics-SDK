@@ -12,12 +12,14 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # Create a zip with the api/ directory at the root of the package
+      # Create a zip with the *contents* of api/ at the root of the zip
       - name: Package API
-        run: cd api
-zip -r ../api-package.zip .
+        run: |
+          cd api
+          zip -r ../api-package.zip .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
