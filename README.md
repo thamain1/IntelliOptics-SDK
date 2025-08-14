@@ -1,4 +1,4 @@
-# Intelli)ptics SDK v0.2
+# IntelliOptics SDK v0.2
 Now with ask(), list_detectors(), and more.
 
 An AI-powered computer vision SDK designed for IntelliOptics's capabilities — privately hosted and controlled by **4WardMotion**.
