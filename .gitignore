@@ -1,1 +1,6 @@
 ﻿site/
+api-package.zip
+*.tar.gz
+output.tar.gz
+__pycache__/
+*.pyc
