@@ -1,18 +1,14 @@
-﻿# main.py – IntelliOptics API
-import os
+﻿import os
 import time
 import uuid
 from typing import Optional, Literal
-
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form, Request
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 
-# ------------------------------------------------------------
-# Config
-# ------------------------------------------------------------
+# ---------- Config ----------
 API_TOKEN = os.getenv("INTELLOPTICS_API_TOKEN", "change-me")
 ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 
@@ -20,21 +16,20 @@ app = FastAPI(title="IntelliOptics API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS if ALLOWED_ORIGINS != ["*"] else ["*"],
+    allow_origins=["*"] if ALLOWED_ORIGINS == ["*"] else ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ------------------------------------------------------------
-# Database (SQLite demo; swap for Postgres in prod)
-# ------------------------------------------------------------
-DB_PATH = os.getenv("DB_URL", "sqlite:///data/app.db")
+# ---------- DB (SQLite for demo) ----------
+DB_PATH = os.getenv("DB_URL", "sqlite:///data/app.db")  # switch to Postgres later
 os.makedirs("data", exist_ok=True)
 engine: Engine = create_engine(DB_PATH, future=True)
 
 def init_db():
     with engine.begin() as con:
-        con.execute("""CREATE TABLE IF NOT EXISTS detectors(
+        con.execute(text("""
+        CREATE TABLE IF NOT EXISTS detectors(
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             mode TEXT NOT NULL,
@@ -42,8 +37,9 @@ def init_db():
             threshold REAL NOT NULL,
             status TEXT NOT NULL DEFAULT 'active',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )""")
-        con.execute("""CREATE TABLE IF NOT EXISTS image_queries(
+        )"""))
+        con.execute(text("""
+        CREATE TABLE IF NOT EXISTS image_queries(
             id TEXT PRIMARY KEY,
             detector_id TEXT NOT NULL,
             answer TEXT NOT NULL,
@@ -51,21 +47,21 @@ def init_db():
             latency_ms INTEGER,
             model_version TEXT,
             ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )""")
-        con.execute("""CREATE TABLE IF NOT EXISTS feedback(
+        )"""))
+        con.execute(text("""
+        CREATE TABLE IF NOT EXISTS feedback(
             id TEXT PRIMARY KEY,
             image_query_id TEXT NOT NULL,
             correct_label TEXT NOT NULL,
             bboxes_json TEXT,
             ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )""")
+        )"""))
 
 init_db()
 
-# ------------------------------------------------------------
-# Auth dependency
-# ------------------------------------------------------------
+# ---------- Auth ----------
 def require_bearer():
+    from fastapi import Request
     def _dep(request: Request):
         auth = request.headers.get("Authorization", "")
         if not auth.startswith("Bearer "):
@@ -75,9 +71,7 @@ def require_bearer():
             raise HTTPException(status_code=403, detail="Invalid token")
     return _dep
 
-# ------------------------------------------------------------
-# Schemas
-# ------------------------------------------------------------
+# ---------- Schemas ----------
 AnswerLabel = Literal["YES", "NO", "COUNT", "UNCLEAR"]
 
 class DetectorOut(BaseModel):
@@ -86,7 +80,7 @@ class DetectorOut(BaseModel):
     mode: Literal["binary", "count", "custom"]
     query_text: str
     threshold: float
-    status: str
+    status: str = "active"
 
 class DetectorCreate(BaseModel):
     name: str
@@ -101,19 +95,7 @@ class AnswerOut(BaseModel):
     latency_ms: Optional[int] = None
     model_version: Optional[str] = "demo-v0"
 
-class ImageQueryJson(BaseModel):
-    detector_id: str
-    image: Optional[str] = None
-    wait: bool = True
-
-class FeedbackIn(BaseModel):
-    image_query_id: str
-    correct_label: AnswerLabel
-    bboxes: Optional[list[dict]] = None
-
-# ------------------------------------------------------------
-# Routes
-# ------------------------------------------------------------
+# ---------- Routes ----------
 @app.get("/healthz")
 def healthz():
     return {"status": "ok", "version": app.version}
@@ -143,9 +125,14 @@ def get_detector(detector_id: str):
     return row
 
 @app.post("/v1/image-queries", response_model=AnswerOut, dependencies=[Depends(require_bearer())])
-async def image_query(detector_id: str = Form(...), wait: bool = Form(True), image: Optional[UploadFile] = File(None)):
+async def image_query(
+    detector_id: str = Form(...),
+    wait: bool = Form(True),
+    image: Optional[UploadFile] = File(None)
+):
     start = time.time()
-    answer, conf = "UNCLEAR", 0.50
+    answer: AnswerLabel = "UNCLEAR"
+    conf = 0.50
     try:
         if image and "yes" in (image.filename or "").lower():
             answer, conf = "YES", 0.92
@@ -153,16 +140,24 @@ async def image_query(detector_id: str = Form(...), wait: bool = Form(True), ima
             answer, conf = "NO", 0.93
     except Exception:
         pass
+
     iq_id = str(uuid.uuid4())
     latency = int((time.time() - start) * 1000)
+
     with engine.begin() as con:
         con.execute(text("""
             INSERT INTO image_queries(id, detector_id, answer, confidence, latency_ms, model_version)
             VALUES(:id,:detector_id,:answer,:confidence,:latency,:mv)
         """), dict(id=iq_id, detector_id=detector_id, answer=answer,
                    confidence=conf, latency=latency, mv="demo-v0"))
+
     return {"image_query_id": iq_id, "answer": answer, "confidence": conf,
             "latency_ms": latency, "model_version": "demo-v0"}
+
+class ImageQueryJson(BaseModel):
+    detector_id: str
+    image: Optional[str] = None
+    wait: bool = True
 
 @app.post("/v1/image-queries-json", response_model=AnswerOut, dependencies=[Depends(require_bearer())])
 def image_query_json(payload: ImageQueryJson):
@@ -179,16 +174,10 @@ def image_query_json(payload: ImageQueryJson):
     return {"image_query_id": iq_id, "answer": answer, "confidence": conf,
             "latency_ms": latency, "model_version": "demo-v0"}
 
-@app.get("/v1/image-queries/{iq_id}", response_model=AnswerOut, dependencies=[Depends(require_bearer())])
-def get_image_query(iq_id: str):
-    with engine.begin() as con:
-        row = con.execute(text("""
-            SELECT id as image_query_id, answer, confidence, latency_ms, model_version
-            FROM image_queries WHERE id=:id
-        """), dict(id=iq_id)).mappings().first()
-    if not row:
-        raise HTTPException(404, "Not found")
-    return row
+class FeedbackIn(BaseModel):
+    image_query_id: str
+    correct_label: AnswerLabel
+    bboxes: Optional[list[dict]] = None
 
 @app.post("/v1/feedback", dependencies=[Depends(require_bearer())])
 def feedback(payload: FeedbackIn):
