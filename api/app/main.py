@@ -2,6 +2,7 @@
 import time
 import uuid
 from typing import Optional, Literal
+
 from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -16,7 +17,7 @@ app = FastAPI(title="IntelliOptics API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if ALLOWED_ORIGINS == ["*"] else ALLOWED_ORIGINS,
+    allow_origins=ALLOWED_ORIGINS if ALLOWED_ORIGINS != ["*"] else ["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -109,21 +110,20 @@ def create_detector(payload: DetectorCreate):
             VALUES(:id,:name,:mode,:query_text,:threshold,'active')
         """), dict(id=det_id, name=payload.name, mode=payload.mode,
                    query_text=payload.query_text, threshold=payload.threshold))
-        row = con.execute(text(
-            "SELECT id,name,mode,query_text,threshold,status FROM detectors WHERE id=:id"
-        ), dict(id=det_id)).mappings().one()
+        row = con.execute(text("SELECT id,name,mode,query_text,threshold,status FROM detectors WHERE id=:id"),
+                          dict(id=det_id)).mappings().one()
     return row
 
 @app.get("/v1/detectors/{detector_id}", response_model=DetectorOut, dependencies=[Depends(require_bearer())])
 def get_detector(detector_id: str):
     with engine.begin() as con:
-        row = con.execute(text(
-            "SELECT id,name,mode,query_text,threshold,status FROM detectors WHERE id=:id"
-        ), dict(id=detector_id)).mappings().first()
+        row = con.execute(text("SELECT id,name,mode,query_text,threshold,status FROM detectors WHERE id=:id"),
+                          dict(id=detector_id)).mappings().first()
     if not row:
         raise HTTPException(404, "Detector not found")
     return row
 
+# Multipart variant
 @app.post("/v1/image-queries", response_model=AnswerOut, dependencies=[Depends(require_bearer())])
 async def image_query(
     detector_id: str = Form(...),
@@ -154,6 +154,7 @@ async def image_query(
     return {"image_query_id": iq_id, "answer": answer, "confidence": conf,
             "latency_ms": latency, "model_version": "demo-v0"}
 
+# JSON variant (image URL)
 class ImageQueryJson(BaseModel):
     detector_id: str
     image: Optional[str] = None
@@ -173,6 +174,17 @@ def image_query_json(payload: ImageQueryJson):
                    confidence=conf, latency=latency, mv="demo-v0"))
     return {"image_query_id": iq_id, "answer": answer, "confidence": conf,
             "latency_ms": latency, "model_version": "demo-v0"}
+
+@app.get("/v1/image-queries/{iq_id}", response_model=AnswerOut, dependencies=[Depends(require_bearer())])
+def get_image_query(iq_id: str):
+    with engine.begin() as con:
+        row = con.execute(text("""
+            SELECT id as image_query_id, answer, confidence, latency_ms, model_version
+            FROM image_queries WHERE id=:id
+        """), dict(id=iq_id)).mappings().first()
+    if not row:
+        raise HTTPException(404, "Not found")
+    return row
 
 class FeedbackIn(BaseModel):
     image_query_id: str
