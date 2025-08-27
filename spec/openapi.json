@@ -1,0 +1,529 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IntelliOptics API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "summary": "Healthz",
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/detectors": {
+      "post": {
+        "summary": "Create Detector",
+        "operationId": "create_detector_v1_detectors_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DetectorCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectorOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/detectors/{detector_id}": {
+      "get": {
+        "summary": "Get Detector",
+        "operationId": "get_detector_v1_detectors__detector_id__get",
+        "parameters": [
+          {
+            "name": "detector_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Detector Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectorOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/image-queries": {
+      "post": {
+        "summary": "Image Query",
+        "operationId": "image_query_v1_image_queries_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_image_query_v1_image_queries_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/image-queries-json": {
+      "post": {
+        "summary": "Image Query Json",
+        "operationId": "image_query_json_v1_image_queries_json_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageQueryJson"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/image-queries/{iq_id}": {
+      "get": {
+        "summary": "Get Image Query",
+        "operationId": "get_image_query_v1_image_queries__iq_id__get",
+        "parameters": [
+          {
+            "name": "iq_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Iq Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedback": {
+      "post": {
+        "summary": "Feedback",
+        "operationId": "feedback_v1_feedback_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnswerOut": {
+        "properties": {
+          "image_query_id": {
+            "type": "string",
+            "title": "Image Query Id"
+          },
+          "answer": {
+            "type": "string",
+            "enum": [
+              "YES",
+              "NO",
+              "COUNT",
+              "UNCLEAR"
+            ],
+            "title": "Answer"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version",
+            "default": "demo-v0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_query_id",
+          "answer",
+          "confidence"
+        ],
+        "title": "AnswerOut"
+      },
+      "Body_image_query_v1_image_queries_post": {
+        "properties": {
+          "detector_id": {
+            "type": "string",
+            "title": "Detector Id"
+          },
+          "wait": {
+            "type": "boolean",
+            "title": "Wait",
+            "default": true
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detector_id"
+        ],
+        "title": "Body_image_query_v1_image_queries_post"
+      },
+      "DetectorCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "binary",
+              "count",
+              "custom"
+            ],
+            "title": "Mode"
+          },
+          "query_text": {
+            "type": "string",
+            "title": "Query Text"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold",
+            "default": 0.75
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "mode",
+          "query_text"
+        ],
+        "title": "DetectorCreate"
+      },
+      "DetectorOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "binary",
+              "count",
+              "custom"
+            ],
+            "title": "Mode"
+          },
+          "query_text": {
+            "type": "string",
+            "title": "Query Text"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "mode",
+          "query_text",
+          "threshold"
+        ],
+        "title": "DetectorOut"
+      },
+      "FeedbackIn": {
+        "properties": {
+          "image_query_id": {
+            "type": "string",
+            "title": "Image Query Id"
+          },
+          "correct_label": {
+            "type": "string",
+            "enum": [
+              "YES",
+              "NO",
+              "COUNT",
+              "UNCLEAR"
+            ],
+            "title": "Correct Label"
+          },
+          "bboxes": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bboxes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_query_id",
+          "correct_label"
+        ],
+        "title": "FeedbackIn"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImageQueryJson": {
+        "properties": {
+          "detector_id": {
+            "type": "string",
+            "title": "Detector Id"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          },
+          "wait": {
+            "type": "boolean",
+            "title": "Wait",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "detector_id"
+        ],
+        "title": "ImageQueryJson"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

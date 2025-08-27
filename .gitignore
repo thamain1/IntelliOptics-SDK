@@ -34,3 +34,16 @@ docs/_build/
 fourward/
 IntelliOptics/fourward/
 
+# --- Python SDK build artifacts ---
+python-sdk/dist/
+python-sdk/build/
+python-sdk/*.egg-info/
+**/__pycache__/
+**/*.pyc
+.venv*/
+_venv*/
+# local codegen scratch
+_gen/
+# editor junk
+.vscode/
+.idea/

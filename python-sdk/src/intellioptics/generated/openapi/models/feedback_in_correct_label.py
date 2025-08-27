@@ -1,0 +1,10 @@
+from enum import Enum
+
+class FeedbackInCorrectLabel(str, Enum):
+    COUNT = "COUNT"
+    NO = "NO"
+    UNCLEAR = "UNCLEAR"
+    YES = "YES"
+
+    def __str__(self) -> str:
+        return str(self.value)
