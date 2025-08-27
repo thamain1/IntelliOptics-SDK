@@ -1,0 +1,27 @@
+name: Deploy API (Azure Web App)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "backend/api/**"
+      - ".github/workflows/deploy-api.yml"
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Zip app (backend/api)
+        run: |
+          powershell -NoProfile -Command "Compress-Archive -Path backend/api/* -DestinationPath app.zip -Force"
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: intellioptics-api-37558
+          slot-name: production
+          package: app.zip
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
