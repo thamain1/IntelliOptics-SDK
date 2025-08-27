@@ -1,4 +1,4 @@
-from fourward.intellioptics.client import IntelliOptics
+from intellioptics.client import IntelliOptics
 
 <<<<<<< HEAD
 def test_sdk_init():

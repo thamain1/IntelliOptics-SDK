@@ -1,0 +1,43 @@
+
+Path                                                                                      LineNumber Line
+----                                                                                      ---------- ----
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         122 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\__init__.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         123 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\client.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         124 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\config.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         125 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\exceptions.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         126 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\experimental.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         127 C:\Users\ThaMain1\IntelliOptics\fourward\intellioptics\models.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         193 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\__init__.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         194 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\client.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         195 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\config.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         196 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\exceptions.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         197 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\experimental.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\all_files.txt                                         198 C:\Users\ThaMain1\IntelliOptics\IntelliOptics\fourward\intellioptics\models.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        48 IntelliOptics/fourward/intellioptics/__init__.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        49 IntelliOptics/fourward/intellioptics/client.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        50 IntelliOptics/fourward/intellioptics/config.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        51 IntelliOptics/fourward/intellioptics/exceptions.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        52 IntelliOptics/fourward/intellioptics/experimental.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                        53 IntelliOptics/fourward/intellioptics/models.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       115 fourward/intellioptics/__init__.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       116 fourward/intellioptics/client.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       117 fourward/intellioptics/config.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       118 fourward/intellioptics/exceptions.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       119 fourward/intellioptics/experimental.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\git_tracked.txt                                       120 fourward/intellioptics/models.py
+C:\Users\ThaMain1\IntelliOptics\_inventory\tree.txt                                              184 ����fourward
+C:\Users\ThaMain1\IntelliOptics\_inventory\tree.txt                                              259 �   ����fourward
+C:\Users\ThaMain1\IntelliOptics\docs\python-sdk\api-reference-docs\_sources\index.rst.txt          5 For a detailed view of the source code, visit the `IntelliOptics SDK GitHub Repository <https://github.co…
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\docs\python-sdk\api-reference-docs\_source…          5 For a detailed view of the source code, visit the `IntelliOptics SDK GitHub Repository <https://github.co…
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\site\python-sdk\api-reference-docs\_source…          5 For a detailed view of the source code, visit the `IntelliOptics SDK GitHub Repository <https://github.co…
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\tests\test_client.py                                 1 from fourward.intellioptics.client import IntelliOptics
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\pyproject.toml                                       2 name = "fourward-intellioptics"
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\README.md                                           28 from fourward.intellioptics.client import IntelliOptics
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\README.md                                           44 Designed to work with fourward-intellioptics-backend FastAPI server:
+C:\Users\ThaMain1\IntelliOptics\IntelliOptics\README.md                                           77 # fourward-intellioptics SDK
+C:\Users\ThaMain1\IntelliOptics\site\python-sdk\api-reference-docs\_sources\index.rst.txt          5 For a detailed view of the source code, visit the `IntelliOptics SDK GitHub Repository <https://github.co…
+C:\Users\ThaMain1\IntelliOptics\tests\test_client.py                                               1 from fourward.intellioptics.client import IntelliOptics
+C:\Users\ThaMain1\IntelliOptics\README.md                                                         28 from fourward.intellioptics.client import IntelliOptics
+C:\Users\ThaMain1\IntelliOptics\README.md                                                         44 Designed to work with fourward-intellioptics-backend FastAPI server:
+C:\Users\ThaMain1\IntelliOptics\README.md                                                         77 # fourward-intellioptics SDK
+

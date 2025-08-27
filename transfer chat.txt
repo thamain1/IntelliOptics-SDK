@@ -1,0 +1,383 @@
+# Create a comprehensive step-by-step playbook as a Markdown file the user can download and use in a new chat.
+
+from datetime import datetime
+
+doc = f"""# IntelliOptics — API ⇄ Worker Alignment Playbook (Step-By-Step)
+
+**Updated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%SZ')}
+
+You asked for a single file we can use in a new chat to continue **step by step**. This playbook captures the decisions, fixes, and copy-pasteable commands we used to debug and align the IntelliOptics **API**, **Service Bus worker**, **Postgres**, and **Blob** access. It standardizes IDs to the SDK contract (`det_*`, `iq_*`), removes schema drift (`query_text` vs `query`), and provides a clean retest path.
+
+---
+
+## 0) TL;DR — What was wrong & what we’re changing
+
+**Symptoms we observed**
+- REST to Service Bus: `401` with “Invalid authorization token signature” (SAS build issues).
+- Worker AMQP connects but **messages dead-letter** (`MaxDeliveryCountExceeded`) with payloads like:
+  ```json
+  {{"kind":"image-query","detector_id":"5c8bec2f-71d4-4c50-a3fc-c1b444ef98de", ...}}
+API: GET /v1/detectors/:id → detector not found even though we “seeded” a row.
+
+/v1/detectors and POST /v1/detectors threw AttributeError (schema drift).
+
+Blob SAS access worked only with object-level SAS; account is private (expected).
+
+Root causes
+
+ID contract mismatch: SDK expects det_* / iq_* public IDs; we were using bare UUIDs for detector_id and random GUIDs for image_query_id → worker could not resolve detector via API.
+
+Schema drift: API’s DB used query_text NOT NULL while API/OpenAPI and worker code expect query.
+
+Two different DBs initially (worker vs API), later aligned to flexibleserverdb.
+
+Fix we’re standardizing
+
+Canonical external IDs: det_* for detectors, iq_* for image queries.
+
+API maps public det_* to internal UUID (or text PK) and accepts both det_* and UUID during cutover.
+
+Single detector text field: query (migrate from query_text).
+
+1) One-time environment sanity (copy/paste)
+Use your actual values — placeholders are shown here. Do not commit secrets.
+
+powershell
+Always show details
+
+Copy code
+# === Global vars ===
+$RG        = "IntelliOptics"
+$APIAPP    = "intellioptics-api-37558"
+$API       = "https://intellioptics-api-37558.azurewebsites.net"   # or https://api.intellioptics.co
+$TOKEN     = "<BEARER_TOKEN_REDACTED>"
+
+# Azure Service Bus (namespace scope connection string)
+$SB_CONN   = "Endpoint=sb://sb-intellioptics.servicebus.windows.net/;SharedAccessKeyName=RootSendListen;SharedAccessKey=<REDACTED>"
+$SB_QUEUE_IN  = "image-queries"
+$SB_QUEUE_OUT = "inference-results"
+
+# Postgres (API app settings show this DB)
+$DB_URL = "postgresql+psycopg://intelliopticsadmin:<REDACTED>@pg-intellioptics.postgres.database.azure.com:5432/flexibleserverdb?sslmode=require"
+
+# Blob Storage
+$STORAGE_ACCOUNT = "stintelliopticsprod"
+$BLOB_CONTAINER  = "images"
+Verify API app settings (DB/queues)
+
+powershell
+Always show details
+
+Copy code
+az webapp config appsettings list -g $RG -n $APIAPP -o table
+az webapp config connection-string list -g $RG -n $APIAPP -o table
+2) Database migration — eliminate schema drift
+We’ll canonicalize query as the required text field and add a public detector ID (det_*).
+
+SQL (run against flexibleserverdb)
+sql
+Always show details
+
+Copy code
+-- 2.1 Ensure 'query' exists and is populated
+ALTER TABLE detectors
+  ADD COLUMN IF NOT EXISTS query TEXT;
+UPDATE detectors SET query = COALESCE(query, query_text) WHERE query IS NULL;
+ALTER TABLE detectors
+  ALTER COLUMN query SET NOT NULL;
+
+-- 2.2 Add a public_id (SDK-style det_*), backfill, and make it unique
+ALTER TABLE detectors
+  ADD COLUMN IF NOT EXISTS public_id TEXT;
+UPDATE detectors
+  SET public_id = COALESCE(public_id, 'det_' || REPLACE(CAST(id AS TEXT), '-', ''));
+ALTER TABLE detectors
+  ADD CONSTRAINT detectors_public_id_key UNIQUE (public_id);
+Note: If id is TEXT not UUID, the backfill rule still works — it just prefixes det_ if missing dashes.
+
+(Optional) Later cleanup
+
+sql
+Always show details
+
+Copy code
+-- After all services stop using query_text:
+-- ALTER TABLE detectors DROP COLUMN query_text;
+3) API patch (FastAPI) — align models & endpoints
+Pydantic models
+python
+Always show details
+
+Copy code
+# models.py
+from pydantic import BaseModel
+from typing import Literal
+
+class Detector(BaseModel):
+    id: str  # public id det_*
+    name: str
+    query: str
+    confidence_threshold: float = 0.9
+    status: Literal["active","disabled"] = "active"
+
+class DetectorCreate(BaseModel):
+    name: str
+    query: str
+    confidence_threshold: float = 0.9
+Mapping and endpoints
+python
+Always show details
+
+Copy code
+# routers/detectors.py
+from fastapi import APIRouter, HTTPException
+from .db import q  # your query helper
+
+router = APIRouter(prefix="/v1/detectors", tags=["detectors"])
+
+def to_detector(dbo) -> dict:
+    return {
+        "id": dbo["public_id"],    # expose det_*
+        "name": dbo["name"],
+        "query": dbo["query"],
+        "confidence_threshold": dbo.get("confidence_threshold") or dbo.get("threshold") or 0.9,
+        "status": dbo.get("status") or "active",
+    }
+
+@router.get("")
+def list_detectors():
+    rows = q("select * from detectors order by created_at desc")
+    return [to_detector(r) for r in rows]
+
+@router.post("")
+def create_detector(body: dict):
+    # body = { name, query, confidence_threshold }
+    row = q("""
+      insert into detectors (id, name, query, confidence_threshold, status, public_id)
+      values (gen_random_uuid(), %(name)s, %(query)s, %(confidence_threshold)s, 'active',
+              'det_' || replace(cast(gen_random_uuid() as text), '-', ''))
+      returning *
+    """, body, one=True)
+    return to_detector(row)
+
+@router.get("/{detector_id}")
+def get_detector(detector_id: str):
+    if detector_id.startswith("det_"):
+        row = q("select * from detectors where public_id=%(id)s", {"id": detector_id}, one=True)
+    else:
+        # accept uuid/text fallback
+        row = q("select * from detectors where id::text=%(id)s", {"id": detector_id}, one=True)
+    if not row:
+        raise HTTPException(404, f"detector not found: {detector_id}")
+    return to_detector(row)
+After this patch: API lists/gets/creates detectors with SDK-style det_* IDs; still tolerates legacy UUID lookups.
+
+4) Queue contract — worker alignment
+Inbound message (API → worker)
+json
+Always show details
+
+Copy code
+{{
+  "kind": "image-query",
+  "image_query_id": "iq_abc123",              // REQUIRED (SDK-style)
+  "detector_id": "det_12345",                 // REQUIRED (SDK-style)
+  "blob_url": "https://.../image.jpg?...SAS", // REQUIRED (object SAS, read)
+  "content_type": "image/jpeg",               // RECOMMENDED
+  "size": 66176,                              // OPTIONAL
+  "timeout": 30,                              // OPTIONAL
+  "metadata": {{"source": "e2e"}}
+}}
+Outbound result (worker → results queue)
+json
+Always show details
+
+Copy code
+{{
+  "image_query_id": "iq_abc123",
+  "answer": "YES",                  // or NO / UNCLEAR / COUNT
+  "confidence": 0.92,
+  "latency_ms": 2311,
+  "model_version": "intellioptics-yolov10n.onnx:4562186",
+  "reason": "no_image|download_failed|detector_not_found"  // optional
+}}
+5) End-to-end test (small, deterministic)
+We’ll do exactly one step at a time. Continue when each step succeeds.
+
+Step 5.1 — Create a detector via API (returns det_*)
+powershell
+Always show details
+
+Copy code
+$body = @{{ name="e2e-sdk"; query="Is there a person in the image?"; confidence_threshold=0.5 }} | ConvertTo-Json
+$det = Invoke-RestMethod -Uri "$API/v1/detectors" -Headers @{Authorization="Bearer $TOKEN"} -Method POST -ContentType "application/json" -Body $body
+$DET = $det.id   # expect det_...
+$det | ConvertTo-Json -Depth 8
+Step 5.2 — Produce a read SAS for a real JPEG
+powershell
+Always show details
+
+Copy code
+# Example via Azure CLI; replace with your preferred SAS creator
+$expiry = (Get-Date).ToUniversalTime().AddMinutes(10).ToString("yyyy-MM-ddTHH:mmZ")
+$blobName = "image-queries/e2e-$( [Guid]::NewGuid().ToString('N') ).jpg"
+
+# Download a test JPG and upload
+$tmp = Join-Path $env:TEMP "e2e.jpg"
+Invoke-WebRequest -Uri "https://picsum.photos/800/600" -OutFile $tmp -UseBasicParsing | Out-Null
+az storage blob upload --account-name $STORAGE_ACCOUNT -c $BLOB_CONTAINER -f $tmp -n $blobName --auth-mode key --output none
+
+# Create object-level read SAS
+$SAS = az storage blob generate-sas --account-name $STORAGE_ACCOUNT -c $BLOB_CONTAINER -n $blobName --permissions r --expiry $expiry --https-only --output tsv
+$URL = "https://$STORAGE_ACCOUNT.blob.core.windows.net/$BLOB_CONTAINER/$blobName?$SAS"
+
+# Sanity check
+(Invoke-WebRequest -Uri $URL -Method Head).StatusCode  # expect 200
+Step 5.3 — Enqueue the work (Python, azure-servicebus)
+powershell
+Always show details
+
+Copy code
+py -m pip install --quiet azure-servicebus
+$script = @'
+import json, os
+from azure.servicebus import ServiceBusClient, ServiceBusMessage
+
+CONN   = os.environ["SB_CONN"]
+QUEUE  = os.environ.get("SB_QUEUE_IN", "image-queries")
+DET    = os.environ["DET"]
+URL    = os.environ["URL"]
+
+iq = "iq_" + __import__("uuid").uuid4().hex  # SDK-style
+payload = {{
+  "kind": "image-query",
+  "image_query_id": iq,
+  "detector_id": DET,
+  "blob_url": URL,
+  "content_type": "image/jpeg",
+  "timeout": 30
+}}
+with ServiceBusClient.from_connection_string(CONN) as client:
+    with client.get_queue_sender(queue_name=QUEUE) as s:
+        s.send_messages(ServiceBusMessage(json.dumps(payload)))
+print("ENQUEUED", iq)
+'@
+$env:SB_CONN = $SB_CONN
+$env:DET     = $DET
+$env:URL     = $URL
+$py = Join-Path $env:TEMP "enqueue_iq.py"
+$script | Set-Content -Path $py -Encoding UTF8
+py $py
+Step 5.4 — Watch the worker & peek the result
+powershell
+Always show details
+
+Copy code
+# Watch logs
+az container logs -g $RG -n infer-worker-cpu --follow
+
+# In a new shell: peek latest 5 result messages
+$script = @'
+from azure.servicebus import ServiceBusClient
+import os, json
+CONN = os.environ["SB_CONN"]
+Q    = os.environ.get("SB_QUEUE_OUT","inference-results")
+with ServiceBusClient.from_connection_string(CONN) as c:
+    with c.get_queue_receiver(queue_name=Q) as r:
+        msgs = r.peek_messages(max_message_count=5)
+        for m in msgs:
+            body = b"".join(m.body) if hasattr(m, "body") else m.body
+            print(json.loads(body.decode("utf-8","ignore")))
+'@
+$py = Join-Path $env:TEMP "peek_results.py"
+$script | Set-Content -Path $py -Encoding UTF8
+py $py
+Expected: An object with your image_query_id (iq_*), answer, confidence, model_version.
+
+6) If it still dead-letters
+Confirm API GET /v1/detectors/{id} works for your det_* ID.
+
+Confirm your SAS URL HEAD == 200 (object SAS; not container SAS).
+
+Check worker logs for explicit reasons (detector_not_found, download_failed, etc.).
+
+DLQ quickdump (Python):
+
+python
+Always show details
+
+Copy code
+from azure.servicebus import ServiceBusClient
+import os, json
+CONN = os.environ["SB_CONN"]; Q="image-queries/$DeadLetterQueue"
+with ServiceBusClient.from_connection_string(CONN) as c:
+  with c.get_queue_receiver(queue_name=Q) as r:
+    for m in r.peek_messages(max_message_count=20):
+      print("DLQ:", m.message_id, m.application_properties)
+      body = b"".join(m.body) if hasattr(m,"body") else m.body
+      print(json.loads(body.decode("utf-8","ignore")))
+7) Rollout & guardrails
+Blue/green API deploy of schema + endpoints.
+
+Worker: accept both UUID and det_* for a grace period (14 days), then remove UUID path.
+
+Dashboards: SB DLQ count, SB Active count, worker success rate, model latency, API 5xx and p95.
+
+Alerts: DLQ spikes, 401/403 from Blob, detector_not_found rate > 0.1% of traffic.
+
+8) Appendix — helpers (optional)
+Mirror query_text → query once
+sql
+Always show details
+
+Copy code
+UPDATE detectors SET query = COALESCE(query, query_text) WHERE query IS NULL;
+Create one known detector with SDK id in DB (temporary)
+sql
+Always show details
+
+Copy code
+INSERT INTO detectors (id, public_id, name, query, confidence_threshold, status, type)
+VALUES (gen_random_uuid(), 'det_e2esmoke', 'e2e-smoke', 'Is there a person in the image?', 0.5, 'active', 'binary')
+ON CONFLICT (public_id) DO NOTHING;
+Minimal /v1/image-queries (direct upload) for parity
+python
+Always show details
+
+Copy code
+# routers/image_queries.py
+from fastapi import APIRouter, UploadFile, File, Query
+from uuid import uuid4
+router = APIRouter(prefix="/v1/image-queries", tags=["image-queries"])
+
+@router.post("")
+def submit(detector_id: str = Query(...), wait: bool = False, image: UploadFile = File(...)):
+    iq = "iq_" + uuid4().hex
+    # upload to blob, enqueue work per contract; if wait, block-read result queue
+    return {{ "image_query_id": iq, "status": "QUEUED" if not wait else "DONE", "answer": "YES", "confidence": 0.91 }}
+Done. Use this file to continue in a fresh chat; we’ll execute one step at a time and verify after each step.
+"""
+
+path = "/mnt/data/IntelliOptics-API-Worker-Alignment-Playbook.md"
+with open(path, "w", encoding="utf-8") as f:
+f.write(doc)
+
+path
+
+Always show details
+
+Copy code
+All set. I put everything into a single step-by-step playbook you can carry into a new chat.
+
+Download the playbook (Markdown)
+
+When you’re ready, open a new chat and drop this file in—we’ll walk through it one step at a time.
+
+
+
+
+
+
+
+
+Sources

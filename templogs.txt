@@ -1,0 +1,476 @@
+2025-08-25T09:41:10  Welcome, you are now connected to log-streaming service.Starting Log Tail -n 10 of existing logs ----/home/LogFiles/__lastCheckTime.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/__lastCheckTime.txt)08/15/2025 14:47:30/home/LogFiles/kudu/deployment/0cfd69ceb7da-6a7c8aaa-940f-4058-b5c6-cc37f16b7920.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/0cfd69ceb7da-6a7c8aaa-940f-4058-b5c6-cc37f16b7920.txt)
+2025-08-14T20:50:35  Parsing the build logs
+2025-08-14T20:50:35  Found 0 issue(s)
+2025-08-14T20:50:35
+2025-08-14T20:50:36  Build Summary :
+2025-08-14T20:50:36  ===============
+2025-08-14T20:50:36  Errors (0)
+2025-08-14T20:50:36  Warnings (0)
+2025-08-14T20:50:36
+2025-08-14T20:50:36  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-14T20:50:36  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/3a2a976fc255-f1a14e95-5e1d-4827-a276-e3fd2afe4b9f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/3a2a976fc255-f1a14e95-5e1d-4827-a276-e3fd2afe4b9f.txt)
+2025-08-21T14:02:42  Parsing the build logs
+2025-08-21T14:02:42  Found 0 issue(s)
+2025-08-21T14:02:42
+2025-08-21T14:02:42  Build Summary :
+2025-08-21T14:02:42  ===============
+2025-08-21T14:02:42  Errors (0)
+2025-08-21T14:02:43  Warnings (0)
+2025-08-21T14:02:43
+2025-08-21T14:02:43  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T14:02:43  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-711a17e9-8423-41c9-89c4-c7ed97749155.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-711a17e9-8423-41c9-89c4-c7ed97749155.txt)
+2025-08-21T15:26:59  Parsing the build logs
+2025-08-21T15:26:59  Found 0 issue(s)
+2025-08-21T15:27:00
+2025-08-21T15:27:00  Build Summary :
+2025-08-21T15:27:00  ===============
+2025-08-21T15:27:00  Errors (0)
+2025-08-21T15:27:00  Warnings (0)
+2025-08-21T15:27:00
+2025-08-21T15:27:01  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T15:27:01  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-8d163c88-ac77-4c36-a15e-a0caf4d6f575.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-8d163c88-ac77-4c36-a15e-a0caf4d6f575.txt)
+2025-08-21T16:19:49  Parsing the build logs
+2025-08-21T16:19:49  Found 0 issue(s)
+2025-08-21T16:19:49
+2025-08-21T16:19:49  Build Summary :
+2025-08-21T16:19:50  ===============
+2025-08-21T16:19:50  Errors (0)
+2025-08-21T16:19:50  Warnings (0)
+2025-08-21T16:19:50
+2025-08-21T16:19:50  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T16:19:51  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-988f209f-9398-4442-aa3b-8784419d4239.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-988f209f-9398-4442-aa3b-8784419d4239.txt)
+2025-08-21T17:44:56  Parsing the build logs
+2025-08-21T17:44:56  Found 0 issue(s)
+2025-08-21T17:44:56
+2025-08-21T17:44:56  Build Summary :
+2025-08-21T17:44:57  ===============
+2025-08-21T17:44:57  Errors (0)
+2025-08-21T17:44:57  Warnings (0)
+2025-08-21T17:44:57
+2025-08-21T17:44:57  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T17:44:58  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-9f55b0c2-1770-44a0-8bb8-81c92773f4ed.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-9f55b0c2-1770-44a0-8bb8-81c92773f4ed.txt)
+2025-08-21T15:50:21  Parsing the build logs
+2025-08-21T15:50:22  Found 0 issue(s)
+2025-08-21T15:50:22
+2025-08-21T15:50:22  Build Summary :
+2025-08-21T15:50:22  ===============
+2025-08-21T15:50:22  Errors (0)
+2025-08-21T15:50:22  Warnings (0)
+2025-08-21T15:50:22
+2025-08-21T15:50:23  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T15:50:23  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-c0b314b2-607f-4533-832a-50c7f9a8689d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-c0b314b2-607f-4533-832a-50c7f9a8689d.txt)
+2025-08-21T16:25:48  Parsing the build logs
+2025-08-21T16:25:48  Found 0 issue(s)
+2025-08-21T16:25:48
+2025-08-21T16:25:48  Build Summary :
+2025-08-21T16:25:49  ===============
+2025-08-21T16:25:49  Errors (0)
+2025-08-21T16:25:50  Warnings (0)
+2025-08-21T16:25:50
+2025-08-21T16:25:50  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T16:25:51  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-d440f0fd-db87-4aea-835b-4e00c583e5e7.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-d440f0fd-db87-4aea-835b-4e00c583e5e7.txt)
+2025-08-21T16:07:00  Parsing the build logs
+2025-08-21T16:07:00  Found 0 issue(s)
+2025-08-21T16:07:01
+2025-08-21T16:07:01  Build Summary :
+2025-08-21T16:07:01  ===============
+2025-08-21T16:07:01  Errors (0)
+2025-08-21T16:07:01  Warnings (0)
+2025-08-21T16:07:02
+2025-08-21T16:07:02  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T16:07:03  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/6d775a371310-f6dd3ec3-b741-47b9-9e1b-dac5b3e04b4b.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/6d775a371310-f6dd3ec3-b741-47b9-9e1b-dac5b3e04b4b.txt)
+2025-08-21T17:37:20  Parsing the build logs
+2025-08-21T17:37:20  Found 0 issue(s)
+2025-08-21T17:37:20
+2025-08-21T17:37:20  Build Summary :
+2025-08-21T17:37:21  ===============
+2025-08-21T17:37:21  Errors (0)
+2025-08-21T17:37:21  Warnings (0)
+2025-08-21T17:37:22
+2025-08-21T17:37:22  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T17:37:23  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/9ec873583926-095c15ae-a6f3-45cc-8f14-c0766e5fa23c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/9ec873583926-095c15ae-a6f3-45cc-8f14-c0766e5fa23c.txt)
+2025-08-15T11:15:52  Parsing the build logs
+2025-08-15T11:15:52  Found 0 issue(s)
+2025-08-15T11:15:53
+2025-08-15T11:15:53  Build Summary :
+2025-08-15T11:15:53  ===============
+2025-08-15T11:15:53  Errors (0)
+2025-08-15T11:15:54  Warnings (0)
+2025-08-15T11:15:54
+2025-08-15T11:15:54  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-15T11:15:55  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a99dc5978c5a-03252634-6c0b-4e79-baa6-c7f9f3d6d61f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a99dc5978c5a-03252634-6c0b-4e79-baa6-c7f9f3d6d61f.txt)
+2025-08-21T12:49:46  Parsing the build logs
+2025-08-21T12:49:46  Found 0 issue(s)
+2025-08-21T12:49:46
+2025-08-21T12:49:47  Build Summary :
+2025-08-21T12:49:47  ===============
+2025-08-21T12:49:47  Errors (0)
+2025-08-21T12:49:47  Warnings (0)
+2025-08-21T12:49:47
+2025-08-21T12:49:47  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T12:49:48  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a99dc5978c5a-29a35ca1-1324-425e-97db-392ba83a3f3d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a99dc5978c5a-29a35ca1-1324-425e-97db-392ba83a3f3d.txt)
+2025-08-21T12:35:58  Parsing the build logs
+2025-08-21T12:35:58  Found 0 issue(s)
+2025-08-21T12:35:58
+2025-08-21T12:35:59  Build Summary :
+2025-08-21T12:35:59  ===============
+2025-08-21T12:35:59  Errors (0)
+2025-08-21T12:35:59  Warnings (0)
+2025-08-21T12:35:59
+2025-08-21T12:36:00  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T12:36:00  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a99dc5978c5a-796d56d8-b4b7-466a-ab53-093d0064e3dc.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a99dc5978c5a-796d56d8-b4b7-466a-ab53-093d0064e3dc.txt)
+2025-08-21T12:57:48  Parsing the build logs
+2025-08-21T12:57:48  Found 0 issue(s)
+2025-08-21T12:57:49
+2025-08-21T12:57:49  Build Summary :
+2025-08-21T12:57:49  ===============
+2025-08-21T12:57:49  Errors (0)
+2025-08-21T12:57:49  Warnings (0)
+2025-08-21T12:57:49
+2025-08-21T12:57:50  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T12:57:50  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a99dc5978c5a-9aeecfc4-49a5-4358-8be4-a2c7f72d0570.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a99dc5978c5a-9aeecfc4-49a5-4358-8be4-a2c7f72d0570.txt)
+2025-08-21T12:25:50  Parsing the build logs
+2025-08-21T12:25:50  Found 0 issue(s)
+2025-08-21T12:25:50
+2025-08-21T12:25:50  Build Summary :
+2025-08-21T12:25:51  ===============
+2025-08-21T12:25:51  Errors (0)
+2025-08-21T12:25:51  Warnings (0)
+2025-08-21T12:25:51
+2025-08-21T12:25:52  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T12:25:52  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a99dc5978c5a-a5228d1e-f961-4bcf-9e37-bb6ef2d4f874.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a99dc5978c5a-a5228d1e-f961-4bcf-9e37-bb6ef2d4f874.txt)
+2025-08-21T12:14:11  Parsing the build logs
+2025-08-21T12:14:12  Found 0 issue(s)
+2025-08-21T12:14:12
+2025-08-21T12:14:12  Build Summary :
+2025-08-21T12:14:12  ===============
+2025-08-21T12:14:12  Errors (0)
+2025-08-21T12:14:12  Warnings (0)
+2025-08-21T12:14:12
+2025-08-21T12:14:13  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-21T12:14:13  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a9f8d6f836d7-0dffb08d-dc40-4b81-9f9e-3f2afb08939e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a9f8d6f836d7-0dffb08d-dc40-4b81-9f9e-3f2afb08939e.txt)
+2025-08-14T22:33:25  Parsing the build logs
+2025-08-14T22:33:26  Found 0 issue(s)
+2025-08-14T22:33:26
+2025-08-14T22:33:26  Build Summary :
+2025-08-14T22:33:26  ===============
+2025-08-14T22:33:26  Errors (0)
+2025-08-14T22:33:27  Warnings (0)
+2025-08-14T22:33:27
+2025-08-14T22:33:27  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-14T22:33:28  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/a9f8d6f836d7-4c6f3a57-0586-410f-ab24-7a37cbcc95d3.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/a9f8d6f836d7-4c6f3a57-0586-410f-ab24-7a37cbcc95d3.txt)
+2025-08-14T22:20:29  Parsing the build logs
+2025-08-14T22:20:29  Found 0 issue(s)
+2025-08-14T22:20:29
+2025-08-14T22:20:29  Build Summary :
+2025-08-14T22:20:29  ===============
+2025-08-14T22:20:30  Errors (0)
+2025-08-14T22:20:30  Warnings (0)
+2025-08-14T22:20:30
+2025-08-14T22:20:30  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-14T22:20:30  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/deployment/b72fdf201f94-012bff0e-1a3f-4f4c-b7ab-a65ad4392832.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/deployment/b72fdf201f94-012bff0e-1a3f-4f4c-b7ab-a65ad4392832.txt)
+2025-08-14T19:28:58  Parsing the build logs
+2025-08-14T19:28:59  Found 0 issue(s)
+2025-08-14T19:28:59
+2025-08-14T19:28:59  Build Summary :
+2025-08-14T19:28:59  ===============
+2025-08-14T19:28:59  Errors (0)
+2025-08-14T19:28:59  Warnings (0)
+2025-08-14T19:29:00
+2025-08-14T19:29:00  Triggering container recycle for OneDeploy by adding/updating restartTrigger.txt to the site root path
+2025-08-14T19:29:00  Deployment successful. deployer = OneDeploy deploymentPath = OneDeploy/home/LogFiles/kudu/trace/09c0210103db-b3e3457c-39eb-47a0-9005-408be2cdb4f0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/09c0210103db-b3e3457c-39eb-47a0-9005-408be2cdb4f0.txt)
+2025-08-21T23:36:14  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZE_N8W&sid=7-jU4XvniK7pjqx9AAAC, method: POST, type: request, pid: 771,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/0a2ad29a9343-5ec131c5-e06f-450c-8635-467e955290bf.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/0a2ad29a9343-5ec131c5-e06f-450c-8635-467e955290bf.txt)
+2025-08-21T20:42:35  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZENa_q&sid=2nj-IhnxgmB_kHsDAAAA, method: GET, type: request, pid: 770,1,18, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/0cfd69ceb7da-6216557a-4a88-4def-b906-a61d33c1999b.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/0cfd69ceb7da-6216557a-4a88-4def-b906-a61d33c1999b.txt)
+2025-08-14T20:44:31  Startup Request, url: /logstream, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None
+2025-08-14T20:48:31    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:48:31  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/0ee9207a1fcc-1d7db660-5f4f-40bc-b43a-b5b8702df6fd.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/0ee9207a1fcc-1d7db660-5f4f-40bc-b43a-b5b8702df6fd.txt)
+2025-08-21T13:27:18  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/0fd891be2502-3df5099b-1baf-4be6-861a-172ce854fb52.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/0fd891be2502-3df5099b-1baf-4be6-861a-172ce854fb52.txt)
+2025-08-22T11:34:44  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHZqEZ.0&sid=vLkpuQQn_0YbIEIrAAAA, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/101bc941e892-a5272f61-e908-440b-9cf9-ed6f7474d610.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/101bc941e892-a5272f61-e908-440b-9cf9-ed6f7474d610.txt)
+2025-08-22T09:49:32  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHBWU7&sid=ZpA14kLcEvzRjXTnAAAC, method: POST, type: request, pid: 768,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/12532c8d0547-2d885162-594d-4072-acbb-bf9afc9b2457.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/12532c8d0547-2d885162-594d-4072-acbb-bf9afc9b2457.txt)
+2025-08-21T14:35:58  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD3il_&sid=XRrKAOapdhNyM-IwAAAI, method: POST, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/18557aa37b21-4a5ab1e6-2c26-4749-939e-25b4a7793f44.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/18557aa37b21-4a5ab1e6-2c26-4749-939e-25b4a7793f44.txt)
+2025-08-21T17:58:20  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZDnroz&sid=kw6QcAKJHVzlDksAAAAO, method: POST, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/1b2fa56664d6-e6ede3bf-11e3-4cd3-9010-621a9e08de3a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/1b2fa56664d6-e6ede3bf-11e3-4cd3-9010-621a9e08de3a.txt)
+2025-08-22T01:47:37  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFTRnN&sid=f9Nx5BNiqIoOBC6PAAAC, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/1c7e5fa6c657-b6200453-4c6a-494c-9f3a-04afb0334779.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/1c7e5fa6c657-b6200453-4c6a-494c-9f3a-04afb0334779.txt)
+2025-08-21T14:38:07  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD4ClG&sid=bN9tf2RgyReG0KQbAAAA, method: POST, type: request, pid: 772,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/1d6c5d1fff17-27395516-b946-47c3-a9e3-2da34cbfb20a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/1d6c5d1fff17-27395516-b946-47c3-a9e3-2da34cbfb20a.txt)
+2025-08-22T10:18:41  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHIQ9D&sid=Wa32Nk4nYD70MkyjAAAE, method: POST, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/2017b7ff5dba-c66ec81c-3227-4526-9037-844d6a515988.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/2017b7ff5dba-c66ec81c-3227-4526-9037-844d6a515988.txt)
+2025-08-16T13:05:08  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/201d352c3c56-be41d49e-11d1-40d7-82a8-c60db1a058ba.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/201d352c3c56-be41d49e-11d1-40d7-82a8-c60db1a058ba.txt)
+2025-08-23T21:26:52  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZOqPaC&sid=q59wLWZtxoFtjFq9AAAA, method: POST, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/22f5f58afe50-69e54efd-9f08-4771-9b13-a2aeba227361.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/22f5f58afe50-69e54efd-9f08-4771-9b13-a2aeba227361.txt)
+2025-08-21T13:52:21  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 768,1,28, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/2c7cdfc709e3-1f62344e-c166-49e0-b757-39403b1bf49e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/2c7cdfc709e3-1f62344e-c166-49e0-b757-39403b1bf49e.txt)
+2025-08-22T12:13:11  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHidSg&sid=QasEaj7VI70vE6wWAAAG, method: POST, type: request, pid: 771,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/2f88104bc376-4aa94f84-9d06-4e3e-ac1e-dceb7d8133ca.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/2f88104bc376-4aa94f84-9d06-4e3e-ac1e-dceb7d8133ca.txt)
+2025-08-21T03:26:34  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 768,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/35b8d73a40a4-767a04cb-82c8-4031-91af-a40fff581f25.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/35b8d73a40a4-767a04cb-82c8-4031-91af-a40fff581f25.txt)
+2025-08-21T03:24:07  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZAfmXO&sid=SQ_-jGdRS_uXnLY0AAAA, method: POST, type: request, pid: 767,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/385fef715e31-5b7e4156-ccf1-49c9-a22a-2c30236a1719.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/385fef715e31-5b7e4156-ccf1-49c9-a22a-2c30236a1719.txt)
+2025-08-21T03:13:14    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T03:13:14  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/385fef715e31-720c49a7-3b36-42a8-afed-d3fbcc0704bb.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/385fef715e31-720c49a7-3b36-42a8-afed-d3fbcc0704bb.txt)
+2025-08-21T03:00:29  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/3a2a976fc255-4e1cf013-bf35-49bf-bf45-12995faceb0a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/3a2a976fc255-4e1cf013-bf35-49bf-bf45-12995faceb0a.txt)
+2025-08-21T13:55:29  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/43fefd71e579-de7893a6-77c7-4c2b-806b-07d49cb4f270.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/43fefd71e579-de7893a6-77c7-4c2b-806b-07d49cb4f270.txt)
+2025-08-21T18:02:56  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/46cd448c4d4b-d30f7568-45ce-450a-bec4-d9940e50cfc4.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/46cd448c4d4b-d30f7568-45ce-450a-bec4-d9940e50cfc4.txt)
+2025-08-21T18:58:22  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD_mb2&sid=aTfCVC9embnN_2y_AAAA, method: POST, type: request, pid: 774,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/478fd7798944-450cf795-737a-42c2-ac6b-eaa2311cb989.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/478fd7798944-450cf795-737a-42c2-ac6b-eaa2311cb989.txt)
+2025-08-22T12:43:18  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 772,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/47b134eff2c3-30106d1c-9682-4160-a012-e94fd9f31658.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/47b134eff2c3-30106d1c-9682-4160-a012-e94fd9f31658.txt)
+2025-08-15T14:29:01    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-15T14:29:01  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/47b134eff2c3-736d5e58-642c-4ed2-ae83-8856c785edd9.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/47b134eff2c3-736d5e58-642c-4ed2-ae83-8856c785edd9.txt)
+2025-08-15T14:27:00  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PYk87DL&sid=AdzKy328dn2wyzx_AAAA, method: POST, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/4ae8e4b202b3-22d8940f-a3e3-4e6a-8f93-fd558cd4669c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/4ae8e4b202b3-22d8940f-a3e3-4e6a-8f93-fd558cd4669c.txt)
+2025-08-22T10:47:56  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHP6rw&sid=X4TrHuKnee_kJQJwAAAE, method: GET, type: request, pid: 768,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/531956623032-0a4b8b32-bb44-4bef-b7e8-ce61c7fd16f0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/531956623032-0a4b8b32-bb44-4bef-b7e8-ce61c7fd16f0.txt)
+2025-08-21T13:24:04  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/56d5a12cc5ff-7c0c8cb4-fd97-4030-8945-957fc404b0c9.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/56d5a12cc5ff-7c0c8cb4-fd97-4030-8945-957fc404b0c9.txt)
+2025-08-21T19:55:32  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZECsWp&sid=xySbPv3j-3YIb6SMAAAA, method: POST, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/5776bba8f6bb-1271f0a2-3f4f-4e5e-8c39-d23409b894c8.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/5776bba8f6bb-1271f0a2-3f4f-4e5e-8c39-d23409b894c8.txt)
+2025-08-15T14:26:37    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-15T14:26:39  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/5776bba8f6bb-e98ecae3-f18a-4b21-bce8-6b4136042931.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/5776bba8f6bb-e98ecae3-f18a-4b21-bce8-6b4136042931.txt)
+2025-08-15T12:20:48  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PYjhElJ&sid=wVZVJTfLAeQr4SWgAAAU, method: POST, type: request, pid: 772,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/59cd2bcee2dd-778cb5aa-4878-43d4-9055-343d60549ced.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/59cd2bcee2dd-778cb5aa-4878-43d4-9055-343d60549ced.txt)
+2025-08-21T23:30:07  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/5b79b3383c36-6fc1ebf8-ffb0-4a48-a6f9-58f062169b7c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/5b79b3383c36-6fc1ebf8-ffb0-4a48-a6f9-58f062169b7c.txt)
+2025-08-15T14:51:31  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 774,1,16, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/60b3a7df8a31-caa137c3-3c36-47f4-9d33-cefe82d06bfa.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/60b3a7df8a31-caa137c3-3c36-47f4-9d33-cefe82d06bfa.txt)
+2025-08-21T21:46:39  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEcHm7&sid=voVmM3_bSHeyT286AAAA, method: GET, type: request, pid: 772,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/614e4d719129-6db9bc5c-5d81-4970-8c2e-87a4f0b725a8.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/614e4d719129-6db9bc5c-5d81-4970-8c2e-87a4f0b725a8.txt)
+2025-08-21T03:36:40  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/642898470626-880e03ce-44c7-443c-b8b8-9d80b8e400d3.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/642898470626-880e03ce-44c7-443c-b8b8-9d80b8e400d3.txt)
+2025-08-22T15:17:14  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZIMl6t&sid=B2cPEHFzlm-tcvfVAAAI, method: POST, type: request, pid: 772,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/6633e696e160-f062c254-c6ea-4903-9e0c-99fb88274347.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6633e696e160-f062c254-c6ea-4903-9e0c-99fb88274347.txt)
+2025-08-22T11:53:13  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHe2vi.0&sid=qqGOCYlchDJBTH18AAAB, method: GET, type: request, pid: 770,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/680ba053a590-32b11396-2310-4ba6-b927-e9dcbcb671d5.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/680ba053a590-32b11396-2310-4ba6-b927-e9dcbcb671d5.txt)
+2025-08-21T18:55:52  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD_BOG.0&sid=tmAjrdkMwNB9IB7CAAAC, method: GET, type: request, pid: 776,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/6ada4ff5e6c7-82627212-b163-42a5-bb71-73b8000abd73.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6ada4ff5e6c7-82627212-b163-42a5-bb71-73b8000abd73.txt)
+2025-08-22T09:19:29  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/6d775a371310-376dd9e7-dbca-48c0-9c77-f8c471a6addf.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6d775a371310-376dd9e7-dbca-48c0-9c77-f8c471a6addf.txt)
+2025-08-21T15:32:21    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T15:32:28  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/6d775a371310-978bccbc-aabd-4e5c-ae4b-ea3589fa7d7a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6d775a371310-978bccbc-aabd-4e5c-ae4b-ea3589fa7d7a.txt)
+2025-08-21T14:41:28  Startup Request, url: /webssh/host, method: GET, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/6d775a371310-988f209f-9398-4442-aa3b-8784419d4239.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6d775a371310-988f209f-9398-4442-aa3b-8784419d4239.txt)
+2025-08-21T17:41:19                      Error occurred, type: error, text: GetParentProcessLinux (4390) failed.: Could not find a part of the path '/proc/4390/stat'., stackTrace:    at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)at Kudu.Core.Infrastructure.ProcessExtensions.GetParentProcessLinux(Process process, ITracer tracer) in /tmp/KuduLite/Kudu.Core/Infrastructure/ProcessExtensions.cs:line 153/home/LogFiles/kudu/trace/6d775a371310-b09bcd2f-6888-4c7a-9d4c-341ed7262a80.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6d775a371310-b09bcd2f-6888-4c7a-9d4c-341ed7262a80.txt)
+2025-08-21T16:03:39    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T16:03:39  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/6f7c4f4fcd78-80633643-1525-45ea-83c1-133170aad5cb.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/6f7c4f4fcd78-80633643-1525-45ea-83c1-133170aad5cb.txt)
+2025-08-21T14:27:06  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD1h3a.0&sid=I0nKtktRk-4l7JPTAAAA, method: GET, type: request, pid: 772,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/71369f0a6121-0d0c2499-8ce0-4a16-a3c1-b2a9a5b655b1.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/71369f0a6121-0d0c2499-8ce0-4a16-a3c1-b2a9a5b655b1.txt)
+2025-08-21T13:17:40  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 769,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/776fa7e66090-7051ecb7-b494-46e8-8fc6-014db2346787.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/776fa7e66090-7051ecb7-b494-46e8-8fc6-014db2346787.txt)
+2025-08-15T01:04:07  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/787bf61fb9cc-77948078-7b6e-4bfd-9554-739a6d1dc453.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/787bf61fb9cc-77948078-7b6e-4bfd-9554-739a6d1dc453.txt)
+2025-08-22T11:10:33  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHUHzp&sid=FHzw3bb27mfyBpd4AAAB, method: POST, type: request, pid: 772,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/788a782bab0e-40c7fde9-1a22-4bde-be69-fb52823abb3f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/788a782bab0e-40c7fde9-1a22-4bde-be69-fb52823abb3f.txt)
+2025-08-15T02:11:59  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,30, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/797abece293d-d2275071-bb01-439e-b3b1-309df1397f10.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/797abece293d-d2275071-bb01-439e-b3b1-309df1397f10.txt)
+2025-08-16T16:56:00  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 772,1,58, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/7cf3a0fe0536-88a774ac-6723-4e16-9300-aeadf41f02ea.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/7cf3a0fe0536-88a774ac-6723-4e16-9300-aeadf41f02ea.txt)
+2025-08-22T03:42:29  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFtkRL.0&sid=ASf2d4xOMhxqHkdmAAAC, method: GET, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/7d14b85a67a4-af1f489c-3a17-49c9-90c5-1fb314c0e51e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/7d14b85a67a4-af1f489c-3a17-49c9-90c5-1fb314c0e51e.txt)
+2025-08-22T09:59:54  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHE72_&sid=XAJwvwQR8ZWefDDOAAAC, method: POST, type: request, pid: 770,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/8042e486b31f-0b25b74e-1ce3-44b0-99b3-12739c71fb12.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/8042e486b31f-0b25b74e-1ce3-44b0-99b3-12739c71fb12.txt)
+2025-08-22T12:15:08  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHj2Sy&sid=nG7w9z2lb4VDevxVAAAC, method: GET, type: request, pid: 774,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/81d9e5e87102-10c95df9-7c14-4fc8-acd1-74edbb9a05f3.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/81d9e5e87102-10c95df9-7c14-4fc8-acd1-74edbb9a05f3.txt)
+2025-08-22T02:27:59  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFchFP.0&sid=eVIJE02OWeedOj3AAAAE, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/8470089d7dd0-a6773304-d217-4755-ab72-4cbfd76065e8.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/8470089d7dd0-a6773304-d217-4755-ab72-4cbfd76065e8.txt)
+2025-08-21T13:36:57  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/8a4be7aecd7a-d624f530-f984-432d-b3c4-001b62e7d99a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/8a4be7aecd7a-d624f530-f984-432d-b3c4-001b62e7d99a.txt)
+2025-08-21T14:18:23  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 768,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/8ce9d5bb00c9-2e3439bd-d7ca-4c52-b8a8-9d24048b4c97.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/8ce9d5bb00c9-2e3439bd-d7ca-4c52-b8a8-9d24048b4c97.txt)
+2025-08-21T21:39:22  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEacic.0&sid=rLdaumGJlz0VPvKVAAAA, method: GET, type: request, pid: 773,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/8f656b28601c-c7c91994-3d94-4a50-8d85-ceabe74996b6.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/8f656b28601c-c7c91994-3d94-4a50-8d85-ceabe74996b6.txt)
+2025-08-22T09:27:19  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZH6fsv&sid=GOsKw2xLeAfIYtSxAAAA, method: POST, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/94641ac437b7-a106c45b-b3e6-4266-a051-92f6ec021841.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/94641ac437b7-a106c45b-b3e6-4266-a051-92f6ec021841.txt)
+2025-08-21T18:34:59    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T18:35:00  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/94641ac437b7-f01f1e14-a69b-4f61-8999-f24524be571f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/94641ac437b7-f01f1e14-a69b-4f61-8999-f24524be571f.txt)
+2025-08-21T18:07:51  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZDq33l&sid=6c_P0zXRcrp6tjmMAAAA, method: POST, type: request, pid: 773,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/9635bc7a5020-8d3e5ddb-3c46-4b20-84df-5795dbf72667.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/9635bc7a5020-8d3e5ddb-3c46-4b20-84df-5795dbf72667.txt)
+2025-08-23T20:41:48  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 768,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/9ec873583926-14ef67be-55e9-46cb-8012-c7d908c4d3c8.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/9ec873583926-14ef67be-55e9-46cb-8012-c7d908c4d3c8.txt)
+2025-08-15T03:07:52  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PYhih7g&sid=vQa4wXdZtpn_jH5IAAAA, method: POST, type: request, pid: 769,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/9ec873583926-49cf0e72-9c1b-4415-b7df-22ee8ce0bba9.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/9ec873583926-49cf0e72-9c1b-4415-b7df-22ee8ce0bba9.txt)
+2025-08-15T11:39:11    Outgoing response, type: response, statusCode: 409, statusText: Conflict/home/LogFiles/kudu/trace/9ec873583926-690ec285-eab4-47d0-ba8d-63b9b4900da2.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/9ec873583926-690ec285-eab4-47d0-ba8d-63b9b4900da2.txt)
+2025-08-15T03:11:10    Outgoing response, type: response, statusCode: 409, statusText: Conflict/home/LogFiles/kudu/trace/9ef4cf9437b2-4f46776e-2b50-4751-a31f-38db9143c79d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/9ef4cf9437b2-4f46776e-2b50-4751-a31f-38db9143c79d.txt)
+2025-08-15T15:42:57  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 771,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/a26ae79eacc5-431b1074-863c-47b2-abab-3451b29857df.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a26ae79eacc5-431b1074-863c-47b2-abab-3451b29857df.txt)
+2025-08-21T19:50:48  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/a49775e42b9a-9483e533-8cab-4033-ba54-93d760e8f48e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a49775e42b9a-9483e533-8cab-4033-ba54-93d760e8f48e.txt)
+2025-08-21T18:36:22  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZDwXDQ&sid=S-wxGO9F3YjOObxaAAAA, method: POST, type: request, pid: 770,1,16, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/a49775e42b9a-a4f63b7b-f335-46c4-8710-0954677449bc.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a49775e42b9a-a4f63b7b-f335-46c4-8710-0954677449bc.txt)
+2025-08-21T18:44:28    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T18:44:29  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a8ad582ba8fe-4e0ec7c2-93b1-4725-a7d9-691d359b7804.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a8ad582ba8fe-4e0ec7c2-93b1-4725-a7d9-691d359b7804.txt)
+2025-08-22T03:16:43  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFnr4a.0&sid=Qt6fA5_oH-8s9qzFAAAA, method: GET, type: request, pid: 768,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/a98fe319a862-5f29b12e-83ba-4210-b9b0-b58177f6d126.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a98fe319a862-5f29b12e-83ba-4210-b9b0-b58177f6d126.txt)
+2025-08-21T03:42:03  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZAk2Bu&sid=yjBmEiukUSo2TuuYAAAC, method: GET, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/a99dc5978c5a-6fc9aabf-e08d-471d-98ba-77b9f055dd87.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a99dc5978c5a-6fc9aabf-e08d-471d-98ba-77b9f055dd87.txt)
+2025-08-21T12:43:47    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T12:43:47  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a99dc5978c5a-b57d2e73-7b69-458f-bff3-628022b2cb57.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a99dc5978c5a-b57d2e73-7b69-458f-bff3-628022b2cb57.txt)
+2025-08-21T11:56:26  Startup Request, url: /logstream, method: GET, type: request, pid: 768,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None
+2025-08-21T12:08:26    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T12:08:27  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a99dc5978c5a-d083523f-4731-4328-b974-5a4046ff46c5.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a99dc5978c5a-d083523f-4731-4328-b974-5a4046ff46c5.txt)
+2025-08-21T13:00:36    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T13:00:36  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a9f8d6f836d7-8cc0042d-21f3-4d3a-87ac-600d241eb7e3.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a9f8d6f836d7-8cc0042d-21f3-4d3a-87ac-600d241eb7e3.txt)
+2025-08-14T23:57:32    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T23:57:33  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a9f8d6f836d7-97de77d8-0cd1-454c-9508-a8c2927429ab.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a9f8d6f836d7-97de77d8-0cd1-454c-9508-a8c2927429ab.txt)
+2025-08-14T21:26:17  Startup Request, url: /logstream, method: GET, type: request, pid: 770,1,37, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true
+2025-08-14T21:28:17    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T21:28:18  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/a9f8d6f836d7-bade0197-550f-4bb9-a99c-3700e34e1321.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/a9f8d6f836d7-bade0197-550f-4bb9-a99c-3700e34e1321.txt)
+2025-08-14T23:55:43    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T23:55:43  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/ab03b9d7d27d-e8277292-d191-4f82-8f94-5bc2ec71945c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ab03b9d7d27d-e8277292-d191-4f82-8f94-5bc2ec71945c.txt)
+2025-08-22T10:04:29  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHFAIn&sid=3wl_6ue5TMMVbg7HAAAB, method: POST, type: request, pid: 772,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/b3694bb77706-f45c9505-2b1b-489d-8803-f9b2519298bf.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/b3694bb77706-f45c9505-2b1b-489d-8803-f9b2519298bf.txt)
+2025-08-21T14:21:57  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZD0VuW&sid=q02K1ByY9ff09CJ1AAAC, method: POST, type: request, pid: 774,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/b72fdf201f94-bed0276d-0267-44d5-9bf9-92f18c3700e8.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/b72fdf201f94-bed0276d-0267-44d5-9bf9-92f18c3700e8.txt)
+2025-08-14T18:55:09  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/b95c067270c7-4bf213ba-dfeb-462a-a0a4-14749cbe995c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/b95c067270c7-4bf213ba-dfeb-462a-a0a4-14749cbe995c.txt)
+2025-08-21T23:57:33  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZF4Dc1&sid=shrcXGd5sSLZOWaYAAAE, method: POST, type: request, pid: 772,1,17, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/ba7f8b6a7b3f-c44918dc-cd1b-47ad-87f7-0a19ccc8fd24.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ba7f8b6a7b3f-c44918dc-cd1b-47ad-87f7-0a19ccc8fd24.txt)
+2025-08-22T11:03:43  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHSjml.0&sid=RJLoRmmy-wIFJdYDAAAC, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/bd064476dbc2-6ed54148-6fe0-499f-89bc-12b01f0806d5.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/bd064476dbc2-6ed54148-6fe0-499f-89bc-12b01f0806d5.txt)
+2025-08-15T01:59:40  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/c36a55a5449c-97c7107e-4a10-4c32-9412-a4833b91df1b.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/c36a55a5449c-97c7107e-4a10-4c32-9412-a4833b91df1b.txt)
+2025-08-22T11:08:17  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHTX3-&sid=hf2CFHG7EZMPqsk_AAAG, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/c8695c112404-10ee3748-7b8f-4407-8c15-836e62b5154e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/c8695c112404-10ee3748-7b8f-4407-8c15-836e62b5154e.txt)
+2025-08-19T02:52:19  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 772,1,46, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/cac73609e96c-adab976a-b003-415b-8175-f1b3822994d2.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/cac73609e96c-adab976a-b003-415b-8175-f1b3822994d2.txt)
+2025-08-22T11:14:53  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,17, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/cb47a95655c0-e2b4df0d-2af8-4b37-8d87-2f0c597df4d0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/cb47a95655c0-e2b4df0d-2af8-4b37-8d87-2f0c597df4d0.txt)
+2025-08-15T02:51:33  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/cda727ce1773-391201e4-27d0-49c2-9b0e-4252f196ba3f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/cda727ce1773-391201e4-27d0-49c2-9b0e-4252f196ba3f.txt)
+2025-08-22T00:06:29  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZF6IX9&sid=W2orJYk1lXvTrkd_AAAB, method: POST, type: request, pid: 771,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/d22dc830d700-d0b99a98-4ed2-48cb-85b3-e79046c5e0e1.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d22dc830d700-d0b99a98-4ed2-48cb-85b3-e79046c5e0e1.txt)
+2025-08-15T14:47:20  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PYkCnBV&sid=BBq_Wot6cVw9AMM6AAAA, method: POST, type: request, pid: 770,1,7, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/d38e5af6c59c-24d4cb5f-6cc0-4af4-8ca6-d46b4fd97c17.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d38e5af6c59c-24d4cb5f-6cc0-4af4-8ca6-d46b4fd97c17.txt)
+2025-08-22T09:41:12  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZH9rAC.0&sid=65CBZHP3c9f8WEv6AAAK, method: GET, type: request, pid: 771,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/d55e0c22d99c-3c938613-86e5-48b1-909d-c59dd1be1cc4.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-3c938613-86e5-48b1-909d-c59dd1be1cc4.txt)
+2025-08-14T19:36:20  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 773,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/d55e0c22d99c-7dbb9f58-107c-4f72-95a0-3325d6f82691.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-7dbb9f58-107c-4f72-95a0-3325d6f82691.txt)
+2025-08-14T19:48:21    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T19:48:21  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-9a0f79ce-62ba-4fa2-b767-5065240adb19.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-9a0f79ce-62ba-4fa2-b767-5065240adb19.txt)
+2025-08-14T20:19:42    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:19:42  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-9ebc7f55-83e0-4d0a-8023-a7c1a0e6cd29.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-9ebc7f55-83e0-4d0a-8023-a7c1a0e6cd29.txt)
+2025-08-14T20:11:42    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:11:42  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-a1dd8873-707b-44ec-bd74-4841a28f5359.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-a1dd8873-707b-44ec-bd74-4841a28f5359.txt)
+2025-08-14T20:15:21    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:15:22  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-c2c0729c-84ef-4bff-b9a3-60981aaebc6d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-c2c0729c-84ef-4bff-b9a3-60981aaebc6d.txt)
+2025-08-14T20:25:38    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:25:38  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-e0956878-eb95-4a5b-9600-fe8686196bfd.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-e0956878-eb95-4a5b-9600-fe8686196bfd.txt)
+2025-08-14T19:48:38    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T19:48:38  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d55e0c22d99c-f5bc5675-745f-4f6b-8da7-23593abe2a40.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d55e0c22d99c-f5bc5675-745f-4f6b-8da7-23593abe2a40.txt)
+2025-08-14T20:31:13    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-14T20:31:14  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/d600619b3c32-c19b4492-6a59-4cf9-be29-6324fb128130.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d600619b3c32-c19b4492-6a59-4cf9-be29-6324fb128130.txt)
+2025-08-19T02:54:27  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 772,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/d80144719513-e9c0efd8-18fa-4c8e-b17a-6e04ccf69f4a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/d80144719513-e9c0efd8-18fa-4c8e-b17a-6e04ccf69f4a.txt)
+2025-08-21T21:40:22  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEardP&sid=3kX7HonxeczH76WHAAAB, method: POST, type: request, pid: 772,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/de93a1fb8664-e8aa9042-0aad-4d29-b6e3-37ebd01e9e0e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/de93a1fb8664-e8aa9042-0aad-4d29-b6e3-37ebd01e9e0e.txt)
+2025-08-22T01:55:16  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFVBzn&sid=KtQAuaRdGvY7Vq95AAAA, method: POST, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/deb54ae96c50-2f7de5f0-b0ae-43d1-b61e-d9bf8a9044a0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/deb54ae96c50-2f7de5f0-b0ae-43d1-b61e-d9bf8a9044a0.txt)
+2025-08-15T00:50:24    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-15T00:50:24  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/deb54ae96c50-480062aa-4186-4b38-b4b3-a1a30870741c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/deb54ae96c50-480062aa-4186-4b38-b4b3-a1a30870741c.txt)
+2025-08-15T00:58:32    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-15T00:58:32  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/deb54ae96c50-9124818a-9e13-4749-957e-c5712f31209d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/deb54ae96c50-9124818a-9e13-4749-957e-c5712f31209d.txt)
+2025-08-15T00:03:49  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 774,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/deb54ae96c50-a3055e8f-e528-4fe8-adbc-b4947a17fe3a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/deb54ae96c50-a3055e8f-e528-4fe8-adbc-b4947a17fe3a.txt)
+2025-08-15T00:12:53    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-15T00:12:53  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/e387f5e85562-bdffc00e-0ef2-4fa2-8787-530b5c8a4f91.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/e387f5e85562-bdffc00e-0ef2-4fa2-8787-530b5c8a4f91.txt)
+2025-08-22T01:45:18  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/e5b94ba95232-268fcddd-4363-41d1-889d-de342d999f1d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/e5b94ba95232-268fcddd-4363-41d1-889d-de342d999f1d.txt)
+2025-08-14T23:58:06  Startup Request, url: /api/logstream/, method: GET, type: request, pid: 770,1,15, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/e9e1bc0472d4-edb48b13-ad46-4a0c-a893-e89d6cf22b95.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/e9e1bc0472d4-edb48b13-ad46-4a0c-a893-e89d6cf22b95.txt)
+2025-08-22T02:18:52  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 769,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/ead702a7a5a4-e7f73471-f4fe-4bf3-96fc-cf991da2bc05.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ead702a7a5a4-e7f73471-f4fe-4bf3-96fc-cf991da2bc05.txt)
+2025-08-22T12:01:49  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHg0-l&sid=tiUrz_uGopMY4CO_AAAA, method: POST, type: request, pid: 769,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/ec58e6cbcf3a-233645a7-ee03-4b71-add9-109ec7dc84c0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ec58e6cbcf3a-233645a7-ee03-4b71-add9-109ec7dc84c0.txt)
+2025-08-21T20:33:38  Startup Request, url: /webssh/webssh2.css, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/ee403130854b-eb4cdef8-8fea-4339-80b1-bf517f9af28a.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ee403130854b-eb4cdef8-8fea-4339-80b1-bf517f9af28a.txt)
+2025-08-21T13:14:38  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/f2e58052fd32-c74e6cb3-034e-48c3-91d3-d81c74ced6f2.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f2e58052fd32-c74e6cb3-034e-48c3-91d3-d81c74ced6f2.txt)
+2025-08-22T11:25:56  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHXpPS.0&sid=D3r21UDsZSOzC8QzAAAE, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/f31c7be1d9a4-fe04ccba-2f03-41f3-945a-1d6d4177892c.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f31c7be1d9a4-fe04ccba-2f03-41f3-945a-1d6d4177892c.txt)
+2025-08-22T00:54:54  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZFHNiy&sid=xOMNGmq7gWd2XbAYAAAF, method: POST, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/f8950e79b7a4-f8bec004-219d-48f9-8061-2083cdaad5ea.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f8950e79b7a4-f8bec004-219d-48f9-8061-2083cdaad5ea.txt)
+2025-08-21T20:11:16  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEGOpb&sid=Vwvwo3gnfn57ItoXAAAC, method: POST, type: request, pid: 770,1,5, ScmType: None, SCM_DO_BUILD_DURING_DEPLOYMENT: true/home/LogFiles/kudu/trace/f8b35e2ffa5d-16c9e3d8-c06c-4306-aef6-669995c6b30e.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f8b35e2ffa5d-16c9e3d8-c06c-4306-aef6-669995c6b30e.txt)
+2025-08-21T21:54:09  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEd_Mt.0&sid=hv7QAItZ-Ful9QBBAAAB, method: GET, type: request, pid: 776,1,16, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/f8b35e2ffa5d-1deaffa6-d739-4a09-8ae8-aa34265a8383.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f8b35e2ffa5d-1deaffa6-d739-4a09-8ae8-aa34265a8383.txt)
+2025-08-21T22:29:21    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T22:29:21  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/f8b35e2ffa5d-20d2eb8c-a658-4326-b42d-dede2b295fd5.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f8b35e2ffa5d-20d2eb8c-a658-4326-b42d-dede2b295fd5.txt)
+2025-08-21T23:01:27    Error occurred, type: error, text: LogStreamManager: ProcessRequest end
+2025-08-21T23:01:27  Error occurred, type: error, text: LogStreamManager: Inside Reset/home/LogFiles/kudu/trace/f98d922bd64a-d716ccd1-d8d9-4165-baac-19a9c9ec845f.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/f98d922bd64a-d716ccd1-d8d9-4165-baac-19a9c9ec845f.txt)
+2025-08-22T10:58:06  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZHRRi7&sid=eu87r1SycadNNdGUAAAC, method: POST, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/fa09d7b198e2-48e90a1b-8511-4cd6-919f-9060d4e32d84.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/fa09d7b198e2-48e90a1b-8511-4cd6-919f-9060d4e32d84.txt)
+2025-08-14T18:41:47  Startup Request, url: /diagnostics/runtime, method: GET, type: request, pid: 770,1,5, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/ff90fd95e3cf-9d1ff42f-cc9f-41d3-bfe3-40a3f50c022d.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ff90fd95e3cf-9d1ff42f-cc9f-41d3-bfe3-40a3f50c022d.txt)
+2025-08-18T14:53:29  Startup Request, url: /api/deployments/?$orderby=ReceivedTime%20desc&$top=20&api-version=2022-03-01, method: GET, type: request, pid: 770,1,7, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/kudu/trace/ffc37cb8bcc1-4b562d8c-133b-49b1-ba6d-31d6b0fb40b0.txt  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/kudu/trace/ffc37cb8bcc1-4b562d8c-133b-49b1-ba6d-31d6b0fb40b0.txt)
+2025-08-21T19:47:19  Startup Request, url: /webssh/socket.io/?EIO=4&transport=polling&t=PZEAzw5&sid=JGaoCy0J2CLEhG4kAAAE, method: POST, type: request, pid: 770,1,15, SCM_DO_BUILD_DURING_DEPLOYMENT: true, ScmType: None/home/LogFiles/2025_08_19_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_19_lw1sdlwk0007KQ_default_docker.log)
+2025-08-19T02:54:26.0515705Z Writing output script to '/opt/startup/startup.sh'
+2025-08-19T02:54:28.6715573Z Using packages from virtual environment antenv located at /tmp/8dddbf20ca146dc/antenv.
+2025-08-19T02:54:28.6722138Z Updated PYTHONPATH to '/home/site/wwwroot/.python_packages/lib/site-packages:/home/site/wwwroot:/opt/startup/app_logs:/tmp/8dddbf20ca146dc/antenv/lib/python3.10/site-packages'
+2025-08-19T02:54:35.2840723Z [2025-08-19 02:54:35 +0000] [1039] [INFO] Starting gunicorn 21.2.0
+2025-08-19T02:54:35.2942389Z [2025-08-19 02:54:35 +0000] [1039] [INFO] Listening at: http://0.0.0.0:8000 (1039)
+2025-08-19T02:54:35.2942550Z [2025-08-19 02:54:35 +0000] [1039] [INFO] Using worker: uvicorn.workers.UvicornWorker
+2025-08-19T02:54:35.3115961Z [2025-08-19 02:54:35 +0000] [1046] [INFO] Booting worker with pid: 1046
+2025-08-19T02:54:45.3142729Z [2025-08-19 02:54:45 +0000] [1046] [INFO] Started server process [1046]
+2025-08-19T02:54:45.3151279Z [2025-08-19 02:54:45 +0000] [1046] [INFO] Waiting for application startup.
+2025-08-19T02:54:45.3214715Z [2025-08-19 02:54:45 +0000] [1046] [INFO] Application startup complete./home/LogFiles/2025_08_19_lw1sdlwk0007KQ_default_scm_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_19_lw1sdlwk0007KQ_default_scm_docker.log)
+2025-08-19T02:53:30.9908667Z Tue Aug 19 02:53:30 UTC 2025 running .net core
+2025-08-19T02:53:36.1468585Z Startup : 02.53.35.740737
+2025-08-19T02:53:36.4495099Z Configure Services : 02.53.36.447777
+2025-08-19T02:53:38.4383324Z Configure : 02.53.38.438155
+2025-08-19T02:53:40.1328383Z Setting Up Routes : 02.53.40.131986
+2025-08-19T02:53:43.6901038Z Exiting Configure : 02.53.43.680247
+2025-08-19T02:53:46.7441640Z Hosting environment: Production
+2025-08-19T02:53:46.7442229Z Content root path: /opt/Kudu
+2025-08-19T02:53:46.7442346Z Now listening on: http://0.0.0.0:8181
+2025-08-19T02:53:46.7442377Z Application started. Press Ctrl+C to shut down./home/LogFiles/2025_08_19_lw1sdlwk0007KQ_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_19_lw1sdlwk0007KQ_docker.log)
+2025-08-19T02:54:45.4009148Z Site startup probe succeeded after 74.5498745 seconds.
+2025-08-19T02:54:45.6093161Z Site is running with deployment version: 24724b32-62b6-4bad-990a-ef292fbd6f27
+2025-08-19T02:54:45.6314837Z Site started.
+2025-08-19T02:55:05.9382703Z Container is terminating. Grace period: 5 seconds.
+2025-08-19T02:55:05.9853783Z Stop and delete container. Retry count = 0
+2025-08-19T02:55:05.9860509Z Stopping container: a2fd13389a05_intellioptics-api-37558.
+2025-08-19T02:55:11.2991231Z Deleting container: a2fd13389a05_intellioptics-api-37558. Retry count = 0
+2025-08-19T02:55:12.0899100Z Container spec TerminationMessagePolicy  path
+2025-08-19T02:55:12.0923395Z Container is terminated. Total time elapsed: 6151 ms.
+2025-08-19T02:55:12.1005761Z Site: intellioptics-api-37558 stopped./home/LogFiles/2025_08_21_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_21_lw1sdlwk0007KQ_default_docker.log)
+2025-08-21T23:59:08.2574264Z   File "/tmp/8dde0d9b409a74a/antenv/lib/python3.11/site-packages/gunicorn/util.py", line 418, in import_app
+2025-08-21T23:59:08.2575119Z     raise AppImportError("Failed to find attribute %r in %r." % (name, module))
+2025-08-21T23:59:08.2575210Z gunicorn.errors.AppImportError: Failed to find attribute 'app' in 'app.main'.
+2025-08-21T23:59:08.2575242Z Failed to find attribute 'app' in 'app.main'.
+2025-08-21T23:59:08.2575308Z [2025-08-21 23:59:08 +0000] [1044] [INFO] Worker exiting (pid: 1044)
+2025-08-21T23:59:08.2575339Z Failed to find attribute 'app' in 'app.main'.
+2025-08-21T23:59:08.2575367Z [2025-08-21 23:59:08 +0000] [1045] [INFO] Worker exiting (pid: 1045)
+2025-08-21T23:59:12.4578050Z [2025-08-21 23:59:12 +0000] [1] [ERROR] Worker (pid:1044) exited with code 4
+2025-08-21T23:59:42.5476329Z [2025-08-21 23:59:42 +0000] [1] [ERROR] Shutting down: Master
+2025-08-21T23:59:42.5478126Z [2025-08-21 23:59:42 +0000] [1] [ERROR] Reason: App failed to load./home/LogFiles/2025_08_21_lw1sdlwk0007KQ_default_scm_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_21_lw1sdlwk0007KQ_default_scm_docker.log)
+2025-08-21T23:56:34.5793295Z Thu Aug 21 23:56:34 UTC 2025 running .net core
+2025-08-21T23:56:41.4315104Z Startup : 11.56.41.014684
+2025-08-21T23:56:41.7097419Z Configure Services : 11.56.41.709313
+2025-08-21T23:56:43.9230741Z Configure : 11.56.43.922680
+2025-08-21T23:56:46.1398202Z Setting Up Routes : 11.56.46.092719
+2025-08-21T23:56:49.7104616Z Exiting Configure : 11.56.49.703396
+2025-08-21T23:56:54.4981504Z Hosting environment: Production
+2025-08-21T23:56:54.5299828Z Content root path: /opt/Kudu
+2025-08-21T23:56:54.5299952Z Now listening on: http://0.0.0.0:8181
+2025-08-21T23:56:54.5300072Z Application started. Press Ctrl+C to shut down./home/LogFiles/2025_08_21_lw1sdlwk0007KQ_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_21_lw1sdlwk0007KQ_docker.log)
+2025-08-21T23:59:43.6184366Z Container is terminating. Grace period: 5 seconds.
+2025-08-21T23:59:43.6474035Z Stop and delete container. Retry count = 0
+2025-08-21T23:59:43.6546496Z Stopping container: dd825dae0d81_intellioptics-api-37558.
+2025-08-21T23:59:43.9260979Z Deleting container: dd825dae0d81_intellioptics-api-37558. Retry count = 0
+2025-08-21T23:59:45.6647714Z Container spec TerminationMessagePolicy  path
+2025-08-21T23:59:45.6771464Z Container is terminated. Total time elapsed: 2049 ms.
+2025-08-21T23:59:45.6804805Z Site container: intellioptics-api-37558 terminated during site startup.
+2025-08-21T23:59:45.6966552Z Site startup probe failed after 200.1939809 seconds.
+2025-08-21T23:59:45.8275725Z Failed to start site. Revert by stopping site.
+2025-08-21T23:59:45.8495523Z Site: intellioptics-api-37558 stopped./home/LogFiles/2025_08_22_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_22_lw1sdlwk0007KQ_default_docker.log)
+2025-08-22T18:33:24.9977363Z {"ts":"2025-08-22T18:33:24.929023+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_list_enter"}
+2025-08-22T18:33:26.1971920Z {"ts":"2025-08-22T18:33:26.195597+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_list_ok","count":4}
+2025-08-22T18:41:12.8478783Z {"ts":"2025-08-22T18:41:12.756735+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_list_enter"}
+2025-08-22T18:41:13.4030694Z {"ts":"2025-08-22T18:41:13.400813+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_list_ok","count":4}
+2025-08-22T18:41:41.8798776Z {"ts":"2025-08-22T18:41:41.879245+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_ping_enter"}
+2025-08-22T18:41:41.9154311Z {"ts":"2025-08-22T18:41:41.914408+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_ping_ok","val":1}
+2025-08-22T18:42:21.9342882Z {"ts":"2025-08-22T18:42:21.927808+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_create_ok","id":"ac8b484f245944ef819178d5aed6ec54"}
+2025-08-22T20:06:46.0024785Z {"ts":"2025-08-22T20:06:45.905859+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_get_enter","detector_id":"5c8bec2f-71d4-4c50-a3fc-c1b444ef98de"}
+2025-08-22T20:06:46.3228160Z {"ts":"2025-08-22T20:06:46.321825+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_get_miss","detector_id":"5c8bec2f-71d4-4c50-a3fc-c1b444ef98de"}
+2025-08-22T20:09:41.3365329Z {"ts":"2025-08-22T20:09:41.335745+00:00","lvl":"INFO","logger":"app.features.detectors","msg":"detectors_create_ok","id":"ec790aefa9f04e65944f370671b0cc18"}/home/LogFiles/2025_08_22_lw1sdlwk0007KQ_default_scm_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_22_lw1sdlwk0007KQ_default_scm_docker.log)
+2025-08-22T16:47:47.1135514Z    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+2025-08-22T16:47:47.1135618Z    at Microsoft.AspNetCore.Proxy.ProxyMiddleware.Invoke(HttpContext context)
+2025-08-22T16:47:47.1135717Z    at Kudu.Services.Web.Tracing.TraceMiddleware.Invoke(HttpContext context) in /tmp/KuduLite/Kudu.Services.Web/Tracing/TraceMiddleware.cs:line 101
+2025-08-22T17:10:27.3134263Z 05.10.27.298390
+2025-08-22T17:41:08.3974187Z Exception Message : The operation was canceled.
+2025-08-22T17:41:08.4359242Z Exception StackTrace :    at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+2025-08-22T17:41:08.4361740Z    at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+2025-08-22T17:41:08.4361889Z    at Microsoft.AspNetCore.Proxy.ProxyMiddleware.Invoke(HttpContext context)
+2025-08-22T17:41:08.4361913Z    at Kudu.Services.Web.Tracing.TraceMiddleware.Invoke(HttpContext context) in /tmp/KuduLite/Kudu.Services.Web/Tracing/TraceMiddleware.cs:line 101
+2025-08-22T18:21:04.5772066Z 06.21.04.506855/home/LogFiles/2025_08_22_lw1sdlwk0007KQ_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_22_lw1sdlwk0007KQ_docker.log)
+2025-08-22T16:51:22.1326154Z Successfully removed non-blocking flag from /podr/container/pipe/15b97a3e02de_intellioptics-api-37558/stderr_2dbbf2ef0de64b58b953382b4a374de6.
+2025-08-22T16:51:22.1330307Z Creating container with image: appsvc/python:3.11_20250723.2.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/python:3.11_20250723.2.tuxprod
+2025-08-22T16:51:24.3393849Z Starting container: 15b97a3e02de_intellioptics-api-37558.
+2025-08-22T16:51:24.4324409Z Starting watchers and probes.
+2025-08-22T16:51:24.4447084Z Starting metrics collection.
+2025-08-22T16:51:24.4449663Z Container is running.
+2025-08-22T16:51:25.5350575Z Container start method finished after 9113 ms.
+2025-08-22T16:52:47.6976268Z Site startup probe succeeded after 81.9396974 seconds.
+2025-08-22T16:52:48.3900637Z Site is running with deployment version: 6b67ea49-bc67-4746-a60d-5d6ddce5355a
+2025-08-22T16:52:48.5219724Z Site started./home/LogFiles/2025_08_23_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_23_lw1sdlwk0007KQ_default_docker.log)
+2025-08-23T23:14:20.9193623Z {"ts":"2025-08-23T23:14:20.847264+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:33391 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:19:22.6856556Z {"ts":"2025-08-23T23:19:22.645566+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:60573 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:24:21.4500302Z {"ts":"2025-08-23T23:24:21.406906+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:58743 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:29:22.6649387Z {"ts":"2025-08-23T23:29:22.563991+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:49961 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:34:22.0507524Z {"ts":"2025-08-23T23:34:22.024955+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:58193 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:39:22.4426126Z {"ts":"2025-08-23T23:39:22.418488+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:41657 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:44:22.7010941Z {"ts":"2025-08-23T23:44:22.674274+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:49085 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:49:22.8578168Z {"ts":"2025-08-23T23:49:22.820673+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:15327 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:54:23.1044289Z {"ts":"2025-08-23T23:54:23.070173+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:44049 - \"GET / HTTP/1.1\" 200"}
+2025-08-23T23:59:23.4747166Z {"ts":"2025-08-23T23:59:23.423647+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:29841 - \"GET / HTTP/1.1\" 200"}/home/LogFiles/2025_08_23_lw1sdlwk0007KQ_default_scm_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_23_lw1sdlwk0007KQ_default_scm_docker.log)
+2025-08-23T21:26:49.7078106Z Setting Up Routes : 09.26.49.706613
+2025-08-23T21:26:50.6289893Z Exiting Configure : 09.26.50.628866
+2025-08-23T21:26:51.0814531Z Hosting environment: Production
+2025-08-23T21:26:51.0815159Z Content root path: /opt/Kudu
+2025-08-23T21:26:51.0823258Z Now listening on: http://0.0.0.0:8181
+2025-08-23T21:26:51.0904731Z Application started. Press Ctrl+C to shut down.
+2025-08-23T22:06:29.7642517Z warn: Microsoft.AspNetCore.Server.Kestrel[22]
+2025-08-23T22:06:29.7714842Z       As of "08/23/2025 22:06:27 +00:00", the heartbeat has been running for "00:00:01.0096467" which is longer than "00:00:01". This could be caused by thread pool starvation.
+2025-08-23T22:21:01.4218205Z warn: Microsoft.AspNetCore.Server.Kestrel[22]
+2025-08-23T22:21:01.4339288Z       As of "08/23/2025 22:21:00 +00:00", the heartbeat has been running for "00:00:02.1216622" which is longer than "00:00:01". This could be caused by thread pool starvation./home/LogFiles/2025_08_23_lw1sdlwk0007KQ_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_23_lw1sdlwk0007KQ_docker.log)
+2025-08-23T21:25:06.5884199Z Successfully removed non-blocking flag from /podr/container/pipe/1a5c7a7643bb_intellioptics-api-37558/stderr_68c6c44ec4fb41e1b98859c5cf0135f2.
+2025-08-23T21:25:06.5888402Z Creating container with image: appsvc/python:3.11_20250723.2.tuxprod from registry: 10.1.0.6:13209 and fully qualified image name: 10.1.0.6:13209/appsvc/python:3.11_20250723.2.tuxprod
+2025-08-23T21:25:08.3314393Z Starting container: 1a5c7a7643bb_intellioptics-api-37558.
+2025-08-23T21:25:08.4104006Z Starting watchers and probes.
+2025-08-23T21:25:08.4182526Z Starting metrics collection.
+2025-08-23T21:25:08.4184108Z Container is running.
+2025-08-23T21:25:08.7025921Z Container start method finished after 8465 ms.
+2025-08-23T21:26:11.6438191Z Site startup probe succeeded after 62.7957255 seconds.
+2025-08-23T21:26:12.2648612Z Site is running with deployment version: 6b67ea49-bc67-4746-a60d-5d6ddce5355a
+2025-08-23T21:26:12.3570945Z Site started./home/LogFiles/2025_08_24_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_24_lw1sdlwk0007KQ_default_docker.log)
+2025-08-24T23:11:01.9301191Z {"ts":"2025-08-24T23:11:01.833823+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:24799 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:16:05.6743861Z {"ts":"2025-08-24T23:16:05.537158+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:56331 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:21:02.5301094Z {"ts":"2025-08-24T23:21:02.508986+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:25125 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:26:03.6146288Z {"ts":"2025-08-24T23:26:03.578535+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:40299 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:31:02.9578504Z {"ts":"2025-08-24T23:31:02.953966+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:54281 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:36:07.1401278Z {"ts":"2025-08-24T23:36:06.879345+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:21741 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:41:03.9004084Z {"ts":"2025-08-24T23:41:03.867212+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:23309 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:46:04.5312563Z {"ts":"2025-08-24T23:46:04.510957+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:26483 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:51:04.6758059Z {"ts":"2025-08-24T23:51:04.654694+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:34679 - \"GET / HTTP/1.1\" 200"}
+2025-08-24T23:56:04.9017487Z {"ts":"2025-08-24T23:56:04.834576+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:38677 - \"GET / HTTP/1.1\" 200"}/home/LogFiles/2025_08_25_lw1sdlwk0007KQ_default_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_25_lw1sdlwk0007KQ_default_docker.log)
+2025-08-25T08:51:38.4951262Z {"ts":"2025-08-25T08:51:38.473257+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:37525 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T08:56:38.8135825Z {"ts":"2025-08-25T08:56:38.771739+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:52229 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:01:38.8618257Z {"ts":"2025-08-25T09:01:38.835614+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:29839 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:06:39.3260619Z {"ts":"2025-08-25T09:06:39.301941+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:43117 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:11:39.4207147Z {"ts":"2025-08-25T09:11:39.392097+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:49347 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:16:39.9561792Z {"ts":"2025-08-25T09:16:39.909480+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:30075 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:21:39.9329243Z {"ts":"2025-08-25T09:21:39.923314+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:45881 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:26:40.4739444Z {"ts":"2025-08-25T09:26:40.455745+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:23279 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:31:40.9518207Z {"ts":"2025-08-25T09:31:40.911344+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:10139 - \"GET / HTTP/1.1\" 200"}
+2025-08-25T09:36:41.3129567Z {"ts":"2025-08-25T09:36:41.267313+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:31361 - \"GET / HTTP/1.1\" 200"}/home/LogFiles/2025_08_25_lw1sdlwk0007KQ_default_scm_docker.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/2025_08_25_lw1sdlwk0007KQ_default_scm_docker.log)
+2025-08-25T08:05:47.6052743Z warn: Microsoft.AspNetCore.Server.Kestrel[22]
+2025-08-25T08:05:47.6080386Z       As of "08/25/2025 08:05:46 +00:00", the heartbeat has been running for "00:00:01.9584423" which is longer than "00:00:01". This could be caused by thread pool starvation./home/LogFiles/AppServiceAppLogs_Feature_Installer/startup_9818.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/AppServiceAppLogs_Feature_Installer/startup_9818.log)
+2025-08-14 18:33:39,384  [MainThread] [DEBUG] : Initializating AppServiceAppLogging
+2025-08-14 18:33:39,401  [Thread-1 (] [DEBUG] : Did not find any previously bound socket
+2025-08-14 18:33:39,402  [MainThread] [DEBUG] : Initialized AppServiceAppLogging
+2025-08-14 18:33:40,969  [Thread-3 (] [DEBUG] : Waiting for the logs flag to be set/home/LogFiles/CodeProfiler/b2fccf_debug.log  (https://intellioptics-api-37558.scm.azurewebsites.net/api/vfs/LogFiles/CodeProfiler/b2fccf_debug.log)[2025_08_14_18_33_40] [appsvc_profiler.installer] [INFO] Code Profiler Installer is starting up[2025_08_14_18_33_40] [appsvc_profiler.installer] [INFO] Cleaning up any existing status file which indicated signal handlers initialized status[2025_08_14_18_33_41] [appsvc_profiler.installer] [DEBUG] APPSETTING_WEBSITE_ENABLE_DEFAULT_CODE_PROFILER : None[2025_08_14_18_33_42] [appsvc_profiler.installer] [INFO] Attempting to install the default code profiler.[2025_08_14_18_33_42] [appsvc_profiler.installer] [DEBUG] viztracer would save traces to /tmp/b2fccf_profiler_trace.json[2025_08_14_18_33_42] [appsvc_profiler.installer] [INFO] Successfully installed code profiler.[2025_08_14_18_33_42] [appsvc_profiler.installer] [INFO] Signal Handlers SIGUSR for needed code-profiler have been initialized for gunicorn process on instance b2fccf9116282c9672b2b47d85ae1e40a0982f2853d98adce6127a0953fdfb84[2025_08_14_18_33_42] [appsvc_profiler.installer] [DEBUG] Code Profiler Installer is exiting as installation is completedEnding Log Tail of existing logs ---Starting Live Log Stream ---
+2025-08-25T09:42:13  No new trace in the past 1 min(s).
+2025-08-25T09:41:41.3137530Z {"ts":"2025-08-25T09:41:41.302825+00:00","lvl":"INFO","logger":"uvicorn.access","msg":"169.254.131.1:35381 - \"GET / HTTP/1.1\" 200"}

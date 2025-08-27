@@ -25,7 +25,7 @@ python
 Always show details
 
 Copy
-from fourward.intellioptics.client import IntelliOptics
+from intellioptics.client import IntelliOptics
 
 client = IntelliOptics(api_token="your-api-key")
 
@@ -41,7 +41,7 @@ INTELLIOPTICS_API_TOKEN – your API key
 INTELLIOPTICS_ENDPOINT – base URL of your backend (default: http://localhost:8000)
 
 🤖 API Compatibility
-Designed to work with fourward-intellioptics-backend FastAPI server:
+Designed to work with intellioptics-backend FastAPI server:
 
  /api/detectors
 
@@ -74,6 +74,6 @@ Azure Blob & SQL integration
 📄 License
 MIT License (c) 2025 4WardMotion
 =======
-# fourward-intellioptics SDK
+# intellioptics SDK
 Custom visual inference SDK for 4WardMotion.
 >>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)
