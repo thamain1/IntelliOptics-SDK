@@ -18,7 +18,7 @@ jobs:
       # Create a zip with the *contents* of api/ at the root of the zip
       - name: Package API
         run: |
-          cd api
+          cd api-service/api
           zip -r ../api-package.zip .
 
       - name: Deploy to Azure Web App
