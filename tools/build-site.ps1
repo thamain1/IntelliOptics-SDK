@@ -1,37 +1,38 @@
-﻿param()
+# Build public site from docs (robust / skip if none)
+$ErrorActionPreference = 'Stop'
+$here = Split-Path -Parent $PSCommandPath
+$repo = Resolve-Path (Join-Path $here '..')
+$pub = Join-Path $repo 'public-site'
+New-Item -ItemType Directory -Force $pub | Out-Null
 
-# Paths
-$Root = Resolve-Path "$PSScriptRoot\.."
-$Docs = Join-Path $Root "docs"
-$Site = Join-Path $Root "site"
-$SdkSrc = Join-Path $Docs "python-sdk\api-reference-docs"
-$SdkDst = Join-Path $Site "python-sdk\api-reference-docs"
+# candidate doc roots (any that exist will be copied)
+$candidates = @('docs\python-sdk\api-reference-docs',
+                'site\python-sdk\api-reference-docs',
+                'api-service\IntelliOptics\docs\python-sdk\api-reference-docs',
+                'api-service\IntelliOptics\site\python-sdk\api-reference-docs')
+$existing = @()
+foreach ($rel in $candidates) {
+  $p = Join-Path $repo $rel
+  if (Test-Path $p) { $existing += $p }
+}
 
-# Clean site/
-if (Test-Path $Site) { Remove-Item $Site -Recurse -Force }
-New-Item -ItemType Directory $Site | Out-Null
+if ($existing.Count -eq 0) {
+  Write-Host "No docs directories found; skipping site build."
+  exit 0
+}
 
-# Copy SDK docs only (robocopy exit codes < 8 are success)
-robocopy $SdkSrc $SdkDst /MIR /R:0 /W:0 | Out-Null
-$rc = $LASTEXITCODE
-if ($rc -ge 8) { throw "robocopy failed with exit code $rc" } else { Write-Host "robocopy exit code $rc (OK)" }
-$global:LASTEXITCODE = 0  # avoid propagating non-zero to the runner
+function Copy-Robo([string]$src,[string]$dst) {
+  New-Item -ItemType Directory -Force $dst | Out-Null
+  robocopy $src $dst /E /NFL /NDL /NJH /NJS
+  $rc = $LASTEXITCODE
+  if ($rc -ge 8) { throw "robocopy failed with exit code $rc from $src" }
+}
 
-# Redirect index.html and 404.html to SDK home
-$Redirect = @"
-<!doctype html>
-<meta charset='utf-8'>
-<meta http-equiv='refresh' content='0; url=python-sdk/api-reference-docs/index.html'>
-<script>location.replace('python-sdk/api-reference-docs/index.html');</script>
-<p><a href='python-sdk/api-reference-docs/index.html'>Go to IntelliOptics Python SDK docs</a></p>
-"@
+foreach ($s in $existing) {
+  $name = Split-Path $s -Leaf
+  $dst = Join-Path $pub $name
+  Copy-Robo $s $dst
+}
 
-$IndexPath = Join-Path $Site "index.html"
-$ErrorPath = Join-Path $Site "404.html"
-$Redirect | Out-File -Encoding utf8 $IndexPath
-$Redirect | Out-File -Encoding utf8 $ErrorPath
-
-if (!(Test-Path $IndexPath)) { throw "site/ was not generated." }
-
-Write-Host "✅ site/ rebuilt from docs/ (SDK as landing page)"
-$global:LASTEXITCODE = 0
+Write-Host "Site build complete: $pub"
+exit 0
