@@ -1,4 +1,4 @@
-# Build public site from docs (always produce .\site\index.html)
+# Build public site from docs (always produce .\site\index.html, no angle brackets)
 $ErrorActionPreference = "Stop"
 
 $here = Split-Path -Parent $PSCommandPath
@@ -32,16 +32,9 @@ if ($existing) {
   Copy-Robo -src $existing -dst $site
 } else {
   Write-Host "No docs directories found; emitting placeholder site."
-  $htmlLines = @(
-    "<!doctype html>",
-    "<html><head><meta charset=""utf-8""><title>IntelliOptics Docs</title></head>",
-    "<body style=""font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial"">",
-    "<h1>IntelliOptics Documentation</h1>",
-    "<p>No generated docs were found in this build. The SDK is present under <code>python-sdk/</code>.</p>",
-    "</body></html>"
-  )
   $out = Join-Path $site "index.html"
-  $htmlLines -join [Environment]::NewLine | Set-Content -Encoding UTF8 -Path $out
+  $content = "IntelliOptics documentation placeholder. No generated docs were found in this build. The SDK lives under python-sdk/."
+  Set-Content -Encoding UTF8 -Path $out -Value $content
   Write-Host "Placeholder written to $out"
 }
 
