@@ -1,6 +1,36 @@
-﻿site/
-api-package.zip
-*.tar.gz
-output.tar.gz
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.egg-info/
+build/
+dist/
+
+# Envs
+.venv/
+venv/
+.env
+.env.* 
+
+# Tools
+.coverage
+.pytest_cache/
+.mypy_cache/
+ruff_cache/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Docs/build
+site/
+docs/_build/
+
+# Artifacts
+*.log
+
+fourward/
+IntelliOptics/fourward/
+
