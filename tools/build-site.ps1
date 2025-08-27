@@ -1,4 +1,4 @@
-# Build public site from docs (always produce .\site\index.html, no angle brackets)
+# Build public site from docs (always produce .\site\index.html)
 $ErrorActionPreference = "Stop"
 
 $here = Split-Path -Parent $PSCommandPath
@@ -6,7 +6,7 @@ $repo = Resolve-Path (Join-Path $here "..")
 $site = Join-Path $repo "site"
 New-Item -ItemType Directory -Force -Path $site | Out-Null
 
-# Candidate Sphinx build roots
+# Candidate doc roots
 $candidates = @(
   "docs\python-sdk\api-reference-docs",
   "site\python-sdk\api-reference-docs",
@@ -20,23 +20,22 @@ foreach ($rel in $candidates) {
   if (Test-Path -Path $p) { $existing = $p; break }
 }
 
-function Copy-Robo([string]$src, [string]$dst) {
+function Copy-Robo($src, $dst) {
   New-Item -ItemType Directory -Force -Path $dst | Out-Null
   robocopy $src $dst /E /NFL /NDL /NJH /NJS | Out-Null
-  $rc = $LASTEXITCODE
-  if ($rc -ge 8) { throw "robocopy failed with exit code $rc from $src" }
+  if ($LASTEXITCODE -ge 8) { throw ("robocopy failed with exit code " + $LASTEXITCODE + " from " + $src) }
 }
 
-if ($existing) {
-  Write-Host "Docs found at: $existing — copying into $site"
-  Copy-Robo -src $existing -dst $site
+if ($existing -ne $null) {
+  Write-Host ("Docs found at: " + $existing + " copying into " + $site)
+  Copy-Robo $existing $site
 } else {
-  Write-Host "No docs directories found; emitting placeholder site."
+  Write-Host "No docs directories found; writing placeholder site."
   $out = Join-Path $site "index.html"
-  $content = "IntelliOptics documentation placeholder. No generated docs were found in this build. The SDK lives under python-sdk/."
+  $content = "IntelliOptics docs placeholder. No generated docs in this build. SDK under python-sdk/."
   Set-Content -Encoding UTF8 -Path $out -Value $content
-  Write-Host "Placeholder written to $out"
+  Write-Host ("Placeholder written to " + $out)
 }
 
-Write-Host "Site build complete: $site"
+Write-Host ("Site build complete: " + $site)
 exit 0
