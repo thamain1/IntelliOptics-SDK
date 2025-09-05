@@ -47,3 +47,5 @@ _gen/
 # editor junk
 .vscode/
 .idea/
+
+_secrets_local/

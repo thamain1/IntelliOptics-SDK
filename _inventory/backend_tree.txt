@@ -1,0 +1,65 @@
+
+Path                                                                     Type  Length LastWriteTime
+----                                                                     ----  ------ -------------
+.dockerignore                                                            FILE     103 8/19/2025 8:01:02 AM
+app                                                                      <DIR>        8/26/2025 10:55:37 PM
+  app\__init__.py                                                        FILE       8 8/18/2025 9:18:51 AM
+  app\__pycache__                                                        <DIR>        8/26/2025 10:55:38 PM
+    app\__pycache__\__init__.cpython-313.pyc                             FILE     193 8/26/2025 10:55:37 PM
+    app\__pycache__\config.cpython-313.pyc                               FILE    2830 8/26/2025 10:55:38 PM
+    app\__pycache__\db.cpython-313.pyc                                   FILE    1148 8/26/2025 10:55:38 PM
+    app\__pycache__\logsetup.cpython-313.pyc                             FILE    3398 8/26/2025 10:55:38 PM
+    app\__pycache__\main.cpython-313.pyc                                 FILE   14759 8/26/2025 10:55:37 PM
+  app\auth.py                                                            FILE     145 8/18/2025 9:18:51 AM
+  app\clients                                                            <DIR>        8/26/2025 10:42:38 PM
+    app\clients\__init__.py                                              FILE       8 8/18/2025 9:18:51 AM
+    app\clients\intellioptics_client.py                                  FILE     424 8/21/2025 7:54:18 AM
+    app\clients\intellioptics_client.py.bak                              FILE     422 8/18/2025 7:21:12 PM
+  app\config.py                                                          FILE    1365 8/18/2025 9:18:51 AM
+  app\db.py                                                              FILE     580 8/18/2025 9:18:51 AM
+  app\features                                                           <DIR>        8/26/2025 10:42:38 PM
+    app\features\__init__.py                                             FILE       8 8/18/2025 9:18:52 AM
+    app\features\alerts.py                                               FILE     574 8/20/2025 8:21:22 AM
+    app\features\alerts.py.bak                                           FILE     553 8/18/2025 9:18:52 AM
+    app\features\detectors.py                                            FILE    4495 8/26/2025 8:35:53 PM
+  app\logsetup.py                                                        FILE    2205 8/19/2025 9:57:01 AM
+  app\main.py                                                            FILE   13871 8/23/2025 9:39:04 AM
+  app\main.py.addrouter.bak                                              FILE   14543 8/21/2025 11:20:22 AM
+  app\main.py.bak                                                        FILE   14094 8/21/2025 10:23:13 AM
+  app\main.py.bak_fix                                                    FILE   14520 8/21/2025 10:54:32 AM
+  app\main.py.bak2                                                       FILE   14142 8/21/2025 10:43:25 AM
+  app\main.py.fixbak                                                     FILE   14593 8/21/2025 10:46:56 AM
+  app\migrations.py                                                      FILE    1558 8/18/2025 9:18:51 AM
+  app\models.py                                                          FILE    1557 8/18/2025 8:28:06 PM
+  app\queues                                                             <DIR>        8/26/2025 10:42:38 PM
+    app\queues\__init__.py                                               FILE       8 8/18/2025 9:18:51 AM
+    app\queues\servicebus.py                                             FILE    2410 8/19/2025 9:07:42 AM
+  app\schemas.py                                                         FILE     601 8/18/2025 9:18:51 AM
+  app\storage                                                            <DIR>        8/26/2025 10:42:38 PM
+    app\storage\__init__.py                                              FILE       8 8/18/2025 9:18:51 AM
+    app\storage\blob.py                                                  FILE    4964 8/19/2025 1:49:45 PM
+Dockerfile                                                               FILE    1275 8/19/2025 7:57:44 AM
+intellioptics                                                            <DIR>        8/26/2025 10:42:38 PM
+  intellioptics\__init__.py                                              FILE     170 8/21/2025 7:46:42 AM
+  intellioptics\__pycache__                                              <DIR>        8/26/2025 10:42:38 PM
+    intellioptics\__pycache__\__init__.cpython-313.pyc                   FILE     300 8/14/2025 6:49:21 PM
+    intellioptics\__pycache__\client.cpython-313.pyc                     FILE    6317 8/14/2025 6:49:21 PM
+    intellioptics\__pycache__\exceptions.cpython-313.pyc                 FILE     721 8/14/2025 6:49:21 PM
+    intellioptics\__pycache__\types.cpython-313.pyc                      FILE    1216 8/14/2025 6:49:21 PM
+  intellioptics\client.py                                                FILE    3934 8/14/2025 1:02:54 PM
+  intellioptics\exceptions.py                                            FILE     126 8/14/2025 1:02:54 PM
+  intellioptics\experimental.py                                          FILE     213 8/14/2025 10:44:38 AM
+  intellioptics\intellioptics                                            <DIR>        8/26/2025 10:42:38 PM
+    intellioptics\intellioptics\__init__.py                              FILE     125 8/14/2025 1:02:54 PM
+    intellioptics\intellioptics\__pycache__                              <DIR>        8/26/2025 10:42:38 PM
+      intellioptics\intellioptics\__pycache__\__init__.cpython-313.pyc   FILE     300 8/14/2025 6:49:21 PM
+      intellioptics\intellioptics\__pycache__\client.cpython-313.pyc     FILE    6317 8/14/2025 6:49:21 PM
+      intellioptics\intellioptics\__pycache__\exceptions.cpython-313.pyc FILE     721 8/14/2025 6:49:21 PM
+      intellioptics\intellioptics\__pycache__\types.cpython-313.pyc      FILE    1216 8/14/2025 6:49:21 PM
+    intellioptics\intellioptics\client.py                                FILE    3934 8/14/2025 1:02:54 PM
+    intellioptics\intellioptics\exceptions.py                            FILE     126 8/14/2025 1:02:54 PM
+    intellioptics\intellioptics\types.py                                 FILE     461 8/14/2025 1:02:54 PM
+  intellioptics\types.py                                                 FILE     461 8/14/2025 1:02:54 PM
+requirements.txt                                                         FILE     214 8/21/2025 8:58:25 AM
+runtime.txt                                                              FILE      11 8/21/2025 7:08:18 AM
+
