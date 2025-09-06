@@ -1,4 +1,4 @@
-﻿import os
+import os
 from typing import Any, Dict, Optional
 import httpx
 from .types import Answer, Detector

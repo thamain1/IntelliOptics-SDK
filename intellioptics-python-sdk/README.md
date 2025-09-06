@@ -1,4 +1,4 @@
-﻿# IntelliOptics Python SDK
+# IntelliOptics Python SDK
 
 ```python
 from intellioptics import IntelliOptics

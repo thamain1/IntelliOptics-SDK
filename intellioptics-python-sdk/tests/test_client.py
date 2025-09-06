@@ -1,4 +1,4 @@
-﻿import respx, httpx
+import respx, httpx
 from intellioptics import IntelliOptics
 
 @respx.mock

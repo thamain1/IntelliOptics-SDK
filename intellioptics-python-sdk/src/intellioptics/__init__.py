@@ -1,4 +1,4 @@
-﻿from .client import IntelliOptics, AsyncIntelliOptics, ExperimentalApi
+from .client import IntelliOptics, AsyncIntelliOptics, ExperimentalApi
 from .models import ImageQuery, ImageQueryResult
 from .exceptions import IntelliOpticsError, ApiError, AuthError, NotFound
 

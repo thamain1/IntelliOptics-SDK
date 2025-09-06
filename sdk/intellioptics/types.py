@@ -1,4 +1,4 @@
-﻿from dataclasses import dataclass
+from dataclasses import dataclass
 from typing import Literal, Optional
 
 AnswerLabel = Literal["YES", "NO", "COUNT", "UNCLEAR"]

@@ -1,4 +1,4 @@
-﻿class IntelliOpticsError(Exception):
+class IntelliOpticsError(Exception):
     pass
 
 class AuthError(IntelliOpticsError):

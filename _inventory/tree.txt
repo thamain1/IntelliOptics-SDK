@@ -1,477 +1,477 @@
 Folder PATH listing
 Volume serial number is B2F5-6D0B
 C:.
-³   .gitignore
-³   aci-worker-debug.yaml
-³   aci-worker-run.yaml
-³   aci-worker.yaml
-³   app.zip
-³   create_detector.py
-³   create_detector_rest.py
-³   intellioptics-python-sdk.zip
-³   intellioptics_sdk_bootstrap.ps1
-³   intellioptics_sdk_zip.ps1
-³   LICENSE
-³   make_io_sdk_zip.ps1
-³   pyproject.toml.BROKEN
-³   README.md
-³   requirements.txt
-³   startup.sh
-³   templogs.txt
-³   test.jpg
-³   transfer chat.txt
-³   worker-aci.yaml
-³   
-ÃÄÄÄ.github
-³   ÀÄÄÄworkflows
-³           api-deploy.yml
-³           deploy-storage-website.yml
-³           python-sdk.yml
-³           
-ÃÄÄÄapi
-³   ³   runtime.txt
-³   ³   
-³   ÀÄÄÄapp
-³           main.py
-³           __init__.py
-³           
-ÃÄÄÄAzure
-³   ³   intellioptics-oneclick.zip
-³   ³   intellioptics_oneclick_bootstrap.sh
-³   ³   
-³   ÀÄÄÄintellioptics-oneclick
-³       ³   .deployment
-³       ³   .env
-³       ³   .env.example
-³       ³   .gitignore
-³       ³   README.md
-³       ³   requirements.txt
-³       ³   
-³       ÃÄÄÄ.github
-³       ³   ÀÄÄÄworkflows
-³       ³           api-ci.yml
-³       ³           worker-ci.yml
-³       ³           
-³       ÃÄÄÄbackend
-³       ³   ³   .dockerignore
-³       ³   ³   Dockerfile
-³       ³   ³   requirements.txt
-³       ³   ³   runtime.txt
-³       ³   ³   
-³       ³   ÃÄÄÄapp
-³       ³   ³   ³   auth.py
-³       ³   ³   ³   config.py
-³       ³   ³   ³   db.py
-³       ³   ³   ³   logsetup.py
-³       ³   ³   ³   main.py
-³       ³   ³   ³   main.py.addrouter.bak
-³       ³   ³   ³   main.py.bak
-³       ³   ³   ³   main.py.bak2
-³       ³   ³   ³   main.py.bak_fix
-³       ³   ³   ³   main.py.fixbak
-³       ³   ³   ³   migrations.py
-³       ³   ³   ³   models.py
-³       ³   ³   ³   schemas.py
-³       ³   ³   ³   __init__.py
-³       ³   ³   ³   
-³       ³   ³   ÃÄÄÄclients
-³       ³   ³   ³       intellioptics_client.py
-³       ³   ³   ³       intellioptics_client.py.bak
-³       ³   ³   ³       __init__.py
-³       ³   ³   ³       
-³       ³   ³   ÃÄÄÄfeatures
-³       ³   ³   ³       alerts.py
-³       ³   ³   ³       alerts.py.bak
-³       ³   ³   ³       detectors.py
-³       ³   ³   ³       __init__.py
-³       ³   ³   ³       
-³       ³   ³   ÃÄÄÄqueues
-³       ³   ³   ³       servicebus.py
-³       ³   ³   ³       __init__.py
-³       ³   ³   ³       
-³       ³   ³   ÀÄÄÄstorage
-³       ³   ³           blob.py
-³       ³   ³           __init__.py
-³       ³   ³           
-³       ³   ÀÄÄÄintellioptics
-³       ³       ³   client.py
-³       ³       ³   exceptions.py
-³       ³       ³   experimental.py
-³       ³       ³   types.py
-³       ³       ³   __init__.py
-³       ³       ³   
-³       ³       ÃÄÄÄintellioptics
-³       ³       ³   ³   client.py
-³       ³       ³   ³   exceptions.py
-³       ³       ³   ³   types.py
-³       ³       ³   ³   __init__.py
-³       ³       ³   ³   
-³       ³       ³   ÀÄÄÄ__pycache__
-³       ³       ³           client.cpython-313.pyc
-³       ³       ³           exceptions.cpython-313.pyc
-³       ³       ³           types.cpython-313.pyc
-³       ³       ³           __init__.cpython-313.pyc
-³       ³       ³           
-³       ³       ÀÄÄÄ__pycache__
-³       ³               client.cpython-313.pyc
-³       ³               exceptions.cpython-313.pyc
-³       ³               types.cpython-313.pyc
-³       ³               __init__.cpython-313.pyc
-³       ³               
-³       ÃÄÄÄdeploy
-³       ³       aci-worker.sh
-³       ³       appservice-api.sh
-³       ³       common.sh
-³       ³       install.ps1
-³       ³       install.sh
-³       ³       provision.sh
-³       ³       
-³       ÀÄÄÄworker-shim
-³               db.py
-³               Dockerfile
-³               models.py
-³               worker.py
-³               
-ÃÄÄÄdocs
-³   ÀÄÄÄpython-sdk
-³       ÀÄÄÄapi-reference-docs
-³           ³   genindex.html
-³           ³   index.html
-³           ³   models.html
-³           ³   search.html
-³           ³   
-³           ÃÄÄÄ_sources
-³           ³       index.rst.txt
-³           ³       models.rst.txt
-³           ³       
-³           ÀÄÄÄ_static
-³               ³   autodoc_pydantic.css
-³               ³   doctools.js@v=9a2dae69
-³               ³   documentation_options.js@v=2753bf86
-³               ³   jquery.js@v=5d32c60e
-³               ³   language_data.js
-³               ³   pygments.css
-³               ³   searchtools.js
-³               ³   sphinx_highlight.js@v=dc90522c
-³               ³   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
-³               ³   
-³               ÃÄÄÄcss
-³               ³   ³   theme.css
-³               ³   ³   
-³               ³   ÀÄÄÄfonts
-³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
-³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
-³               ³           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
-³               ³           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
-³               ³           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
-³               ³           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
-³               ³           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
-³               ³           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
-³               ³           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
-³               ³           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
-³               ³           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
-³               ³           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
-³               ³           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
-³               ³           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
-³               ³           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
-³               ³           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
-³               ³           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
-³               ³           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
-³               ³           
-³               ÀÄÄÄjs
-³                       theme.js
-³                       
-ÃÄÄÄfourward
-³   ÀÄÄÄintellioptics
-³           client.py
-³           config.py
-³           exceptions.py
-³           experimental.py
-³           models.py
-³           __init__.py
-³           
-ÃÄÄÄIntelliOptics
-³   ³   .gitignore
-³   ³   api-package.zip
-³   ³   LICENSE
-³   ³   pyproject.toml
-³   ³   README.md
-³   ³   requirements.txt
-³   ³   startup.sh
-³   ³   
-³   ÃÄÄÄapi
-³   ³   ³   runtime.txt
-³   ³   ³   
-³   ³   ÀÄÄÄapp
-³   ³           main.py
-³   ³           requirements.txt
-³   ³           __init__.py
-³   ³           
-³   ÃÄÄÄdocs
-³   ³   ÀÄÄÄpython-sdk
-³   ³       ÀÄÄÄapi-reference-docs
-³   ³           ³   genindex.html
-³   ³           ³   index.html
-³   ³           ³   models.html
-³   ³           ³   search.html
-³   ³           ³   
-³   ³           ÃÄÄÄ_sources
-³   ³           ³       index.rst.txt
-³   ³           ³       models.rst.txt
-³   ³           ³       
-³   ³           ÀÄÄÄ_static
-³   ³               ³   autodoc_pydantic.css
-³   ³               ³   doctools.js@v=9a2dae69
-³   ³               ³   documentation_options.js@v=2753bf86
-³   ³               ³   jquery.js@v=5d32c60e
-³   ³               ³   language_data.js
-³   ³               ³   pygments.css
-³   ³               ³   searchtools.js
-³   ³               ³   sphinx_highlight.js@v=dc90522c
-³   ³               ³   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
-³   ³               ³   
-³   ³               ÃÄÄÄcss
-³   ³               ³   ³   theme.css
-³   ³               ³   ³   
-³   ³               ³   ÀÄÄÄfonts
-³   ³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
-³   ³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
-³   ³               ³           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
-³   ³               ³           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
-³   ³               ³           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
-³   ³               ³           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
-³   ³               ³           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
-³   ³               ³           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
-³   ³               ³           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
-³   ³               ³           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
-³   ³               ³           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
-³   ³               ³           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
-³   ³               ³           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
-³   ³               ³           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
-³   ³               ³           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
-³   ³               ³           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
-³   ³               ³           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
-³   ³               ³           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
-³   ³               ³           
-³   ³               ÀÄÄÄjs
-³   ³                       theme.js
-³   ³                       
-³   ÃÄÄÄfourward
-³   ³   ÀÄÄÄintellioptics
-³   ³           client.py
-³   ³           config.py
-³   ³           exceptions.py
-³   ³           experimental.py
-³   ³           models.py
-³   ³           __init__.py
-³   ³           
-³   ÃÄÄÄsdk
-³   ³   ³   pyproject.toml
-³   ³   ³   README.md
-³   ³   ³   
-³   ³   ÃÄÄÄintellioptics
-³   ³   ³   ³   client.py
-³   ³   ³   ³   exceptions.py
-³   ³   ³   ³   types.py
-³   ³   ³   ³   __init__.py
-³   ³   ³   ³   
-³   ³   ³   ÀÄÄÄ__pycache__
-³   ³   ³           client.cpython-313.pyc
-³   ³   ³           exceptions.cpython-313.pyc
-³   ³   ³           types.cpython-313.pyc
-³   ³   ³           __init__.cpython-313.pyc
-³   ³   ³           
-³   ³   ÀÄÄÄintellioptics.egg-info
-³   ³           dependency_links.txt
-³   ³           PKG-INFO
-³   ³           requires.txt
-³   ³           SOURCES.txt
-³   ³           top_level.txt
-³   ³           
-³   ÃÄÄÄsite
-³   ³   ³   404.html
-³   ³   ³   index.html
-³   ³   ³   
-³   ³   ÀÄÄÄpython-sdk
-³   ³       ÀÄÄÄapi-reference-docs
-³   ³           ³   genindex.html
-³   ³           ³   index.html
-³   ³           ³   models.html
-³   ³           ³   search.html
-³   ³           ³   
-³   ³           ÃÄÄÄ_sources
-³   ³           ³       index.rst.txt
-³   ³           ³       models.rst.txt
-³   ³           ³       
-³   ³           ÀÄÄÄ_static
-³   ³               ³   autodoc_pydantic.css
-³   ³               ³   doctools.js@v=9a2dae69
-³   ³               ³   documentation_options.js@v=2753bf86
-³   ³               ³   jquery.js@v=5d32c60e
-³   ³               ³   language_data.js
-³   ³               ³   pygments.css
-³   ³               ³   searchtools.js
-³   ³               ³   sphinx_highlight.js@v=dc90522c
-³   ³               ³   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
-³   ³               ³   
-³   ³               ÃÄÄÄcss
-³   ³               ³   ³   theme.css
-³   ³               ³   ³   
-³   ³               ³   ÀÄÄÄfonts
-³   ³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
-³   ³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
-³   ³               ³           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
-³   ³               ³           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
-³   ³               ³           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
-³   ³               ³           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
-³   ³               ³           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
-³   ³               ³           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
-³   ³               ³           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
-³   ³               ³           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
-³   ³               ³           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
-³   ³               ³           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
-³   ³               ³           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
-³   ³               ³           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
-³   ³               ³           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
-³   ³               ³           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
-³   ³               ³           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
-³   ³               ³           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
-³   ³               ³           
-³   ³               ÀÄÄÄjs
-³   ³                       theme.js
-³   ³                       
-³   ÃÄÄÄtests
-³   ³       test_client.py
-³   ³       
-³   ÀÄÄÄtools
-³           build-site.ps1
-³           
-ÃÄÄÄintellioptics-python-sdk
-³   ³   .gitignore
-³   ³   pyproject.toml
-³   ³   README.md
-³   ³   
-³   ÃÄÄÄ.github
-³   ³   ÀÄÄÄworkflows
-³   ³           ci.yml
-³   ³           
-³   ÃÄÄÄ.pytest_cache
-³   ³   ³   .gitignore
-³   ³   ³   CACHEDIR.TAG
-³   ³   ³   README.md
-³   ³   ³   
-³   ³   ÀÄÄÄv
-³   ³       ÀÄÄÄcache
-³   ³               nodeids
-³   ³               
-³   ÃÄÄÄdist
-³   ³       intellioptics-0.1.0-py3-none-any.whl
-³   ³       intellioptics-0.1.0.tar.gz
-³   ³       
-³   ÃÄÄÄsrc
-³   ³   ÀÄÄÄintellioptics
-³   ³       ³   client.py
-³   ³       ³   exceptions.py
-³   ³       ³   models.py
-³   ³       ³   __init__.py
-³   ³       ³   
-³   ³       ÀÄÄÄ__pycache__
-³   ³               client.cpython-313.pyc
-³   ³               exceptions.cpython-313.pyc
-³   ³               models.cpython-313.pyc
-³   ³               __init__.cpython-313.pyc
-³   ³               
-³   ÀÄÄÄtests
-³       ³   test_client.py
-³       ³   
-³       ÀÄÄÄ__pycache__
-³               test_client.cpython-313-pytest-8.4.1.pyc
-³               
-ÃÄÄÄintellioptics_sdk
-³       intellioptics_sdk_zip.ps1
-³       
-ÃÄÄÄsdk
-³   ³   pyproject.toml
-³   ³   README.md
-³   ³   
-³   ÃÄÄÄintellioptics
-³   ³   ³   client.py
-³   ³   ³   exceptions.py
-³   ³   ³   types.py
-³   ³   ³   __init__.py
-³   ³   ³   
-³   ³   ÀÄÄÄ__pycache__
-³   ³           client.cpython-313.pyc
-³   ³           exceptions.cpython-313.pyc
-³   ³           types.cpython-313.pyc
-³   ³           __init__.cpython-313.pyc
-³   ³           
-³   ÀÄÄÄintellioptics.egg-info
-³           dependency_links.txt
-³           PKG-INFO
-³           requires.txt
-³           SOURCES.txt
-³           top_level.txt
-³           
-ÃÄÄÄsite
-³   ³   404.html
-³   ³   index.html
-³   ³   
-³   ÀÄÄÄpython-sdk
-³       ÀÄÄÄapi-reference-docs
-³           ³   genindex.html
-³           ³   index.html
-³           ³   models.html
-³           ³   search.html
-³           ³   
-³           ÃÄÄÄ_sources
-³           ³       index.rst.txt
-³           ³       models.rst.txt
-³           ³       
-³           ÀÄÄÄ_static
-³               ³   autodoc_pydantic.css
-³               ³   doctools.js@v=9a2dae69
-³               ³   documentation_options.js@v=2753bf86
-³               ³   jquery.js@v=5d32c60e
-³               ³   language_data.js
-³               ³   pygments.css
-³               ³   searchtools.js
-³               ³   sphinx_highlight.js@v=dc90522c
-³               ³   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
-³               ³   
-³               ÃÄÄÄcss
-³               ³   ³   theme.css
-³               ³   ³   
-³               ³   ÀÄÄÄfonts
-³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
-³               ³           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
-³               ³           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
-³               ³           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
-³               ³           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
-³               ³           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
-³               ³           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
-³               ³           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
-³               ³           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
-³               ³           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
-³               ³           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
-³               ³           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
-³               ³           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
-³               ³           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
-³               ³           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
-³               ³           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
-³               ³           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
-³               ³           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
-³               ³           
-³               ÀÄÄÄjs
-³                       theme.js
-³                       
-ÃÄÄÄtests
-³       test_client.py
-³       
-ÃÄÄÄtools
-³       build-site.ps1
-³       
-ÀÄÄÄ_inventory
+ï¿½   .gitignore
+ï¿½   aci-worker-debug.yaml
+ï¿½   aci-worker-run.yaml
+ï¿½   aci-worker.yaml
+ï¿½   app.zip
+ï¿½   create_detector.py
+ï¿½   create_detector_rest.py
+ï¿½   intellioptics-python-sdk.zip
+ï¿½   intellioptics_sdk_bootstrap.ps1
+ï¿½   intellioptics_sdk_zip.ps1
+ï¿½   LICENSE
+ï¿½   make_io_sdk_zip.ps1
+ï¿½   pyproject.toml.BROKEN
+ï¿½   README.md
+ï¿½   requirements.txt
+ï¿½   startup.sh
+ï¿½   templogs.txt
+ï¿½   test.jpg
+ï¿½   transfer chat.txt
+ï¿½   worker-aci.yaml
+ï¿½   
+ï¿½ï¿½ï¿½ï¿½.github
+ï¿½   ï¿½ï¿½ï¿½ï¿½workflows
+ï¿½           api-deploy.yml
+ï¿½           deploy-storage-website.yml
+ï¿½           python-sdk.yml
+ï¿½           
+ï¿½ï¿½ï¿½ï¿½api
+ï¿½   ï¿½   runtime.txt
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½app
+ï¿½           main.py
+ï¿½           __init__.py
+ï¿½           
+ï¿½ï¿½ï¿½ï¿½Azure
+ï¿½   ï¿½   intellioptics-oneclick.zip
+ï¿½   ï¿½   intellioptics_oneclick_bootstrap.sh
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics-oneclick
+ï¿½       ï¿½   .deployment
+ï¿½       ï¿½   .env
+ï¿½       ï¿½   .env.example
+ï¿½       ï¿½   .gitignore
+ï¿½       ï¿½   README.md
+ï¿½       ï¿½   requirements.txt
+ï¿½       ï¿½   
+ï¿½       ï¿½ï¿½ï¿½ï¿½.github
+ï¿½       ï¿½   ï¿½ï¿½ï¿½ï¿½workflows
+ï¿½       ï¿½           api-ci.yml
+ï¿½       ï¿½           worker-ci.yml
+ï¿½       ï¿½           
+ï¿½       ï¿½ï¿½ï¿½ï¿½backend
+ï¿½       ï¿½   ï¿½   .dockerignore
+ï¿½       ï¿½   ï¿½   Dockerfile
+ï¿½       ï¿½   ï¿½   requirements.txt
+ï¿½       ï¿½   ï¿½   runtime.txt
+ï¿½       ï¿½   ï¿½   
+ï¿½       ï¿½   ï¿½ï¿½ï¿½ï¿½app
+ï¿½       ï¿½   ï¿½   ï¿½   auth.py
+ï¿½       ï¿½   ï¿½   ï¿½   config.py
+ï¿½       ï¿½   ï¿½   ï¿½   db.py
+ï¿½       ï¿½   ï¿½   ï¿½   logsetup.py
+ï¿½       ï¿½   ï¿½   ï¿½   main.py
+ï¿½       ï¿½   ï¿½   ï¿½   main.py.addrouter.bak
+ï¿½       ï¿½   ï¿½   ï¿½   main.py.bak
+ï¿½       ï¿½   ï¿½   ï¿½   main.py.bak2
+ï¿½       ï¿½   ï¿½   ï¿½   main.py.bak_fix
+ï¿½       ï¿½   ï¿½   ï¿½   main.py.fixbak
+ï¿½       ï¿½   ï¿½   ï¿½   migrations.py
+ï¿½       ï¿½   ï¿½   ï¿½   models.py
+ï¿½       ï¿½   ï¿½   ï¿½   schemas.py
+ï¿½       ï¿½   ï¿½   ï¿½   __init__.py
+ï¿½       ï¿½   ï¿½   ï¿½   
+ï¿½       ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½clients
+ï¿½       ï¿½   ï¿½   ï¿½       intellioptics_client.py
+ï¿½       ï¿½   ï¿½   ï¿½       intellioptics_client.py.bak
+ï¿½       ï¿½   ï¿½   ï¿½       __init__.py
+ï¿½       ï¿½   ï¿½   ï¿½       
+ï¿½       ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½features
+ï¿½       ï¿½   ï¿½   ï¿½       alerts.py
+ï¿½       ï¿½   ï¿½   ï¿½       alerts.py.bak
+ï¿½       ï¿½   ï¿½   ï¿½       detectors.py
+ï¿½       ï¿½   ï¿½   ï¿½       __init__.py
+ï¿½       ï¿½   ï¿½   ï¿½       
+ï¿½       ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½queues
+ï¿½       ï¿½   ï¿½   ï¿½       servicebus.py
+ï¿½       ï¿½   ï¿½   ï¿½       __init__.py
+ï¿½       ï¿½   ï¿½   ï¿½       
+ï¿½       ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½storage
+ï¿½       ï¿½   ï¿½           blob.py
+ï¿½       ï¿½   ï¿½           __init__.py
+ï¿½       ï¿½   ï¿½           
+ï¿½       ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½       ï¿½       ï¿½   client.py
+ï¿½       ï¿½       ï¿½   exceptions.py
+ï¿½       ï¿½       ï¿½   experimental.py
+ï¿½       ï¿½       ï¿½   types.py
+ï¿½       ï¿½       ï¿½   __init__.py
+ï¿½       ï¿½       ï¿½   
+ï¿½       ï¿½       ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½       ï¿½       ï¿½   ï¿½   client.py
+ï¿½       ï¿½       ï¿½   ï¿½   exceptions.py
+ï¿½       ï¿½       ï¿½   ï¿½   types.py
+ï¿½       ï¿½       ï¿½   ï¿½   __init__.py
+ï¿½       ï¿½       ï¿½   ï¿½   
+ï¿½       ï¿½       ï¿½   ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½       ï¿½       ï¿½           client.cpython-313.pyc
+ï¿½       ï¿½       ï¿½           exceptions.cpython-313.pyc
+ï¿½       ï¿½       ï¿½           types.cpython-313.pyc
+ï¿½       ï¿½       ï¿½           __init__.cpython-313.pyc
+ï¿½       ï¿½       ï¿½           
+ï¿½       ï¿½       ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½       ï¿½               client.cpython-313.pyc
+ï¿½       ï¿½               exceptions.cpython-313.pyc
+ï¿½       ï¿½               types.cpython-313.pyc
+ï¿½       ï¿½               __init__.cpython-313.pyc
+ï¿½       ï¿½               
+ï¿½       ï¿½ï¿½ï¿½ï¿½deploy
+ï¿½       ï¿½       aci-worker.sh
+ï¿½       ï¿½       appservice-api.sh
+ï¿½       ï¿½       common.sh
+ï¿½       ï¿½       install.ps1
+ï¿½       ï¿½       install.sh
+ï¿½       ï¿½       provision.sh
+ï¿½       ï¿½       
+ï¿½       ï¿½ï¿½ï¿½ï¿½worker-shim
+ï¿½               db.py
+ï¿½               Dockerfile
+ï¿½               models.py
+ï¿½               worker.py
+ï¿½               
+ï¿½ï¿½ï¿½ï¿½docs
+ï¿½   ï¿½ï¿½ï¿½ï¿½python-sdk
+ï¿½       ï¿½ï¿½ï¿½ï¿½api-reference-docs
+ï¿½           ï¿½   genindex.html
+ï¿½           ï¿½   index.html
+ï¿½           ï¿½   models.html
+ï¿½           ï¿½   search.html
+ï¿½           ï¿½   
+ï¿½           ï¿½ï¿½ï¿½ï¿½_sources
+ï¿½           ï¿½       index.rst.txt
+ï¿½           ï¿½       models.rst.txt
+ï¿½           ï¿½       
+ï¿½           ï¿½ï¿½ï¿½ï¿½_static
+ï¿½               ï¿½   autodoc_pydantic.css
+ï¿½               ï¿½   doctools.js@v=9a2dae69
+ï¿½               ï¿½   documentation_options.js@v=2753bf86
+ï¿½               ï¿½   jquery.js@v=5d32c60e
+ï¿½               ï¿½   language_data.js
+ï¿½               ï¿½   pygments.css
+ï¿½               ï¿½   searchtools.js
+ï¿½               ï¿½   sphinx_highlight.js@v=dc90522c
+ï¿½               ï¿½   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
+ï¿½               ï¿½   
+ï¿½               ï¿½ï¿½ï¿½ï¿½css
+ï¿½               ï¿½   ï¿½   theme.css
+ï¿½               ï¿½   ï¿½   
+ï¿½               ï¿½   ï¿½ï¿½ï¿½ï¿½fonts
+ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
+ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
+ï¿½               ï¿½           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
+ï¿½               ï¿½           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
+ï¿½               ï¿½           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
+ï¿½               ï¿½           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
+ï¿½               ï¿½           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
+ï¿½               ï¿½           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
+ï¿½               ï¿½           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
+ï¿½               ï¿½           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
+ï¿½               ï¿½           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
+ï¿½               ï¿½           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
+ï¿½               ï¿½           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
+ï¿½               ï¿½           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
+ï¿½               ï¿½           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
+ï¿½               ï¿½           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
+ï¿½               ï¿½           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
+ï¿½               ï¿½           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
+ï¿½               ï¿½           
+ï¿½               ï¿½ï¿½ï¿½ï¿½js
+ï¿½                       theme.js
+ï¿½                       
+ï¿½ï¿½ï¿½ï¿½fourward
+ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½           client.py
+ï¿½           config.py
+ï¿½           exceptions.py
+ï¿½           experimental.py
+ï¿½           models.py
+ï¿½           __init__.py
+ï¿½           
+ï¿½ï¿½ï¿½ï¿½IntelliOptics
+ï¿½   ï¿½   .gitignore
+ï¿½   ï¿½   api-package.zip
+ï¿½   ï¿½   LICENSE
+ï¿½   ï¿½   pyproject.toml
+ï¿½   ï¿½   README.md
+ï¿½   ï¿½   requirements.txt
+ï¿½   ï¿½   startup.sh
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½api
+ï¿½   ï¿½   ï¿½   runtime.txt
+ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½app
+ï¿½   ï¿½           main.py
+ï¿½   ï¿½           requirements.txt
+ï¿½   ï¿½           __init__.py
+ï¿½   ï¿½           
+ï¿½   ï¿½ï¿½ï¿½ï¿½docs
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½python-sdk
+ï¿½   ï¿½       ï¿½ï¿½ï¿½ï¿½api-reference-docs
+ï¿½   ï¿½           ï¿½   genindex.html
+ï¿½   ï¿½           ï¿½   index.html
+ï¿½   ï¿½           ï¿½   models.html
+ï¿½   ï¿½           ï¿½   search.html
+ï¿½   ï¿½           ï¿½   
+ï¿½   ï¿½           ï¿½ï¿½ï¿½ï¿½_sources
+ï¿½   ï¿½           ï¿½       index.rst.txt
+ï¿½   ï¿½           ï¿½       models.rst.txt
+ï¿½   ï¿½           ï¿½       
+ï¿½   ï¿½           ï¿½ï¿½ï¿½ï¿½_static
+ï¿½   ï¿½               ï¿½   autodoc_pydantic.css
+ï¿½   ï¿½               ï¿½   doctools.js@v=9a2dae69
+ï¿½   ï¿½               ï¿½   documentation_options.js@v=2753bf86
+ï¿½   ï¿½               ï¿½   jquery.js@v=5d32c60e
+ï¿½   ï¿½               ï¿½   language_data.js
+ï¿½   ï¿½               ï¿½   pygments.css
+ï¿½   ï¿½               ï¿½   searchtools.js
+ï¿½   ï¿½               ï¿½   sphinx_highlight.js@v=dc90522c
+ï¿½   ï¿½               ï¿½   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
+ï¿½   ï¿½               ï¿½   
+ï¿½   ï¿½               ï¿½ï¿½ï¿½ï¿½css
+ï¿½   ï¿½               ï¿½   ï¿½   theme.css
+ï¿½   ï¿½               ï¿½   ï¿½   
+ï¿½   ï¿½               ï¿½   ï¿½ï¿½ï¿½ï¿½fonts
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
+ï¿½   ï¿½               ï¿½           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
+ï¿½   ï¿½               ï¿½           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
+ï¿½   ï¿½               ï¿½           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
+ï¿½   ï¿½               ï¿½           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
+ï¿½   ï¿½               ï¿½           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
+ï¿½   ï¿½               ï¿½           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
+ï¿½   ï¿½               ï¿½           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
+ï¿½   ï¿½               ï¿½           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
+ï¿½   ï¿½               ï¿½           
+ï¿½   ï¿½               ï¿½ï¿½ï¿½ï¿½js
+ï¿½   ï¿½                       theme.js
+ï¿½   ï¿½                       
+ï¿½   ï¿½ï¿½ï¿½ï¿½fourward
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½   ï¿½           client.py
+ï¿½   ï¿½           config.py
+ï¿½   ï¿½           exceptions.py
+ï¿½   ï¿½           experimental.py
+ï¿½   ï¿½           models.py
+ï¿½   ï¿½           __init__.py
+ï¿½   ï¿½           
+ï¿½   ï¿½ï¿½ï¿½ï¿½sdk
+ï¿½   ï¿½   ï¿½   pyproject.toml
+ï¿½   ï¿½   ï¿½   README.md
+ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½   ï¿½   ï¿½   ï¿½   client.py
+ï¿½   ï¿½   ï¿½   ï¿½   exceptions.py
+ï¿½   ï¿½   ï¿½   ï¿½   types.py
+ï¿½   ï¿½   ï¿½   ï¿½   __init__.py
+ï¿½   ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½   ï¿½   ï¿½           client.cpython-313.pyc
+ï¿½   ï¿½   ï¿½           exceptions.cpython-313.pyc
+ï¿½   ï¿½   ï¿½           types.cpython-313.pyc
+ï¿½   ï¿½   ï¿½           __init__.cpython-313.pyc
+ï¿½   ï¿½   ï¿½           
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics.egg-info
+ï¿½   ï¿½           dependency_links.txt
+ï¿½   ï¿½           PKG-INFO
+ï¿½   ï¿½           requires.txt
+ï¿½   ï¿½           SOURCES.txt
+ï¿½   ï¿½           top_level.txt
+ï¿½   ï¿½           
+ï¿½   ï¿½ï¿½ï¿½ï¿½site
+ï¿½   ï¿½   ï¿½   404.html
+ï¿½   ï¿½   ï¿½   index.html
+ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½python-sdk
+ï¿½   ï¿½       ï¿½ï¿½ï¿½ï¿½api-reference-docs
+ï¿½   ï¿½           ï¿½   genindex.html
+ï¿½   ï¿½           ï¿½   index.html
+ï¿½   ï¿½           ï¿½   models.html
+ï¿½   ï¿½           ï¿½   search.html
+ï¿½   ï¿½           ï¿½   
+ï¿½   ï¿½           ï¿½ï¿½ï¿½ï¿½_sources
+ï¿½   ï¿½           ï¿½       index.rst.txt
+ï¿½   ï¿½           ï¿½       models.rst.txt
+ï¿½   ï¿½           ï¿½       
+ï¿½   ï¿½           ï¿½ï¿½ï¿½ï¿½_static
+ï¿½   ï¿½               ï¿½   autodoc_pydantic.css
+ï¿½   ï¿½               ï¿½   doctools.js@v=9a2dae69
+ï¿½   ï¿½               ï¿½   documentation_options.js@v=2753bf86
+ï¿½   ï¿½               ï¿½   jquery.js@v=5d32c60e
+ï¿½   ï¿½               ï¿½   language_data.js
+ï¿½   ï¿½               ï¿½   pygments.css
+ï¿½   ï¿½               ï¿½   searchtools.js
+ï¿½   ï¿½               ï¿½   sphinx_highlight.js@v=dc90522c
+ï¿½   ï¿½               ï¿½   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
+ï¿½   ï¿½               ï¿½   
+ï¿½   ï¿½               ï¿½ï¿½ï¿½ï¿½css
+ï¿½   ï¿½               ï¿½   ï¿½   theme.css
+ï¿½   ï¿½               ï¿½   ï¿½   
+ï¿½   ï¿½               ï¿½   ï¿½ï¿½ï¿½ï¿½fonts
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
+ï¿½   ï¿½               ï¿½           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
+ï¿½   ï¿½               ï¿½           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
+ï¿½   ï¿½               ï¿½           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
+ï¿½   ï¿½               ï¿½           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
+ï¿½   ï¿½               ï¿½           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
+ï¿½   ï¿½               ï¿½           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
+ï¿½   ï¿½               ï¿½           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
+ï¿½   ï¿½               ï¿½           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
+ï¿½   ï¿½               ï¿½           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
+ï¿½   ï¿½               ï¿½           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
+ï¿½   ï¿½               ï¿½           
+ï¿½   ï¿½               ï¿½ï¿½ï¿½ï¿½js
+ï¿½   ï¿½                       theme.js
+ï¿½   ï¿½                       
+ï¿½   ï¿½ï¿½ï¿½ï¿½tests
+ï¿½   ï¿½       test_client.py
+ï¿½   ï¿½       
+ï¿½   ï¿½ï¿½ï¿½ï¿½tools
+ï¿½           build-site.ps1
+ï¿½           
+ï¿½ï¿½ï¿½ï¿½intellioptics-python-sdk
+ï¿½   ï¿½   .gitignore
+ï¿½   ï¿½   pyproject.toml
+ï¿½   ï¿½   README.md
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½.github
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½workflows
+ï¿½   ï¿½           ci.yml
+ï¿½   ï¿½           
+ï¿½   ï¿½ï¿½ï¿½ï¿½.pytest_cache
+ï¿½   ï¿½   ï¿½   .gitignore
+ï¿½   ï¿½   ï¿½   CACHEDIR.TAG
+ï¿½   ï¿½   ï¿½   README.md
+ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½v
+ï¿½   ï¿½       ï¿½ï¿½ï¿½ï¿½cache
+ï¿½   ï¿½               nodeids
+ï¿½   ï¿½               
+ï¿½   ï¿½ï¿½ï¿½ï¿½dist
+ï¿½   ï¿½       intellioptics-0.1.0-py3-none-any.whl
+ï¿½   ï¿½       intellioptics-0.1.0.tar.gz
+ï¿½   ï¿½       
+ï¿½   ï¿½ï¿½ï¿½ï¿½src
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½   ï¿½       ï¿½   client.py
+ï¿½   ï¿½       ï¿½   exceptions.py
+ï¿½   ï¿½       ï¿½   models.py
+ï¿½   ï¿½       ï¿½   __init__.py
+ï¿½   ï¿½       ï¿½   
+ï¿½   ï¿½       ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½   ï¿½               client.cpython-313.pyc
+ï¿½   ï¿½               exceptions.cpython-313.pyc
+ï¿½   ï¿½               models.cpython-313.pyc
+ï¿½   ï¿½               __init__.cpython-313.pyc
+ï¿½   ï¿½               
+ï¿½   ï¿½ï¿½ï¿½ï¿½tests
+ï¿½       ï¿½   test_client.py
+ï¿½       ï¿½   
+ï¿½       ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½               test_client.cpython-313-pytest-8.4.1.pyc
+ï¿½               
+ï¿½ï¿½ï¿½ï¿½intellioptics_sdk
+ï¿½       intellioptics_sdk_zip.ps1
+ï¿½       
+ï¿½ï¿½ï¿½ï¿½sdk
+ï¿½   ï¿½   pyproject.toml
+ï¿½   ï¿½   README.md
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics
+ï¿½   ï¿½   ï¿½   client.py
+ï¿½   ï¿½   ï¿½   exceptions.py
+ï¿½   ï¿½   ï¿½   types.py
+ï¿½   ï¿½   ï¿½   __init__.py
+ï¿½   ï¿½   ï¿½   
+ï¿½   ï¿½   ï¿½ï¿½ï¿½ï¿½__pycache__
+ï¿½   ï¿½           client.cpython-313.pyc
+ï¿½   ï¿½           exceptions.cpython-313.pyc
+ï¿½   ï¿½           types.cpython-313.pyc
+ï¿½   ï¿½           __init__.cpython-313.pyc
+ï¿½   ï¿½           
+ï¿½   ï¿½ï¿½ï¿½ï¿½intellioptics.egg-info
+ï¿½           dependency_links.txt
+ï¿½           PKG-INFO
+ï¿½           requires.txt
+ï¿½           SOURCES.txt
+ï¿½           top_level.txt
+ï¿½           
+ï¿½ï¿½ï¿½ï¿½site
+ï¿½   ï¿½   404.html
+ï¿½   ï¿½   index.html
+ï¿½   ï¿½   
+ï¿½   ï¿½ï¿½ï¿½ï¿½python-sdk
+ï¿½       ï¿½ï¿½ï¿½ï¿½api-reference-docs
+ï¿½           ï¿½   genindex.html
+ï¿½           ï¿½   index.html
+ï¿½           ï¿½   models.html
+ï¿½           ï¿½   search.html
+ï¿½           ï¿½   
+ï¿½           ï¿½ï¿½ï¿½ï¿½_sources
+ï¿½           ï¿½       index.rst.txt
+ï¿½           ï¿½       models.rst.txt
+ï¿½           ï¿½       
+ï¿½           ï¿½ï¿½ï¿½ï¿½_static
+ï¿½               ï¿½   autodoc_pydantic.css
+ï¿½               ï¿½   doctools.js@v=9a2dae69
+ï¿½               ï¿½   documentation_options.js@v=2753bf86
+ï¿½               ï¿½   jquery.js@v=5d32c60e
+ï¿½               ï¿½   language_data.js
+ï¿½               ï¿½   pygments.css
+ï¿½               ï¿½   searchtools.js
+ï¿½               ï¿½   sphinx_highlight.js@v=dc90522c
+ï¿½               ï¿½   _sphinx_javascript_frameworks_compat.js@v=2cd50e6c
+ï¿½               ï¿½   
+ï¿½               ï¿½ï¿½ï¿½ï¿½css
+ï¿½               ï¿½   ï¿½   theme.css
+ï¿½               ï¿½   ï¿½   
+ï¿½               ï¿½   ï¿½ï¿½ï¿½ï¿½fonts
+ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713
+ï¿½               ï¿½           fontawesome-webfont.eot@674f50d287a8c48dc19ba404d20fe713%3F
+ï¿½               ï¿½           fontawesome-webfont.svg@912ec66d7572ff821749319396470bde
+ï¿½               ï¿½           fontawesome-webfont.ttf@b06871f281fee6b241d60582ae9369b9
+ï¿½               ï¿½           fontawesome-webfont.woff2@af7ae505a9eed503f8b8e6982036873e
+ï¿½               ï¿½           fontawesome-webfont.woff@fee66e712a8a08eef5805a46892932ad
+ï¿½               ï¿½           lato-bold-italic.woff2@0b6bb6725576b072c5d0b02ecdd1900d
+ï¿½               ï¿½           lato-bold-italic.woff@9c7e4e9eb485b4a121c760e61bc3707c
+ï¿½               ï¿½           lato-bold.woff2@cccb897485813c7c256901dbca54ecf2
+ï¿½               ï¿½           lato-bold.woff@d878b6c29b10beca227e9eef4246111b
+ï¿½               ï¿½           lato-normal-italic.woff2@4eb103b4d12be57cb1d040ed5e162e9d
+ï¿½               ï¿½           lato-normal-italic.woff@f28f2d6482446544ef1ea1ccc6dd5892
+ï¿½               ï¿½           lato-normal.woff2@bd03a2cc277bbbc338d464e679fe9942
+ï¿½               ï¿½           lato-normal.woff@27bd77b9162d388cb8d4c4217c7c5e2a
+ï¿½               ï¿½           Roboto-Slab-Bold.woff2@9984f4a9bda09be08e83f2506954adbe
+ï¿½               ï¿½           Roboto-Slab-Bold.woff@bed5564a116b05148e3b3bea6fb1162a
+ï¿½               ï¿½           Roboto-Slab-Regular.woff2@7abf5b8d04d26a2cafea937019bca958
+ï¿½               ï¿½           Roboto-Slab-Regular.woff@c1be9284088d487c5e3ff0a10a92e58c
+ï¿½               ï¿½           
+ï¿½               ï¿½ï¿½ï¿½ï¿½js
+ï¿½                       theme.js
+ï¿½                       
+ï¿½ï¿½ï¿½ï¿½tests
+ï¿½       test_client.py
+ï¿½       
+ï¿½ï¿½ï¿½ï¿½tools
+ï¿½       build-site.ps1
+ï¿½       
+ï¿½ï¿½ï¿½ï¿½_inventory
         all_files.csv
         all_files.txt
         git_ignored.txt

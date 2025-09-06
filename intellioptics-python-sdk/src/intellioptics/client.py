@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 import os, time, asyncio, httpx
 from typing import Any, Optional
 from .exceptions import ApiError, AuthError, NotFound
