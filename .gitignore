@@ -49,3 +49,11 @@ _gen/
 .idea/
 
 _secrets_local/
+# Prevent server-side code from re-entering the SDK repo
+backend/
+infra/
+deploy/
+data/
+worker/
+Dockerfile
+Dockerfile.*
