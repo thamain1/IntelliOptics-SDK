@@ -81,3 +81,21 @@ class IntelliOptics:
             if time.time() - start > timeout_sec:
                 return iq
             time.sleep(poll_interval)
+
+    # Labels
+    def add_label(self, image_query_id: str, label: str,
+                  confidence: float | None = None,
+                  detector_id: str | None = None,
+                  user_id: str | None = None,
+                  metadata: dict | None = None) -> dict:
+        payload = {
+            "image_query_id": image_query_id,
+            "label": label,
+            "confidence": confidence,
+            "detector_id": detector_id,
+            "user_id": user_id,
+            "metadata": metadata,
+        }
+        # strip None values
+        payload = {k: v for k, v in payload.items() if v is not None}
+        return self._http.post_json("/v1/labels", json=payload)
