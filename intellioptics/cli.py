@@ -5,7 +5,6 @@ app = typer.Typer(add_completion=False)
 def _client():
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN") or os.getenv("INTELLIOPTICS_API_TOKEN"),
     )
 
 @app.command()
