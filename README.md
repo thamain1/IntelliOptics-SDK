@@ -41,11 +41,10 @@ The SDK and CLI are configured through environment variables:
 
 | Variable | Description |
 | --- | --- |
-| `INTELLIOPTICS_ENDPOINT` | Base URL of the IntelliOptics API (for example `[https://intellioptics-api-37558.azurewebsites.net)`). |
+| `INTELLIOPTICS_ENDPOINT` | Base URL of the IntelliOptics API (for example `https://intellioptics-api-37558.azurewebsites.net`). |
 | `INTELLIOPTICS_API_TOKEN` | Personal access token used for authenticating requests. |
 | `DISABLE_TLS_VERIFY` | Optional. Set to `1` to skip TLS certificate verification (useful for local testing). |
 
-The CLI also honours the legacy misspelling `INTELLIOOPTICS_API_TOKEN` for backward compatibility.
 
 ## Command line interface
 
@@ -53,12 +52,12 @@ Once installed, the CLI entrypoint is available as `intellioptics`:
 
 ```bash
 # Verify that your environment variables are wired up
-$ export INTELLIOPTICS_ENDPOINT="https://api.intellioptics.ai"
+$ export INTELLIOPTICS_ENDPOINT="https://intellioptics-api-37558.azurewebsites.net"
 $ export INTELLIOPTICS_API_TOKEN="your-token"
 $ intellioptics status
 {
   "ok": true,
-  "endpoint": "https://api.intellioptics.ai"
+  "endpoint": "https://intellioptics-api-37558.azurewebsites.net"
 }
 
 # Check the identity associated with the current API token
@@ -83,7 +82,7 @@ configured environment variables:
 from intellioptics import IntelliOptics
 
 client = IntelliOptics(
-    endpoint="https://api.intellioptics.ai",
+    endpoint="https:intellioptics-api-37558.azurewebsites.net",
     api_token="your-token",
 )
 
