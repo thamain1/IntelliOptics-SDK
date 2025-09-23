@@ -1,4 +1,4 @@
-""" Contains all the data models used in inputs/outputs """
+"""Contains all the data models used in inputs/outputs"""
 
 from .answer_out import AnswerOut
 from .answer_out_answer import AnswerOutAnswer
@@ -12,6 +12,10 @@ from .feedback_in_bboxes_type_0_item import FeedbackInBboxesType0Item
 from .feedback_in_correct_label import FeedbackInCorrectLabel
 from .http_validation_error import HTTPValidationError
 from .image_query_json import ImageQueryJson
+from .label_in import LabelIn
+from .label_in_metadata_type_0 import LabelInMetadataType0
+from .label_out import LabelOut
+from .label_out_metadata_type_0 import LabelOutMetadataType0
 from .validation_error import ValidationError
 
 __all__ = (
@@ -27,5 +31,9 @@ __all__ = (
     "FeedbackInCorrectLabel",
     "HTTPValidationError",
     "ImageQueryJson",
+    "LabelIn",
+    "LabelInMetadataType0",
+    "LabelOut",
+    "LabelOutMetadataType0",
     "ValidationError",
 )
