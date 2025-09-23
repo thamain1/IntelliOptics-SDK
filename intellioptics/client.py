@@ -1,4 +1,6 @@
-import os, time
+import json
+import os
+import time
 from typing import Optional, Union, IO, List
 from .errors import ApiTokenError
 from .models import Detector, ImageQuery, QueryResult, UserIdentity
@@ -50,6 +52,7 @@ class IntelliOptics:
             "wait": wait,
             "confidence_threshold": confidence_threshold,
             "inspection_id": inspection_id,
+            "metadata": json.dumps(metadata) if metadata is not None else None,
         }
         form = {k: v for k, v in form.items() if v is not None}
         return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
