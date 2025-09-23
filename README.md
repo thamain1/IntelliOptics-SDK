@@ -102,6 +102,24 @@ confident = client.wait_for_confident_result(query, confidence_threshold=0.95)
 print(confident.status, confident.label, confident.confidence)
 ```
 
+Successful calls to the image query endpoints now emit payloads that mirror the SDK models. A
+typical response looks like:
+
+```json
+{
+  "id": "iq-123",
+  "detector_id": "det-456",
+  "status": "DONE",
+  "result_type": "binary",
+  "label": "YES",
+  "confidence": 0.97,
+  "extra": {
+    "latency_ms": 420,
+    "model_version": "demo-v0"
+  }
+}
+```
+
 The helper functions `ask_ml` and `ask_confident` wrap common flows for asynchronous and
 confidence-thresholded queries. When you need ground-truth data, call `add_label` to attach human
 labels (optionally with metadata) to a given image query.
