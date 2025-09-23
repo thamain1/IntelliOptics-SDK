@@ -27,7 +27,7 @@ io = IntelliOptics(api_token="YOUR_TOKEN")  # or set env vars
 
 print("healthy?", io.health_generated())
 
-det = io.create_detector(name="Widget Presence", mode="BINARY", description="Detect widget")
+det = io.create_detector(name="Widget Presence", labels=["widget", "no_widget"])
 res = io.submit_image_query(detector=det.id, image="image.jpg", wait=5.0, confidence_threshold=0.75)
 
 iq = io.get_image_query(res["id"])

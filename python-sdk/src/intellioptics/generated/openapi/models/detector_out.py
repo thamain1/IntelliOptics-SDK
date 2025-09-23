@@ -1,105 +1,49 @@
-from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+from __future__ import annotations
+
+from typing import Any, Mapping, TypeVar, cast, List
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-from ..models.detector_out_mode import DetectorOutMode
-from ..types import UNSET, Unset
-from typing import Union
-
-
-
-
-
-
 T = TypeVar("T", bound="DetectorOut")
-
 
 
 @_attrs_define
 class DetectorOut:
-    """ 
-        Attributes:
-            id (str):
-            name (str):
-            mode (DetectorOutMode):
-            query_text (str):
-            threshold (float):
-            status (Union[Unset, str]):  Default: 'active'.
-     """
+    """Detector representation returned by the API."""
 
     id: str
     name: str
-    mode: DetectorOutMode
-    query_text: str
-    threshold: float
-    status: Union[Unset, str] = 'active'
+    labels: List[str] = _attrs_field(factory=list)
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-
-
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
-
         name = self.name
-
-        mode = self.mode.value
-
-        query_text = self.query_text
-
-        threshold = self.threshold
-
-        status = self.status
-
+        labels = self.labels
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({
             "id": id,
             "name": name,
-            "mode": mode,
-            "query_text": query_text,
-            "threshold": threshold,
+            "labels": labels,
         })
-        if status is not UNSET:
-            field_dict["status"] = status
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
         id = d.pop("id")
-
         name = d.pop("name")
-
-        mode = DetectorOutMode(d.pop("mode"))
-
-
-
-
-        query_text = d.pop("query_text")
-
-        threshold = d.pop("threshold")
-
-        status = d.pop("status", UNSET)
+        labels = cast(List[str], d.pop("labels", []))
 
         detector_out = cls(
             id=id,
             name=name,
-            mode=mode,
-            query_text=query_text,
-            threshold=threshold,
-            status=status,
+            labels=labels,
         )
-
 
         detector_out.additional_properties = d
         return detector_out

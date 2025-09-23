@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 import httpx
 from .types import Answer, Detector
 from .exceptions import AuthError, ApiError
@@ -23,20 +23,16 @@ class IntelliOptics:
         )
 
     # --- Detectors ---
-    def create_detector(self, name: str, mode: str, query_text: str, threshold: float = 0.75) -> Detector:
-        payload = {"name": name, "mode": mode, "query_text": query_text, "threshold": threshold}
+    def create_detector(self, name: str, labels: Optional[List[str]] = None) -> Detector:
+        payload = {"name": name, "labels": labels or []}
         r = self._client.post("/v1/detectors", json=payload); _ok(r)
         d = r.json()
-        return Detector(id=d["id"], name=d["name"], mode=d["mode"],
-                        query_text=d["query_text"], threshold=d["threshold"],
-                        status=d.get("status", "active"))
+        return Detector(id=d["id"], name=d["name"], labels=d.get("labels", []))
 
     def get_detector(self, detector_id: str) -> Detector:
         r = self._client.get(f"/v1/detectors/{detector_id}"); _ok(r)
         d = r.json()
-        return Detector(id=d["id"], name=d["name"], mode=d["mode"],
-                        query_text=d["query_text"], threshold=d["threshold"],
-                        status=d.get("status", "active"))
+        return Detector(id=d["id"], name=d["name"], labels=d.get("labels", []))
 
     # --- Image Queries / Answers ---
     def ask_image(self, detector_id: str, image: bytes | str, wait: bool = True) -> Answer:
