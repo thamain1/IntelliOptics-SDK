@@ -8,7 +8,7 @@ from typing import Optional, List, Dict, Any
 class Detector(BaseModel):
     id: str
     name: str
-    labels: List[str] = []
+    labels: List[str] = Field(default_factory=list)
 
 class ImageQuery(BaseModel):
     id: str
