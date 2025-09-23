@@ -14,4 +14,9 @@ def status():
 
 @app.command()
 def whoami():
-    print(json.dumps(_client().whoami(), indent=2))
+    identity = _client().whoami()
+    serializer = getattr(identity, "model_dump", None)
+    if serializer is None:
+        serializer = identity.dict
+    data = serializer()
+    print(json.dumps(data, indent=2))
