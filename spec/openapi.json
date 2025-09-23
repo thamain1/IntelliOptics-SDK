@@ -310,10 +310,49 @@
             "type": "string",
             "title": "Detector Id"
           },
+          "prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
           "wait": {
-            "type": "boolean",
-            "title": "Wait",
-            "default": true
+            "type": "number",
+            "title": "Wait Seconds",
+            "default": 0
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "title": "Confidence Threshold",
+            "default": 0.9
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata",
+            "description": "JSON-encoded metadata blob when using multipart form submissions."
+          },
+          "inspection_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Id"
           },
           "image": {
             "anyOf": [
@@ -468,6 +507,17 @@
             "type": "string",
             "title": "Detector Id"
           },
+          "prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
           "image": {
             "anyOf": [
               {
@@ -480,9 +530,37 @@
             "title": "Image"
           },
           "wait": {
-            "type": "boolean",
-            "title": "Wait",
-            "default": true
+            "type": "number",
+            "title": "Wait Seconds",
+            "default": 0
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "title": "Confidence Threshold",
+            "default": 0.9
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          },
+          "inspection_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Id"
           }
         },
         "type": "object",
