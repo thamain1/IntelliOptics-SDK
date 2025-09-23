@@ -1,10 +1,13 @@
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
+from typing import Optional, Dict, Any
 
 class Detector(BaseModel):
     id: str
     name: str
-    labels: List[str] = []
+    mode: str
+    query_text: str
+    threshold: float
+    status: Optional[str] = "active"
 
 class ImageQuery(BaseModel):
     id: str

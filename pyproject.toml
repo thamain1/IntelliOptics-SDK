@@ -23,3 +23,7 @@ intellioptics = "intellioptics.cli:app"
 [tool.setuptools.packages.find]
 include = ["intellioptics*"]
 exclude = ["backend*", "infra*", "sdk*", "spec*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -25,8 +25,21 @@ class IntelliOptics:
         return self._http.get_json("/v1/health")
 
     # Detectors
-    def create_detector(self, name: str, labels: Optional[List[str]] = None) -> Detector:
-        data = self._http.post_json("/v1/detectors", json={"name": name, "labels": labels or []})
+    def create_detector(
+        self,
+        name: str,
+        mode: str,
+        query_text: str,
+        threshold: Optional[float] = None,
+    ) -> Detector:
+        payload = {
+            "name": name,
+            "mode": mode,
+            "query_text": query_text,
+        }
+        if threshold is not None:
+            payload["threshold"] = threshold
+        data = self._http.post_json("/v1/detectors", json=payload)
         return Detector(**data)
 
     def list_detectors(self) -> List[Detector]:
