@@ -1,49 +1,38 @@
-"""Data model for creating detectors."""
+"""Envelope for detector listings."""
 
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, List, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="DetectorCreate")
+from .detector_out import DetectorOut
+
+T = TypeVar("T", bound="DetectorList")
 
 
 @_attrs_define
-class DetectorCreate:
-    """Payload accepted by ``POST /v1/detectors``.
+class DetectorList:
+    """Response wrapper for ``GET /v1/detectors``."""
 
-    Attributes:
-        name: Human friendly detector name.
-        labels: Optional label hints for the detector.
-    """
-
-    name: str
-    labels: list[str] = _attrs_field(factory=list)
+    items: List[DetectorOut]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "name": self.name,
-            "labels": list(self.labels),
-        })
+        field_dict["items"] = [item.to_dict() for item in self.items]
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        name = d.pop("name")
-        labels = list(d.pop("labels", []))
-        detector_create = cls(
-            name=name,
-            labels=labels,
-        )
-        detector_create.additional_properties = d
-        return detector_create
+        items = [DetectorOut.from_dict(item) for item in d.pop("items", [])]
+        detector_list = cls(items=items)
+        detector_list.additional_properties = d
+        return detector_list
 
     @property
     def additional_keys(self) -> list[str]:

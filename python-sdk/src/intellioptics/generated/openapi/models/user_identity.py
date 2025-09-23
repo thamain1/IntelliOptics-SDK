@@ -1,49 +1,54 @@
-"""Data model for creating detectors."""
+"""Authenticated user identity payload."""
 
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, List, Optional, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="DetectorCreate")
+T = TypeVar("T", bound="UserIdentity")
 
 
 @_attrs_define
-class DetectorCreate:
-    """Payload accepted by ``POST /v1/detectors``.
+class UserIdentity:
+    """Details returned by ``GET /v1/users/me``."""
 
-    Attributes:
-        name: Human friendly detector name.
-        labels: Optional label hints for the detector.
-    """
-
-    name: str
-    labels: list[str] = _attrs_field(factory=list)
+    id: str
+    email: Optional[str] = None
+    name: Optional[str] = None
+    tenant: Optional[str] = None
+    roles: List[str] = _attrs_field(factory=list)
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({
-            "name": self.name,
-            "labels": list(self.labels),
+            "id": self.id,
+            "roles": list(self.roles),
         })
+        if self.email is not None:
+            field_dict["email"] = self.email
+        if self.name is not None:
+            field_dict["name"] = self.name
+        if self.tenant is not None:
+            field_dict["tenant"] = self.tenant
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        name = d.pop("name")
-        labels = list(d.pop("labels", []))
-        detector_create = cls(
-            name=name,
-            labels=labels,
+        user_identity = cls(
+            id=d.pop("id"),
+            email=d.pop("email", None),
+            name=d.pop("name", None),
+            tenant=d.pop("tenant", None),
+            roles=list(d.pop("roles", [])),
         )
-        detector_create.additional_properties = d
-        return detector_create
+        user_identity.additional_properties = d
+        return user_identity
 
     @property
     def additional_keys(self) -> list[str]:
