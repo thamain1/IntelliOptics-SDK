@@ -1,3 +1,4 @@
+import json
 import os, time
 from typing import Optional, Union, IO, List
 from .errors import ApiTokenError
@@ -51,6 +52,8 @@ class IntelliOptics:
             "confidence_threshold": confidence_threshold,
             "inspection_id": inspection_id,
         }
+        if metadata is not None:
+            form["metadata"] = json.dumps(metadata)
         form = {k: v for k, v in form.items() if v is not None}
         return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
 
