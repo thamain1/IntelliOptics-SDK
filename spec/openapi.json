@@ -22,6 +22,32 @@
       }
     },
     "/v1/detectors": {
+      "get": {
+        "summary": "List Detectors",
+        "operationId": "list_detectors_v1_detectors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectorList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Create Detector",
         "operationId": "create_detector_v1_detectors_post",
@@ -233,6 +259,73 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/me": {
+      "get": {
+        "summary": "Get Current User",
+        "operationId": "get_current_user_v1_users_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdentity"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/labels": {
+      "post": {
+        "summary": "Submit Label",
+        "operationId": "submit_label_v1_labels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelSubmission"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelSubmissionResponse"
+                }
               }
             }
           },
@@ -523,6 +616,105 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "DetectorList": {
+        "type": "object",
+        "title": "DetectorList",
+        "properties": {
+          "items": {
+            "type": "array",
+            "title": "Items",
+            "items": {
+              "$ref": "#/components/schemas/DetectorOut"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "UserIdentity": {
+        "type": "object",
+        "title": "UserIdentity",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Email"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Name"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Tenant"
+          },
+          "roles": {
+            "type": "array",
+            "title": "Roles",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": true
+      },
+      "LabelSubmission": {
+        "type": "object",
+        "title": "LabelSubmission",
+        "properties": {
+          "image_query_id": {
+            "type": "string",
+            "title": "Image Query Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "detector_id": {
+            "type": "string",
+            "title": "Detector Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "metadata": {
+            "type": "object",
+            "title": "Metadata",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "image_query_id",
+          "label"
+        ]
+      },
+      "LabelSubmissionResponse": {
+        "type": "object",
+        "title": "LabelSubmissionResponse",
+        "additionalProperties": true
       }
     }
   }
