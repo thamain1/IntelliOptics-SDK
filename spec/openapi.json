@@ -340,30 +340,18 @@
             "type": "string",
             "title": "Name"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold",
-            "default": 0.75
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Labels",
+            "default": []
           }
         },
         "type": "object",
         "required": [
-          "name",
-          "mode",
-          "query_text"
+          "name"
         ],
         "title": "DetectorCreate"
       },
@@ -377,36 +365,19 @@
             "type": "string",
             "title": "Name"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold"
-          },
-          "status": {
-            "type": "string",
-            "title": "Status",
-            "default": "active"
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Labels",
+            "default": []
           }
         },
         "type": "object",
         "required": [
           "id",
-          "name",
-          "mode",
-          "query_text",
-          "threshold"
+          "name"
         ],
         "title": "DetectorOut"
       },

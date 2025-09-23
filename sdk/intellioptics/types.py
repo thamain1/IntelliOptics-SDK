@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal, Optional
 
 AnswerLabel = Literal["YES", "NO", "COUNT", "UNCLEAR"]
@@ -15,7 +15,4 @@ class Answer:
 class Detector:
     id: str
     name: str
-    mode: Literal["binary", "count", "custom"]
-    query_text: str
-    threshold: float
-    status: str = "active"
+    labels: list[str] = field(default_factory=list)

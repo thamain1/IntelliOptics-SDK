@@ -1,89 +1,44 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-
-from ..types import UNSET, Unset
-
-from ..models.detector_create_mode import DetectorCreateMode
-from ..types import UNSET, Unset
-from typing import Union
-
-
-
-
 
 
 T = TypeVar("T", bound="DetectorCreate")
 
 
-
 @_attrs_define
 class DetectorCreate:
-    """ 
-        Attributes:
-            name (str):
-            mode (DetectorCreateMode):
-            query_text (str):
-            threshold (Union[Unset, float]):  Default: 0.75.
-     """
+    """Detector creation payload."""
 
     name: str
-    mode: DetectorCreateMode
-    query_text: str
-    threshold: Union[Unset, float] = 0.75
+    labels: list[str] = _attrs_field(factory=list)
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-
-
 
     def to_dict(self) -> dict[str, Any]:
         name = self.name
-
-        mode = self.mode.value
-
-        query_text = self.query_text
-
-        threshold = self.threshold
-
+        labels = list(self.labels)
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({
             "name": name,
-            "mode": mode,
-            "query_text": query_text,
+            "labels": labels,
         })
-        if threshold is not UNSET:
-            field_dict["threshold"] = threshold
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
         name = d.pop("name")
-
-        mode = DetectorCreateMode(d.pop("mode"))
-
-
-
-
-        query_text = d.pop("query_text")
-
-        threshold = d.pop("threshold", UNSET)
+        labels = list(d.pop("labels", []))
 
         detector_create = cls(
             name=name,
-            mode=mode,
-            query_text=query_text,
-            threshold=threshold,
+            labels=labels,
         )
-
 
         detector_create.additional_properties = d
         return detector_create
