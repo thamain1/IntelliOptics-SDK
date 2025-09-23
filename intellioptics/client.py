@@ -38,21 +38,48 @@ class IntelliOptics:
         return Detector(**self._http.get_json(f"/v1/detectors/{detector_id}"))
 
     # Image queries
-    def submit_image_query(self, detector: Optional[Union[Detector, str]] = None, image: Optional[Union[str, bytes, IO[bytes]]] = None,
-                           prompt: Optional[str] = None, wait: Optional[float] = None,
-                           confidence_threshold: Optional[float] = None, metadata: Optional[dict] = None,
-                           inspection_id: Optional[str] = None) -> ImageQuery:
+    def submit_image_query(self, detector: Optional[Union[Detector, str]] = None,
+                           image: Optional[Union[str, bytes, IO[bytes]]] = None,
+                           wait: Optional[bool] = None) -> ImageQuery:
         img = to_jpeg_bytes(image) if image is not None else None
-        files = {"image": ("image.jpg", img, "image/jpeg")} if img else None
-        form = {
-            "detector_id": detector.id if isinstance(detector, Detector) else detector,
-            "prompt": prompt,
-            "wait": wait,
-            "confidence_threshold": confidence_threshold,
-            "inspection_id": inspection_id,
-        }
-        form = {k: v for k, v in form.items() if v is not None}
-        return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
+        files = {"image": ("image.jpg", img, "image/jpeg")} if img is not None else None
+
+        detector_id = None
+        if isinstance(detector, Detector):
+            detector_id = detector.id
+        elif detector is not None:
+            detector_id = str(detector)
+
+        form = {}
+        if detector_id is not None:
+            form["detector_id"] = detector_id
+        if wait is not None:
+            form["wait"] = "true" if wait else "false"
+
+        post_kwargs = {"data": form}
+        if files is not None:
+            post_kwargs["files"] = files
+
+        return ImageQuery(**self._http.post_json("/v1/image-queries", **post_kwargs))
+
+    def submit_image_query_json(self, detector: Optional[Union[Detector, str]] = None,
+                                image: Optional[str] = None,
+                                wait: Optional[bool] = None) -> ImageQuery:
+        detector_id = None
+        if isinstance(detector, Detector):
+            detector_id = detector.id
+        elif detector is not None:
+            detector_id = str(detector)
+
+        payload = {}
+        if detector_id is not None:
+            payload["detector_id"] = detector_id
+        if image is not None:
+            payload["image"] = image
+        if wait is not None:
+            payload["wait"] = wait
+
+        return ImageQuery(**self._http.post_json("/v1/image-queries-json", json=payload))
 
     def get_image_query(self, image_query_id: str) -> ImageQuery:
         return ImageQuery(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
@@ -61,12 +88,12 @@ class IntelliOptics:
         return QueryResult(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
 
     # Helpers similar to GL
-    def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[float] = 0.0) -> ImageQuery:
+    def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[bool] = None) -> ImageQuery:
         return self.submit_image_query(detector=detector, image=image, wait=wait)
 
     def ask_confident(self, detector: Union[Detector, str], image, confidence_threshold: float = 0.9,
                       timeout_sec: float = 30.0, poll_interval: float = 0.5) -> ImageQuery:
-        iq = self.submit_image_query(detector=detector, image=image, confidence_threshold=confidence_threshold)
+        iq = self.submit_image_query(detector=detector, image=image)
         return self.wait_for_confident_result(iq, confidence_threshold, timeout_sec, poll_interval)
 
     def wait_for_confident_result(self, image_query: Union[ImageQuery, str], confidence_threshold: float = 0.9,
