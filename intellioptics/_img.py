@@ -1,17 +1,18 @@
-from typing import Union, IO
+from typing import IO, Union
 from io import BytesIO
+from os import PathLike
 from PIL import Image
 try:
     import numpy as np  # type: ignore
 except Exception:
     np = None  # type: ignore
 
-def to_jpeg_bytes(image: Union[str, bytes, IO[bytes], "Image.Image", "np.ndarray"]) -> bytes:  # type: ignore[name-defined]
+def to_jpeg_bytes(image: Union[str, PathLike[str], bytes, IO[bytes], "Image.Image", "np.ndarray"]) -> bytes:  # type: ignore[name-defined]
     if isinstance(image, bytes):
         return image
     if hasattr(image, "read"):
         return image.read()  # type: ignore[return-value]
-    if isinstance(image, str):
+    if isinstance(image, (str, PathLike)):
         with open(image, "rb") as f:
             return f.read()
     try:

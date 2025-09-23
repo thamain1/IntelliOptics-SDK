@@ -1,17 +1,22 @@
-import os, json, typer
+import json
+import typer
+
 from .client import IntelliOptics
+
 app = typer.Typer(add_completion=False)
 
-def _client():
-    return IntelliOptics(
-        endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN") or os.getenv("INTELLIOPTICS_API_TOKEN"),
-    )
+
+def _client() -> IntelliOptics:
+    return IntelliOptics()
+
 
 @app.command()
-def status():
-    print(json.dumps({"ok": True, "endpoint": os.getenv("INTELLIOPTICS_ENDPOINT")}, indent=2))
+def status() -> None:
+    client = _client()
+    print(json.dumps({"ok": True, "endpoint": client.base_url}, indent=2))
+
 
 @app.command()
-def whoami():
-    print(json.dumps(_client().whoami(), indent=2))
+def whoami() -> None:
+    client = _client()
+    print(json.dumps(client.whoami(), indent=2))
