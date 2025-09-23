@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class AnswerOutAnswer(str, Enum):
     COUNT = "COUNT"
     NO = "NO"

@@ -1,47 +1,34 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+from typing import Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 from ..models.detector_out_mode import DetectorOutMode
 from ..types import UNSET, Unset
-from typing import Union
-
-
-
-
-
 
 T = TypeVar("T", bound="DetectorOut")
 
 
-
 @_attrs_define
 class DetectorOut:
-    """ 
-        Attributes:
-            id (str):
-            name (str):
-            mode (DetectorOutMode):
-            query_text (str):
-            threshold (float):
-            status (Union[Unset, str]):  Default: 'active'.
-     """
+    """
+    Attributes:
+        id (str):
+        name (str):
+        mode (DetectorOutMode):
+        query_text (str):
+        threshold (float):
+        status (Union[Unset, str]):  Default: 'active'.
+    """
 
     id: str
     name: str
     mode: DetectorOutMode
     query_text: str
     threshold: float
-    status: Union[Unset, str] = 'active'
+    status: Union[Unset, str] = "active"
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-
-
 
     def to_dict(self) -> dict[str, Any]:
         id = self.id
@@ -56,22 +43,21 @@ class DetectorOut:
 
         status = self.status
 
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "id": id,
-            "name": name,
-            "mode": mode,
-            "query_text": query_text,
-            "threshold": threshold,
-        })
+        field_dict.update(
+            {
+                "id": id,
+                "name": name,
+                "mode": mode,
+                "query_text": query_text,
+                "threshold": threshold,
+            }
+        )
         if status is not UNSET:
             field_dict["status"] = status
 
         return field_dict
-
-
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
@@ -81,9 +67,6 @@ class DetectorOut:
         name = d.pop("name")
 
         mode = DetectorOutMode(d.pop("mode"))
-
-
-
 
         query_text = d.pop("query_text")
 
@@ -99,7 +82,6 @@ class DetectorOut:
             threshold=threshold,
             status=status,
         )
-
 
         detector_out.additional_properties = d
         return detector_out
