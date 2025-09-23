@@ -8,7 +8,10 @@ from typing import Optional, List, Dict, Any
 class Detector(BaseModel):
     id: str
     name: str
-    labels: List[str] = []
+    mode: str
+    query_text: str
+    threshold: Optional[float] = None
+    status: Optional[str] = None
 
 class ImageQuery(BaseModel):
     id: str
