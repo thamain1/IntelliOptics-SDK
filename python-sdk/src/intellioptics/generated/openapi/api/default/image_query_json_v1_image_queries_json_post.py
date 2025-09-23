@@ -1,30 +1,21 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from ...models.answer_out import AnswerOut
+from ...client import AuthenticatedClient, Client
 from ...models.http_validation_error import HTTPValidationError
 from ...models.image_query_json import ImageQueryJson
-from typing import cast
-
+from ...models.image_query_out import ImageQueryOut
+from ...types import Response
 
 
 def _get_kwargs(
     *,
     body: ImageQueryJson,
-
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
-
-
-    
-
-    
 
     _kwargs: dict[str, Any] = {
         "method": "post",
@@ -33,26 +24,22 @@ def _get_kwargs(
 
     _kwargs["json"] = body.to_dict()
 
-
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
     return _kwargs
 
 
-
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Union[AnswerOut, HTTPValidationError]]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
     if response.status_code == 200:
-        response_200 = AnswerOut.from_dict(response.json())
-
-
+        response_200 = ImageQueryOut.from_dict(response.json())
 
         return response_200
 
     if response.status_code == 422:
         response_422 = HTTPValidationError.from_dict(response.json())
-
-
 
         return response_422
 
@@ -62,7 +49,9 @@ def _parse_response(*, client: Union[AuthenticatedClient, Client], response: htt
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[Union[AnswerOut, HTTPValidationError]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -75,9 +64,8 @@ def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: ImageQueryJson,
-
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """ Image Query Json
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
+    """Image Query Json
 
     Args:
         body (ImageQueryJson):
@@ -87,13 +75,11 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
-     """
-
+        Response[Union[HTTPValidationError, ImageQueryOut]]
+    """
 
     kwargs = _get_kwargs(
         body=body,
-
     )
 
     response = client.get_httpx_client().request(
@@ -102,13 +88,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     *,
     client: Union[AuthenticatedClient, Client],
     body: ImageQueryJson,
-
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """ Image Query Json
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
+    """Image Query Json
 
     Args:
         body (ImageQueryJson):
@@ -118,23 +104,21 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
-     """
-
+        Union[HTTPValidationError, ImageQueryOut]
+    """
 
     return sync_detailed(
         client=client,
-body=body,
-
+        body=body,
     ).parsed
+
 
 async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: ImageQueryJson,
-
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """ Image Query Json
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
+    """Image Query Json
 
     Args:
         body (ImageQueryJson):
@@ -144,28 +128,24 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
-     """
-
+        Response[Union[HTTPValidationError, ImageQueryOut]]
+    """
 
     kwargs = _get_kwargs(
         body=body,
-
     )
 
-    response = await client.get_async_httpx_client().request(
-        **kwargs
-    )
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
     body: ImageQueryJson,
-
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """ Image Query Json
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
+    """Image Query Json
 
     Args:
         body (ImageQueryJson):
@@ -175,12 +155,12 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
-     """
+        Union[HTTPValidationError, ImageQueryOut]
+    """
 
-
-    return (await asyncio_detailed(
-        client=client,
-body=body,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            client=client,
+            body=body,
+        )
+    ).parsed

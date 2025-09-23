@@ -118,7 +118,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQueryOut"
                 }
               }
             }
@@ -156,7 +156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQueryOut"
                 }
               }
             }
@@ -195,7 +195,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQueryOut"
                 }
               }
             }
@@ -252,38 +252,13 @@
   },
   "components": {
     "schemas": {
-      "AnswerOut": {
+      "Body_image_query_v1_image_queries_post": {
         "properties": {
-          "image_query_id": {
+          "detector_id": {
             "type": "string",
-            "title": "Image Query Id"
+            "title": "Detector Id"
           },
-          "answer": {
-            "type": "string",
-            "enum": [
-              "YES",
-              "NO",
-              "COUNT",
-              "UNCLEAR"
-            ],
-            "title": "Answer"
-          },
-          "confidence": {
-            "type": "number",
-            "title": "Confidence"
-          },
-          "latency_ms": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Latency Ms"
-          },
-          "model_version": {
+          "prompt": {
             "anyOf": [
               {
                 "type": "string"
@@ -292,28 +267,21 @@
                 "type": "null"
               }
             ],
-            "title": "Model Version",
-            "default": "demo-v0"
-          }
-        },
-        "type": "object",
-        "required": [
-          "image_query_id",
-          "answer",
-          "confidence"
-        ],
-        "title": "AnswerOut"
-      },
-      "Body_image_query_v1_image_queries_post": {
-        "properties": {
-          "detector_id": {
-            "type": "string",
-            "title": "Detector Id"
+            "title": "Prompt"
           },
           "wait": {
-            "type": "boolean",
-            "title": "Wait",
-            "default": true
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wait"
           },
           "image": {
             "anyOf": [
@@ -326,6 +294,53 @@
               }
             ],
             "title": "Image"
+          },
+          "confidence_threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          },
+          "inspection_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Id"
+          },
+          "human_review": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Human Review"
           }
         },
         "type": "object",
@@ -471,7 +486,8 @@
           "image": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "format": "byte"
               },
               {
                 "type": "null"
@@ -479,10 +495,84 @@
             ],
             "title": "Image"
           },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt"
+          },
           "wait": {
-            "type": "boolean",
-            "title": "Wait",
-            "default": true
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wait"
+          },
+          "confidence_threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          },
+          "inspection_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Id"
+          },
+          "human_review": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Human Review"
           }
         },
         "type": "object",
@@ -490,6 +580,92 @@
           "detector_id"
         ],
         "title": "ImageQueryJson"
+      },
+      "ImageQueryOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "detector_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detector Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "result_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Type"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "extra": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "title": "ImageQueryOut"
       },
       "ValidationError": {
         "properties": {

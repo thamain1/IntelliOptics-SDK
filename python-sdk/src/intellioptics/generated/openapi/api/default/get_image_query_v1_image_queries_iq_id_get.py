@@ -1,50 +1,38 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
-from ...models.answer_out import AnswerOut
+from ...client import AuthenticatedClient, Client
 from ...models.http_validation_error import HTTPValidationError
-from typing import cast
-
+from ...models.image_query_out import ImageQueryOut
+from ...types import Response
 
 
 def _get_kwargs(
     iq_id: str,
-
 ) -> dict[str, Any]:
-    
-
-    
-
-    
-
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/v1/image-queries/{iq_id}".format(iq_id=iq_id,),
+        "url": "/v1/image-queries/{iq_id}".format(
+            iq_id=iq_id,
+        ),
     }
-
 
     return _kwargs
 
 
-
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Union[AnswerOut, HTTPValidationError]]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
     if response.status_code == 200:
-        response_200 = AnswerOut.from_dict(response.json())
-
-
+        response_200 = ImageQueryOut.from_dict(response.json())
 
         return response_200
 
     if response.status_code == 422:
         response_422 = HTTPValidationError.from_dict(response.json())
-
-
 
         return response_422
 
@@ -54,7 +42,9 @@ def _parse_response(*, client: Union[AuthenticatedClient, Client], response: htt
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[Union[AnswerOut, HTTPValidationError]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -67,9 +57,8 @@ def sync_detailed(
     iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """ Get Image Query
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
+    """Get Image Query
 
     Args:
         iq_id (str):
@@ -79,13 +68,11 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
-     """
-
+        Response[Union[HTTPValidationError, ImageQueryOut]]
+    """
 
     kwargs = _get_kwargs(
         iq_id=iq_id,
-
     )
 
     response = client.get_httpx_client().request(
@@ -94,13 +81,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """ Get Image Query
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
+    """Get Image Query
 
     Args:
         iq_id (str):
@@ -110,23 +97,21 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
-     """
-
+        Union[HTTPValidationError, ImageQueryOut]
+    """
 
     return sync_detailed(
         iq_id=iq_id,
-client=client,
-
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """ Get Image Query
+) -> Response[Union[HTTPValidationError, ImageQueryOut]]:
+    """Get Image Query
 
     Args:
         iq_id (str):
@@ -136,28 +121,24 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
-     """
-
+        Response[Union[HTTPValidationError, ImageQueryOut]]
+    """
 
     kwargs = _get_kwargs(
         iq_id=iq_id,
-
     )
 
-    response = await client.get_async_httpx_client().request(
-        **kwargs
-    )
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """ Get Image Query
+) -> Optional[Union[HTTPValidationError, ImageQueryOut]]:
+    """Get Image Query
 
     Args:
         iq_id (str):
@@ -167,12 +148,12 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
-     """
+        Union[HTTPValidationError, ImageQueryOut]
+    """
 
-
-    return (await asyncio_detailed(
-        iq_id=iq_id,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            iq_id=iq_id,
+            client=client,
+        )
+    ).parsed
