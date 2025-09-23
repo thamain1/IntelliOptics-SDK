@@ -1,11 +1,20 @@
-from intellioptics.client import IntelliOptics
+import pytest
 
-<<<<<<< HEAD
-def test_sdk_init():
-    client = IntelliOptics(api_token="fake-token")
-    assert client.api_token == "fake-token"
-=======
-def test_init():
-    client = IntelliOptics(api_token="test-token")
-    assert client.api_token == "test-token"
->>>>>>> 5f1bbe5 (Initial commit of IntelliOptics SDK)
+from intellioptics.client import IntelliOptics
+from intellioptics.errors import ApiTokenError
+
+
+def test_init_requires_api_token(monkeypatch):
+    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
+
+    with pytest.raises(ApiTokenError):
+        IntelliOptics(endpoint="https://example.com")
+
+
+def test_init_uses_environment(monkeypatch):
+    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "env-token")
+    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://example.com")
+
+    client = IntelliOptics()
+
+    assert client._http.headers["Authorization"] == "Bearer env-token"
