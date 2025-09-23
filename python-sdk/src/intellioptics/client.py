@@ -14,11 +14,15 @@ try:
     from .generated.openapi.api.default.image_query_json_v1_image_queries_json_post import sync as _image_query_json_sync
     from .generated.openapi.api.default.get_image_query_v1_image_queries_iq_id_get import sync as _get_image_query_sync
     from .generated.openapi.api.default.feedback_v1_feedback_post import sync as _feedback_sync
+    from .generated.openapi.api.default.add_label_v1_labels_post import sync as _add_label_sync
 
     from .generated.openapi.models.detector_create import DetectorCreate
     from .generated.openapi.models.detector_out import DetectorOut
     from .generated.openapi.models.image_query_json import ImageQueryJson
     from .generated.openapi.models.feedback_in import FeedbackIn
+    from .generated.openapi.models.label_create import LabelCreate
+    from .generated.openapi.models.label_ack import LabelAck
+    from .generated.openapi.models.label_create_metadata_type_0 import LabelCreateMetadataType0
 except Exception:
     AuthenticatedClient = _t.Any  # type: ignore[misc,assignment]
     _healthz_sync = None  # type: ignore[assignment]
@@ -27,10 +31,14 @@ except Exception:
     _image_query_json_sync = None  # type: ignore[assignment]
     _get_image_query_sync = None  # type: ignore[assignment]
     _feedback_sync = None  # type: ignore[assignment]
+    _add_label_sync = None  # type: ignore[assignment]
     DetectorCreate = _t.Any  # type: ignore[assignment]
     DetectorOut = _t.Any  # type: ignore[assignment]
     ImageQueryJson = _t.Any  # type: ignore[assignment]
     FeedbackIn = _t.Any  # type: ignore[assignment]
+    LabelCreate = _t.Any  # type: ignore[assignment]
+    LabelAck = _t.Any  # type: ignore[assignment]
+    LabelCreateMetadataType0 = _t.Any  # type: ignore[assignment]
 
 # Optional deps for image conversion helpers
 try:
@@ -82,6 +90,7 @@ class IntelliOptics:
       - submit_image_query_json(...) (JSON body)
       - get_image_query(iq_id)
       - submit_feedback(**kwargs)
+      - add_label(**kwargs)
     """
 
     def __init__(
@@ -197,6 +206,44 @@ class IntelliOptics:
             raise RuntimeError("Generated client not available; re-run codegen or check installation.")
         body = FeedbackIn(**kwargs)
         return _feedback_sync(client=self._client, json_body=body)
+
+    def add_label(
+        self,
+        *,
+        image_query_id: str,
+        label: str,
+        confidence: float | None = None,
+        detector_id: str | None = None,
+        user_id: str | None = None,
+        metadata: dict[str, _t.Any] | None = None,
+    ) -> "LabelAck":
+        """Attach a human-provided label to an image query."""
+        if (
+            self._client is None
+            or _add_label_sync is None
+            or LabelCreate is _t.Any
+            or LabelAck is _t.Any
+        ):
+            raise RuntimeError("Generated client not available; re-run codegen or check installation.")
+
+        body_kwargs: dict[str, _t.Any] = {
+            "image_query_id": image_query_id,
+            "label": label,
+        }
+        if confidence is not None:
+            body_kwargs["confidence"] = confidence
+        if detector_id is not None:
+            body_kwargs["detector_id"] = detector_id
+        if user_id is not None:
+            body_kwargs["user_id"] = user_id
+        if metadata is not None:
+            if isinstance(LabelCreateMetadataType0, type):
+                body_kwargs["metadata"] = LabelCreateMetadataType0.from_dict(metadata)
+            else:
+                body_kwargs["metadata"] = metadata
+
+        body = LabelCreate(**body_kwargs)
+        return _add_label_sync(client=self._client, json_body=body)
 
     def close(self) -> None:
         try:

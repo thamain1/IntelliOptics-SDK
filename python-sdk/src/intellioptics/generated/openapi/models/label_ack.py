@@ -5,72 +5,63 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ImageQueryJson")
+T = TypeVar("T", bound="LabelAck")
 
 
 @_attrs_define
-class ImageQueryJson:
+class LabelAck:
     """
     Attributes:
-        detector_id (str):
-        image (Union[None, Unset, str]):
-        wait (Union[Unset, bool]):  Default: True.
+        label_id (str):
+        status (Union[None, Unset, str]):
     """
 
-    detector_id: str
-    image: Union[None, Unset, str] = UNSET
-    wait: Union[Unset, bool] = True
+    label_id: str
+    status: Union[None, Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        detector_id = self.detector_id
+        label_id = self.label_id
 
-        image: Union[None, Unset, str]
-        if isinstance(self.image, Unset):
-            image = UNSET
+        status: Union[None, Unset, str]
+        if isinstance(self.status, Unset):
+            status = UNSET
         else:
-            image = self.image
-
-        wait = self.wait
+            status = self.status
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "detector_id": detector_id,
+                "label_id": label_id,
             }
         )
-        if image is not UNSET:
-            field_dict["image"] = image
-        if wait is not UNSET:
-            field_dict["wait"] = wait
+        if status is not UNSET:
+            field_dict["status"] = status
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        detector_id = d.pop("detector_id")
+        label_id = d.pop("label_id")
 
-        def _parse_image(data: object) -> Union[None, Unset, str]:
+        def _parse_status(data: object) -> Union[None, Unset, str]:
             if data is None:
                 return data
             if isinstance(data, Unset):
                 return data
             return cast(Union[None, Unset, str], data)
 
-        image = _parse_image(d.pop("image", UNSET))
+        status = _parse_status(d.pop("status", UNSET))
 
-        wait = d.pop("wait", UNSET)
-
-        image_query_json = cls(
-            detector_id=detector_id,
-            image=image,
-            wait=wait,
+        label_ack = cls(
+            label_id=label_id,
+            status=status,
         )
 
-        image_query_json.additional_properties = d
-        return image_query_json
+        label_ack.additional_properties = d
+        return label_ack
 
     @property
     def additional_keys(self) -> List[str]:
