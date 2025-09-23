@@ -100,6 +100,10 @@ with open("inspection.jpg", "rb") as image_file:
 # Poll until the model is confident enough (defaults to 90%)
 confident = client.wait_for_confident_result(query, confidence_threshold=0.95)
 print(confident.status, confident.label, confident.confidence)
+
+# Responses now expose the canonical ImageQuery payload used throughout the SDK.
+print(confident.model_dump())
+# {'id': 'iq-123', 'detector_id': 'det-456', 'status': 'DONE', 'label': 'ppe', 'confidence': 0.98}
 ```
 
 The helper functions `ask_ml` and `ask_confident` wrap common flows for asynchronous and

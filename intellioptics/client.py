@@ -3,6 +3,40 @@ from typing import Optional, Union, IO, List
 from .errors import ApiTokenError
 from .models import Detector, ImageQuery, QueryResult, UserIdentity
 from ._http import HttpClient
+
+
+def _normalize_image_query_payload(payload: dict) -> dict:
+    """Translate legacy answer payloads into the ImageQuery/QueryResult schema."""
+
+    if not isinstance(payload, dict):
+        return payload
+
+    # If the payload already looks like an ImageQuery, return as-is.
+    if "id" in payload and ("status" in payload or "label" in payload):
+        return payload
+
+    image_query_id = payload.get("image_query_id") or payload.get("id")
+    if not image_query_id:
+        return payload
+
+    status = payload.get("status")
+    if not status:
+        # Fall back to a best-effort default. Legacy responses only contained
+        # the answer when the inference completed, so we treat it as DONE.
+        status = "DONE" if payload.get("answer") is not None else "PENDING"
+
+    normalized = {
+        "id": image_query_id,
+        "detector_id": payload.get("detector_id"),
+        "status": status,
+        "result_type": payload.get("result_type"),
+        "confidence": payload.get("confidence"),
+        "label": payload.get("label") or payload.get("answer"),
+        "extra": payload.get("extra"),
+    }
+
+    # Strip keys with None values except for required ones.
+    return {k: v for k, v in normalized.items() if v is not None or k in {"id", "status"}}
 from ._img import to_jpeg_bytes
 
 class IntelliOptics:
@@ -52,13 +86,18 @@ class IntelliOptics:
             "inspection_id": inspection_id,
         }
         form = {k: v for k, v in form.items() if v is not None}
-        return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
+        payload = self._http.post_json("/v1/image-queries", files=files, data=form)
+        return ImageQuery(**_normalize_image_query_payload(payload))
 
     def get_image_query(self, image_query_id: str) -> ImageQuery:
-        return ImageQuery(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
+        payload = self._http.get_json(f"/v1/image-queries/{image_query_id}")
+        return ImageQuery(**_normalize_image_query_payload(payload))
 
     def get_result(self, image_query_id: str) -> QueryResult:
-        return QueryResult(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
+        payload = self._http.get_json(f"/v1/image-queries/{image_query_id}")
+        normalized = _normalize_image_query_payload(payload)
+        normalized.pop("detector_id", None)
+        return QueryResult(**normalized)
 
     # Helpers similar to GL
     def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[float] = 0.0) -> ImageQuery:
