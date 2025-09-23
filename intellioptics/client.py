@@ -1,5 +1,6 @@
+import json
 import os, time
-from typing import Optional, Union, IO, List
+from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
 from .models import Detector, ImageQuery, QueryResult, UserIdentity
 from ._http import HttpClient
@@ -40,7 +41,8 @@ class IntelliOptics:
     # Image queries
     def submit_image_query(self, detector: Optional[Union[Detector, str]] = None, image: Optional[Union[str, bytes, IO[bytes]]] = None,
                            prompt: Optional[str] = None, wait: Optional[float] = None,
-                           confidence_threshold: Optional[float] = None, metadata: Optional[dict] = None,
+                           confidence_threshold: Optional[float] = None,
+                           metadata: Optional[Union[Dict[str, Any], str]] = None,
                            inspection_id: Optional[str] = None) -> ImageQuery:
         img = to_jpeg_bytes(image) if image is not None else None
         files = {"image": ("image.jpg", img, "image/jpeg")} if img else None
@@ -49,9 +51,12 @@ class IntelliOptics:
             "prompt": prompt,
             "wait": wait,
             "confidence_threshold": confidence_threshold,
+            "metadata": metadata,
             "inspection_id": inspection_id,
         }
         form = {k: v for k, v in form.items() if v is not None}
+        if "metadata" in form and not isinstance(form["metadata"], str):
+            form["metadata"] = json.dumps(form["metadata"])
         return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
 
     def get_image_query(self, image_query_id: str) -> ImageQuery:

@@ -310,10 +310,27 @@
             "type": "string",
             "title": "Detector Id"
           },
+          "prompt": {
+            "type": "string",
+            "title": "Prompt"
+          },
           "wait": {
-            "type": "boolean",
+            "type": "number",
             "title": "Wait",
-            "default": true
+            "default": 0
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "type": "string",
+            "title": "Metadata",
+            "description": "JSON encoded metadata payload"
+          },
+          "inspection_id": {
+            "type": "string",
+            "title": "Inspection Id"
           },
           "image": {
             "anyOf": [
@@ -468,6 +485,10 @@
             "type": "string",
             "title": "Detector Id"
           },
+          "prompt": {
+            "type": "string",
+            "title": "Prompt"
+          },
           "image": {
             "anyOf": [
               {
@@ -480,9 +501,22 @@
             "title": "Image"
           },
           "wait": {
-            "type": "boolean",
+            "type": "number",
             "title": "Wait",
-            "default": true
+            "default": 0
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "type": "object",
+            "title": "Metadata",
+            "additionalProperties": {}
+          },
+          "inspection_id": {
+            "type": "string",
+            "title": "Inspection Id"
           }
         },
         "type": "object",
