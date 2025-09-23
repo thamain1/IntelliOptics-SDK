@@ -1,7 +1,7 @@
 import os, time
-from typing import Optional, Union, IO, List
+from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
-from .models import Detector, ImageQuery, QueryResult
+from .models import Detector, ImageQuery, QueryResult, FeedbackIn
 from ._http import HttpClient
 from ._img import to_jpeg_bytes
 
@@ -99,3 +99,21 @@ class IntelliOptics:
         # strip None values
         payload = {k: v for k, v in payload.items() if v is not None}
         return self._http.post_json("/v1/labels", json=payload)
+
+    def submit_feedback(self, feedback: Optional[Union[FeedbackIn, Dict[str, Any]]] = None,
+                        **kwargs) -> Dict[str, Any]:
+        if feedback is not None and kwargs:
+            raise ValueError("Provide feedback as a model/dict or as keyword arguments, not both.")
+
+        if feedback is None:
+            feedback_model = FeedbackIn(**kwargs)
+        elif isinstance(feedback, FeedbackIn):
+            feedback_model = feedback
+        else:
+            feedback_model = FeedbackIn(**feedback)
+
+        if hasattr(feedback_model, "model_dump"):
+            payload = feedback_model.model_dump(exclude_none=True)
+        else:
+            payload = feedback_model.dict(exclude_none=True)
+        return self._http.post_json("/v1/feedback", json=payload)

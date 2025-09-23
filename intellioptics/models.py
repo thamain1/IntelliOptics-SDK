@@ -1,5 +1,6 @@
+from typing import Optional, List, Dict, Any, Literal
+
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
 
 class Detector(BaseModel):
     id: str
@@ -22,3 +23,9 @@ class QueryResult(BaseModel):
     confidence: Optional[float] = None
     result_type: Optional[str] = None
     extra: Optional[Dict[str, Any]] = None
+
+
+class FeedbackIn(BaseModel):
+    image_query_id: str
+    correct_label: Literal["YES", "NO", "COUNT", "UNCLEAR"]
+    bboxes: Optional[List[Dict[str, Any]]] = None
