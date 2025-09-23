@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
 try:
     from pydantic import ConfigDict
@@ -8,7 +10,17 @@ from typing import Optional, List, Dict, Any
 class Detector(BaseModel):
     id: str
     name: str
-    labels: List[str] = []
+    labels: List[str] = Field(default_factory=list)
+    status: Optional[str] = "active"
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+    if ConfigDict is not None:  # pragma: no branch
+        model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
+    else:  # pragma: no cover - executed on Pydantic v1
+        class Config:
+            extra = "allow"
 
 class ImageQuery(BaseModel):
     id: str

@@ -6,29 +6,27 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
 from typing import cast
-from typing import Union
+
+if TYPE_CHECKING:
+  from ..models.detector_out import DetectorOut
 
 
 
 
 
-
-T = TypeVar("T", bound="DetectorCreate")
+T = TypeVar("T", bound="ListDetectorsV1DetectorsGetResponse200Type1")
 
 
 
 @_attrs_define
-class DetectorCreate:
+class ListDetectorsV1DetectorsGetResponse200Type1:
     """ 
         Attributes:
-            name (str):
-            labels (Union[Unset, list[str]]):
+            items (list['DetectorOut']):
      """
 
-    name: str
-    labels: Union[Unset, list[str]] = UNSET
+    items: list['DetectorOut']
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -36,11 +34,11 @@ class DetectorCreate:
 
 
     def to_dict(self) -> dict[str, Any]:
-        name = self.name
-
-        labels: Union[Unset, list[str]] = UNSET
-        if not isinstance(self.labels, Unset):
-            labels = self.labels
+        from ..models.detector_out import DetectorOut
+        items = []
+        for items_item_data in self.items:
+            items_item = items_item_data.to_dict()
+            items.append(items_item)
 
 
 
@@ -48,10 +46,8 @@ class DetectorCreate:
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({
-            "name": name,
+            "items": items,
         })
-        if labels is not UNSET:
-            field_dict["labels"] = labels
 
         return field_dict
 
@@ -59,20 +55,25 @@ class DetectorCreate:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.detector_out import DetectorOut
         d = dict(src_dict)
-        name = d.pop("name")
+        items = []
+        _items = d.pop("items")
+        for items_item_data in (_items):
+            items_item = DetectorOut.from_dict(items_item_data)
 
-        labels = cast(list[str], d.pop("labels", UNSET))
 
 
-        detector_create = cls(
-            name=name,
-            labels=labels,
+            items.append(items_item)
+
+
+        list_detectors_v1_detectors_get_response_200_type_1 = cls(
+            items=items,
         )
 
 
-        detector_create.additional_properties = d
-        return detector_create
+        list_detectors_v1_detectors_get_response_200_type_1.additional_properties = d
+        return list_detectors_v1_detectors_get_response_200_type_1
 
     @property
     def additional_keys(self) -> list[str]:

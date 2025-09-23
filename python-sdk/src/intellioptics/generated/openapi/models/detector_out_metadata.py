@@ -6,29 +6,21 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-from ..types import UNSET, Unset
-from typing import cast
-from typing import Union
 
 
 
 
 
 
-T = TypeVar("T", bound="DetectorCreate")
+T = TypeVar("T", bound="DetectorOutMetadata")
 
 
 
 @_attrs_define
-class DetectorCreate:
+class DetectorOutMetadata:
     """ 
-        Attributes:
-            name (str):
-            labels (Union[Unset, list[str]]):
      """
 
-    name: str
-    labels: Union[Unset, list[str]] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -36,22 +28,9 @@ class DetectorCreate:
 
 
     def to_dict(self) -> dict[str, Any]:
-        name = self.name
-
-        labels: Union[Unset, list[str]] = UNSET
-        if not isinstance(self.labels, Unset):
-            labels = self.labels
-
-
-
-
+        
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "name": name,
-        })
-        if labels is not UNSET:
-            field_dict["labels"] = labels
 
         return field_dict
 
@@ -60,19 +39,12 @@ class DetectorCreate:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        name = d.pop("name")
-
-        labels = cast(list[str], d.pop("labels", UNSET))
-
-
-        detector_create = cls(
-            name=name,
-            labels=labels,
+        detector_out_metadata = cls(
         )
 
 
-        detector_create.additional_properties = d
-        return detector_create
+        detector_out_metadata.additional_properties = d
+        return detector_out_metadata
 
     @property
     def additional_keys(self) -> list[str]:

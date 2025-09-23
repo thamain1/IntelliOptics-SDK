@@ -57,6 +57,54 @@
             }
           }
         }
+      },
+      "get": {
+        "summary": "List Detectors",
+        "operationId": "list_detectors_v1_detectors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DetectorOut"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/DetectorOut"
+                          }
+                        }
+                      },
+                      "required": [
+                        "items"
+                      ],
+                      "additionalProperties": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/detectors/{detector_id}": {
@@ -335,80 +383,72 @@
         "title": "Body_image_query_v1_image_queries_post"
       },
       "DetectorCreate": {
+        "title": "DetectorCreate",
+        "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "title": "Name"
+            "title": "Name",
+            "type": "string"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold",
-            "default": 0.75
+          "labels": {
+            "title": "Labels",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
           }
         },
-        "type": "object",
         "required": [
-          "name",
-          "mode",
-          "query_text"
+          "name"
         ],
-        "title": "DetectorCreate"
+        "additionalProperties": true
       },
       "DetectorOut": {
+        "title": "DetectorOut",
+        "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "title": "Id"
+            "title": "Id",
+            "type": "string"
           },
           "name": {
-            "type": "string",
-            "title": "Name"
+            "title": "Name",
+            "type": "string"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold"
+          "labels": {
+            "title": "Labels",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
           },
           "status": {
-            "type": "string",
             "title": "Status",
+            "type": "string",
             "default": "active"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "title": "Metadata",
+            "type": "object"
           }
         },
-        "type": "object",
         "required": [
           "id",
-          "name",
-          "mode",
-          "query_text",
-          "threshold"
+          "name"
         ],
-        "title": "DetectorOut"
+        "additionalProperties": true
       },
       "FeedbackIn": {
         "properties": {
