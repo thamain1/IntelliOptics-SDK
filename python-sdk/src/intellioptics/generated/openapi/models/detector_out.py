@@ -6,10 +6,14 @@ from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
-from ..models.detector_out_mode import DetectorOutMode
 from ..types import UNSET, Unset
+from dateutil.parser import isoparse
+from typing import cast
 from typing import Union
+import datetime
 
+if TYPE_CHECKING:
+  from ..models.detector_out_metadata import DetectorOutMetadata
 
 
 
@@ -25,18 +29,20 @@ class DetectorOut:
         Attributes:
             id (str):
             name (str):
-            mode (DetectorOutMode):
-            query_text (str):
-            threshold (float):
+            labels (Union[Unset, list[str]]):
             status (Union[Unset, str]):  Default: 'active'.
+            created_at (Union[Unset, datetime.datetime]):
+            updated_at (Union[Unset, datetime.datetime]):
+            metadata (Union[Unset, DetectorOutMetadata]):
      """
 
     id: str
     name: str
-    mode: DetectorOutMode
-    query_text: str
-    threshold: float
+    labels: Union[Unset, list[str]] = UNSET
     status: Union[Unset, str] = 'active'
+    created_at: Union[Unset, datetime.datetime] = UNSET
+    updated_at: Union[Unset, datetime.datetime] = UNSET
+    metadata: Union[Unset, 'DetectorOutMetadata'] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
 
@@ -44,17 +50,30 @@ class DetectorOut:
 
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.detector_out_metadata import DetectorOutMetadata
         id = self.id
 
         name = self.name
 
-        mode = self.mode.value
+        labels: Union[Unset, list[str]] = UNSET
+        if not isinstance(self.labels, Unset):
+            labels = self.labels
 
-        query_text = self.query_text
 
-        threshold = self.threshold
 
         status = self.status
+
+        created_at: Union[Unset, str] = UNSET
+        if not isinstance(self.created_at, Unset):
+            created_at = self.created_at.isoformat()
+
+        updated_at: Union[Unset, str] = UNSET
+        if not isinstance(self.updated_at, Unset):
+            updated_at = self.updated_at.isoformat()
+
+        metadata: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.metadata, Unset):
+            metadata = self.metadata.to_dict()
 
 
         field_dict: dict[str, Any] = {}
@@ -62,12 +81,17 @@ class DetectorOut:
         field_dict.update({
             "id": id,
             "name": name,
-            "mode": mode,
-            "query_text": query_text,
-            "threshold": threshold,
         })
+        if labels is not UNSET:
+            field_dict["labels"] = labels
         if status is not UNSET:
             field_dict["status"] = status
+        if created_at is not UNSET:
+            field_dict["created_at"] = created_at
+        if updated_at is not UNSET:
+            field_dict["updated_at"] = updated_at
+        if metadata is not UNSET:
+            field_dict["metadata"] = metadata
 
         return field_dict
 
@@ -75,29 +99,55 @@ class DetectorOut:
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.detector_out_metadata import DetectorOutMetadata
         d = dict(src_dict)
         id = d.pop("id")
 
         name = d.pop("name")
 
-        mode = DetectorOutMode(d.pop("mode"))
+        labels = cast(list[str], d.pop("labels", UNSET))
 
-
-
-
-        query_text = d.pop("query_text")
-
-        threshold = d.pop("threshold")
 
         status = d.pop("status", UNSET)
+
+        _created_at = d.pop("created_at", UNSET)
+        created_at: Union[Unset, datetime.datetime]
+        if isinstance(_created_at,  Unset):
+            created_at = UNSET
+        else:
+            created_at = isoparse(_created_at)
+
+
+
+
+        _updated_at = d.pop("updated_at", UNSET)
+        updated_at: Union[Unset, datetime.datetime]
+        if isinstance(_updated_at,  Unset):
+            updated_at = UNSET
+        else:
+            updated_at = isoparse(_updated_at)
+
+
+
+
+        _metadata = d.pop("metadata", UNSET)
+        metadata: Union[Unset, DetectorOutMetadata]
+        if isinstance(_metadata,  Unset):
+            metadata = UNSET
+        else:
+            metadata = DetectorOutMetadata.from_dict(_metadata)
+
+
+
 
         detector_out = cls(
             id=id,
             name=name,
-            mode=mode,
-            query_text=query_text,
-            threshold=threshold,
+            labels=labels,
             status=status,
+            created_at=created_at,
+            updated_at=updated_at,
+            metadata=metadata,
         )
 
 

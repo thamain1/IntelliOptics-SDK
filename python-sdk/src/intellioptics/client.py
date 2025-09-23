@@ -11,12 +11,17 @@ try:
     from .generated.openapi.api.default.healthz_healthz_get import sync as _healthz_sync
     from .generated.openapi.api.default.create_detector_v1_detectors_post import sync as _create_detector_sync
     from .generated.openapi.api.default.get_detector_v1_detectors_detector_id_get import sync as _get_detector_sync
+    from .generated.openapi.api.default.list_detectors_v1_detectors_get import sync as _list_detectors_sync
     from .generated.openapi.api.default.image_query_json_v1_image_queries_json_post import sync as _image_query_json_sync
     from .generated.openapi.api.default.get_image_query_v1_image_queries_iq_id_get import sync as _get_image_query_sync
     from .generated.openapi.api.default.feedback_v1_feedback_post import sync as _feedback_sync
 
     from .generated.openapi.models.detector_create import DetectorCreate
     from .generated.openapi.models.detector_out import DetectorOut
+    from .generated.openapi.models.list_detectors_v1_detectors_get_response_200_type_1 import (
+        ListDetectorsV1DetectorsGetResponse200Type1,
+    )
+    from .generated.openapi.models.http_validation_error import HTTPValidationError
     from .generated.openapi.models.image_query_json import ImageQueryJson
     from .generated.openapi.models.feedback_in import FeedbackIn
 except Exception:
@@ -24,11 +29,14 @@ except Exception:
     _healthz_sync = None  # type: ignore[assignment]
     _create_detector_sync = None  # type: ignore[assignment]
     _get_detector_sync = None  # type: ignore[assignment]
+    _list_detectors_sync = None  # type: ignore[assignment]
     _image_query_json_sync = None  # type: ignore[assignment]
     _get_image_query_sync = None  # type: ignore[assignment]
     _feedback_sync = None  # type: ignore[assignment]
     DetectorCreate = _t.Any  # type: ignore[assignment]
     DetectorOut = _t.Any  # type: ignore[assignment]
+    ListDetectorsV1DetectorsGetResponse200Type1 = _t.Any  # type: ignore[assignment]
+    HTTPValidationError = _t.Any  # type: ignore[assignment]
     ImageQueryJson = _t.Any  # type: ignore[assignment]
     FeedbackIn = _t.Any  # type: ignore[assignment]
 
@@ -140,6 +148,27 @@ class IntelliOptics:
             raise RuntimeError("Generated client not available; re-run codegen or check installation.")
         body = DetectorCreate(**kwargs)
         return _create_detector_sync(client=self._client, json_body=body)
+
+    def list_detectors(self) -> list["DetectorOut"]:
+        if self._client is None or _list_detectors_sync is None:
+            raise RuntimeError("Generated client not available; re-run codegen or check installation.")
+        result = _list_detectors_sync(client=self._client)
+        if result is None:
+            return []
+        if isinstance(result, list):
+            return result
+        if isinstance(result, ListDetectorsV1DetectorsGetResponse200Type1):
+            return result.items
+        if isinstance(result, HTTPValidationError):
+            raise RuntimeError(f"Validation error while listing detectors: {result}")
+        items = getattr(result, "items", None)
+        if isinstance(items, list):
+            return items
+        if isinstance(result, dict):
+            raw_items = result.get("items")
+            if isinstance(raw_items, list):
+                return raw_items
+        raise RuntimeError(f"Unexpected response type from list_detectors: {type(result)!r}")
 
     def get_detector(self, detector_id: str) -> "DetectorOut":
         if self._client is None or _get_detector_sync is None:
