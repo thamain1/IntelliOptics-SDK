@@ -143,5 +143,4 @@ pytest
 
 ## Support
 
-For issues, feedback, or feature requests, please contact the IntelliOptics team through your
-customer support channel or reach out to your IntelliOptics solutions engineer.
+For issues, feedback, or feature requests, please contact jmorgan@4wardmotions.con.
