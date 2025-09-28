@@ -27,12 +27,16 @@ io = IntelliOptics(api_token="YOUR_TOKEN")  # or set env vars
 
 print("healthy?", io.health_generated())
 
+
+det = io.create_detector(name="Widget Presence", labels=["widget", "no_widget"])
+
 me = io.whoami()
 print("authenticated as", me.email or me.id)
 
 det = io.create_detector(name="Widget Presence", labels=["widget", "no_widget"])
 for detector in io.list_detectors():
     print(det.id, det.name)
+
 
 res = io.submit_image_query(detector=det.id, image="image.jpg", wait=5.0, confidence_threshold=0.75)
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Any, Mapping, TypeVar, cast, List
 
 """Data model for creating detectors."""
 
@@ -13,6 +15,7 @@ from typing import Any, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+
 from ..models.detector_create_mode import DetectorCreateMode
 from ..types import UNSET, Unset
 
@@ -21,6 +24,12 @@ T = TypeVar("T", bound="DetectorCreate")
 
 @_attrs_define
 class DetectorCreate:
+    """Detector creation payload."""
+
+    name: str
+    labels: List[str] = _attrs_field(factory=list)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
     """Payload accepted by ``POST /v1/detectors``.
 
     Attributes:
@@ -54,13 +63,7 @@ class DetectorCreate:
     def to_dict(self) -> dict[str, Any]:
 
         name = self.name
-
-        mode = self.mode.value
-
-        query_text = self.query_text
-
-        threshold = self.threshold
-
+        labels = self.labels
 
         field_dict: Dict[str, Any] = {}
 
@@ -69,6 +72,9 @@ class DetectorCreate:
         field_dict.update(self.additional_properties)
 
         field_dict.update({
+            "name": name,
+            "labels": labels,
+        })
             "name": self.name,
             "labels": list(self.labels),
         })
@@ -90,6 +96,9 @@ class DetectorCreate:
         d = src_dict.copy()
         name = d.pop("name")
 
+        labels = cast(List[str], d.pop("labels", []))
+
+
         labels = list(d.pop("labels", []))
 
 
@@ -98,6 +107,7 @@ class DetectorCreate:
         query_text = d.pop("query_text")
 
         threshold = d.pop("threshold", UNSET)
+
 
         detector_create = cls(
             name=name,

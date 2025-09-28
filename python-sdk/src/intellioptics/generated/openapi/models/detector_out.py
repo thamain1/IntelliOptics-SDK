@@ -1,3 +1,8 @@
+
+from __future__ import annotations
+
+from typing import Any, Mapping, TypeVar, cast, List
+
 """Detector representation returned by the API."""
 
 from __future__ import annotations
@@ -8,6 +13,7 @@ from typing import Any, TypeVar
 from typing import Any, Dict, List, Type, TypeVar, Union
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union
+
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -20,6 +26,13 @@ T = TypeVar("T", bound="DetectorOut")
 
 @_attrs_define
 class DetectorOut:
+
+    """Detector representation returned by the API."""
+
+    id: str
+    name: str
+    labels: List[str] = _attrs_field(factory=list)
+
     """Serialized detector returned by the IntelliOptics API."""
 
     id: str
@@ -54,8 +67,9 @@ class DetectorOut:
     def to_dict(self) -> dict[str, Any]:
 
         id = self.id
-
         name = self.name
+
+        labels = self.labels
 
         mode = self.mode.value
 
@@ -67,11 +81,18 @@ class DetectorOut:
 
         field_dict: Dict[str, Any] = {}
 
+
         field_dict: dict[str, Any] = {}
 
         field_dict.update(self.additional_properties)
         
         field_dict.update({
+
+            "id": id,
+            "name": name,
+            "labels": labels,
+        })
+
             "id": self.id,
             "name": self.name,
             "labels": list(self.labels),
@@ -100,8 +121,9 @@ class DetectorOut:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
         id = d.pop("id")
-
         name = d.pop("name")
+
+        labels = cast(List[str], d.pop("labels", []))
 
         mode = DetectorOutMode(d.pop("mode"))
 
@@ -113,9 +135,14 @@ class DetectorOut:
 
 
         detector_out = cls(
+
+            id=id,
+            name=name,
+            labels=labels,
             id=d.pop("id"),
             name=d.pop("name"),
             labels=list(d.pop("labels", [])),
+
         )
 
         detector_out.additional_properties = d

@@ -532,7 +532,12 @@
         },
         "required": [
           "name"
+
+        ],
+        "title": "DetectorCreate"
+
         ]
+
       },
       "DetectorOut": {
         "title": "DetectorOut",
@@ -558,7 +563,12 @@
         "required": [
           "id",
           "name"
+
+        ],
+        "title": "DetectorOut"
+
         ]
+
       },
       "FeedbackIn": {
         "properties": {
