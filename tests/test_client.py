@@ -2,6 +2,7 @@ import pytest
 
 from intellioptics.client import IntelliOptics
 from intellioptics.errors import ApiTokenError
+from intellioptics.models import UserIdentity, FeedbackIn
 from intellioptics.models import UserIdentity, Detector, ImageQuery
 from intellioptics.models import Detector, UserIdentity
 
@@ -294,6 +295,46 @@ def test_init_uses_environment_defaults(monkeypatch):
     assert serializer() == identity_payload
 
 
+def test_submit_feedback_posts_feedback_payload(monkeypatch):
+    client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
+
+    payload_capture = {}
+
+    def fake_post_json(path, *, json):
+        payload_capture["path"] = path
+        payload_capture["json"] = json
+        return {"status": "ok"}
+
+    monkeypatch.setattr(client._http, "post_json", fake_post_json)
+
+    result = client.submit_feedback(
+        image_query_id="iq-123",
+        correct_label="YES",
+        bboxes=[{"x": 1, "y": 2, "width": 3, "height": 4}],
+    )
+
+    assert payload_capture["path"] == "/v1/feedback"
+    assert payload_capture["json"] == {
+        "image_query_id": "iq-123",
+        "correct_label": "YES",
+        "bboxes": [{"x": 1, "y": 2, "width": 3, "height": 4}],
+    }
+    assert result == {"status": "ok"}
+
+
+def test_submit_feedback_handles_empty_response(monkeypatch):
+    client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
+
+    def fake_post_json(path, *, json):
+        assert path == "/v1/feedback"
+        assert json == {"image_query_id": "iq-456", "correct_label": "NO"}
+        raise ValueError("No JSON object could be decoded")
+
+    monkeypatch.setattr(client._http, "post_json", fake_post_json)
+
+    feedback = FeedbackIn(image_query_id="iq-456", correct_label="NO")
+
+    assert client.submit_feedback(feedback) == {}
 def test_submit_image_query_builds_multipart_form(monkeypatch):
     client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
 

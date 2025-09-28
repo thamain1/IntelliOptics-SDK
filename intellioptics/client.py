@@ -1,6 +1,7 @@
 import os, time
 from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
+from .models import Detector, ImageQuery, QueryResult, UserIdentity, FeedbackIn
 from .models import Detector, ImageQuery, QueryResult, FeedbackIn
 from .models import Detector, ImageQuery, QueryResult, UserIdentity
 from ._http import HttpClient
@@ -169,6 +170,29 @@ class IntelliOptics:
         payload = {k: v for k, v in payload.items() if v is not None}
         return self._http.post_json("/v1/labels", json=payload)
 
+    def submit_feedback(self, feedback: FeedbackIn | None = None, **kwargs) -> dict:
+        """Submit feedback for an image query.
+
+        Either supply a :class:`FeedbackIn` instance or the required keyword arguments
+        (``image_query_id`` and ``correct_label`` with optional ``bboxes`` and other
+        fields accepted by the model).
+        """
+
+        if feedback is not None and kwargs:
+            raise TypeError("submit_feedback accepts either a FeedbackIn instance or keyword arguments, not both")
+
+        if feedback is None:
+            feedback = FeedbackIn(**kwargs)
+        elif not isinstance(feedback, FeedbackIn):
+            feedback = FeedbackIn(**feedback)
+
+        serializer = getattr(feedback, "model_dump", feedback.dict)
+        payload = serializer(exclude_none=True)
+        try:
+            response = self._http.post_json("/v1/feedback", json=payload)
+        except ValueError:
+            return {}
+        return response or {}
     def submit_feedback(self, feedback: Optional[Union[FeedbackIn, Dict[str, Any]]] = None,
                         **kwargs) -> Dict[str, Any]:
         if feedback is not None and kwargs:

@@ -57,3 +57,15 @@ class UserIdentity(BaseModel):
     else:  # pragma: no cover - executed on Pydantic v1
         class Config:
             extra = "allow"
+
+
+class FeedbackIn(BaseModel):
+    image_query_id: str
+    correct_label: str
+    bboxes: Optional[List[Dict[str, Any]]] = None
+
+    if ConfigDict is not None:  # pragma: no branch
+        model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
+    else:  # pragma: no cover - executed on Pydantic v1
+        class Config:
+            extra = "allow"
