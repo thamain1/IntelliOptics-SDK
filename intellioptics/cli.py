@@ -14,6 +14,8 @@ def _client():
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
 
+        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
+
         api_token=os.getenv("INTELLIOOPTICS_API_TOKEN"),
 
     api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
