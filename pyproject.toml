@@ -26,3 +26,6 @@ exclude = ["backend*", "infra*", "sdk*", "spec*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+pythonpath = ["."]
+
