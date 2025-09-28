@@ -4,11 +4,11 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="LabelOutMetadataType0")
+T = TypeVar("T", bound="FeedbackV1FeedbackPostResponse200")
 
 
 @_attrs_define
-class LabelOutMetadataType0:
+class FeedbackV1FeedbackPostResponse200:
     """ """
 
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -22,10 +22,10 @@ class LabelOutMetadataType0:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        label_out_metadata_type_0 = cls()
+        feedback_v1_feedback_post_response_200 = cls()
 
-        label_out_metadata_type_0.additional_properties = d
-        return label_out_metadata_type_0
+        feedback_v1_feedback_post_response_200.additional_properties = d
+        return feedback_v1_feedback_post_response_200
 
     @property
     def additional_keys(self) -> list[str]:

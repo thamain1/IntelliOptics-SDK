@@ -1,22 +1,9 @@
-
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    List,
-    Type,
-    TypeVar,
-    Union,
-    cast,
-)
-
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.feedback_in_correct_label import FeedbackInCorrectLabel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -30,30 +17,24 @@ T = TypeVar("T", bound="FeedbackIn")
 class FeedbackIn:
     """
     Attributes:
-        image_query_id (str):
-        correct_label (FeedbackInCorrectLabel):
-        bboxes (Union[List['FeedbackInBboxesType0Item'], None, Unset]):
+        iq_id (str):
+        correct_label (str):
         bboxes (Union[None, Unset, list['FeedbackInBboxesType0Item']]):
+        notes (Union[None, Unset, str]):
     """
 
-    image_query_id: str
-    correct_label: FeedbackInCorrectLabel
-
-    bboxes: Union[List["FeedbackInBboxesType0Item"], None, Unset] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-    def to_dict(self) -> Dict[str, Any]:
-
+    iq_id: str
+    correct_label: str
     bboxes: Union[None, Unset, list["FeedbackInBboxesType0Item"]] = UNSET
+    notes: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        iq_id = self.iq_id
 
-        image_query_id = self.image_query_id
+        correct_label = self.correct_label
 
-        correct_label = self.correct_label.value
-
-        bboxes: Union[List[Dict[str, Any]], None, Unset]
+        bboxes: Union[None, Unset, list[dict[str, Any]]]
         if isinstance(self.bboxes, Unset):
             bboxes = UNSET
         elif isinstance(self.bboxes, list):
@@ -65,42 +46,37 @@ class FeedbackIn:
         else:
             bboxes = self.bboxes
 
-        field_dict: Dict[str, Any] = {}
+        notes: Union[None, Unset, str]
+        if isinstance(self.notes, Unset):
+            notes = UNSET
+        else:
+            notes = self.notes
 
         field_dict: dict[str, Any] = {}
-
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "image_query_id": image_query_id,
+                "iq_id": iq_id,
                 "correct_label": correct_label,
             }
         )
         if bboxes is not UNSET:
             field_dict["bboxes"] = bboxes
+        if notes is not UNSET:
+            field_dict["notes"] = notes
 
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.feedback_in_bboxes_type_0_item import FeedbackInBboxesType0Item
 
-        d = src_dict.copy()
-
         d = dict(src_dict)
+        iq_id = d.pop("iq_id")
 
-        image_query_id = d.pop("image_query_id")
-
-        correct_label = FeedbackInCorrectLabel(d.pop("correct_label"))
-
-        def _parse_bboxes(data: object) -> Union[None, Unset, list["FeedbackInBboxesType0Item"]]:
-
-        def _parse_bboxes(
-            data: object,
-        ) -> Union[List["FeedbackInBboxesType0Item"], None, Unset]:
+        correct_label = d.pop("correct_label")
 
         def _parse_bboxes(data: object) -> Union[None, Unset, list["FeedbackInBboxesType0Item"]]:
-
             if data is None:
                 return data
             if isinstance(data, Unset):
@@ -111,16 +87,7 @@ class FeedbackIn:
                 bboxes_type_0 = []
                 _bboxes_type_0 = data
                 for bboxes_type_0_item_data in _bboxes_type_0:
-
                     bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(bboxes_type_0_item_data)
-
-
-                    bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(
-                        bboxes_type_0_item_data
-                    )
-
-                    bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(bboxes_type_0_item_data)
-
 
                     bboxes_type_0.append(bboxes_type_0_item)
 
@@ -129,24 +96,29 @@ class FeedbackIn:
                 pass
             return cast(Union[None, Unset, list["FeedbackInBboxesType0Item"]], data)
 
-            return cast(Union[List["FeedbackInBboxesType0Item"], None, Unset], data)
-
-            return cast(Union[None, Unset, list["FeedbackInBboxesType0Item"]], data)
-
-
         bboxes = _parse_bboxes(d.pop("bboxes", UNSET))
 
+        def _parse_notes(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        notes = _parse_notes(d.pop("notes", UNSET))
+
         feedback_in = cls(
-            image_query_id=image_query_id,
+            iq_id=iq_id,
             correct_label=correct_label,
             bboxes=bboxes,
+            notes=notes,
         )
 
         feedback_in.additional_properties = d
         return feedback_in
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

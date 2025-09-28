@@ -1,19 +1,12 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
-
-"""Envelope for detector listings."""
-
-from __future__ import annotations
-
-from collections.abc import Mapping
-from typing import Any, List, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.detector_out import DetectorOut
-from typing import cast, Union
-from .detector_out import DetectorOut
+if TYPE_CHECKING:
+    from ..models.detector_out import DetectorOut
+
 
 T = TypeVar("T", bound="DetectorList")
 
@@ -21,11 +14,11 @@ T = TypeVar("T", bound="DetectorList")
 @_attrs_define
 class DetectorList:
     """
-        Attributes:
-            items (list['DetectorOut']):
+    Attributes:
+        items (list['DetectorOut']):
     """
 
-    items: list['DetectorOut']
+    items: list["DetectorOut"]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -36,27 +29,22 @@ class DetectorList:
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "items": items,
-        })
+        field_dict.update(
+            {
+                "items": items,
+            }
+        )
 
-    """Response wrapper for ``GET /v1/detectors``."""
-
-    items: List[DetectorOut]
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-    def to_dict(self) -> dict[str, Any]:
-        field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
-        field_dict["items"] = [item.to_dict() for item in self.items]
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.detector_out import DetectorOut
+
         d = dict(src_dict)
         items = []
         _items = d.pop("items")
-        for items_item_data in (_items):
+        for items_item_data in _items:
             items_item = DetectorOut.from_dict(items_item_data)
 
             items.append(items_item)
@@ -64,9 +52,6 @@ class DetectorList:
         detector_list = cls(
             items=items,
         )
-
-        items = [DetectorOut.from_dict(item) for item in d.pop("items", [])]
-        detector_list = cls(items=items)
 
         detector_list.additional_properties = d
         return detector_list

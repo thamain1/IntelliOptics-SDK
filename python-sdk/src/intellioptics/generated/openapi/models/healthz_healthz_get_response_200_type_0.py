@@ -4,11 +4,11 @@ from typing import Any, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="LabelInMetadataType0")
+T = TypeVar("T", bound="HealthzHealthzGetResponse200Type0")
 
 
 @_attrs_define
-class LabelInMetadataType0:
+class HealthzHealthzGetResponse200Type0:
     """ """
 
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -22,10 +22,10 @@ class LabelInMetadataType0:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        label_in_metadata_type_0 = cls()
+        healthz_healthz_get_response_200_type_0 = cls()
 
-        label_in_metadata_type_0.additional_properties = d
-        return label_in_metadata_type_0
+        healthz_healthz_get_response_200_type_0.additional_properties = d
+        return healthz_healthz_get_response_200_type_0
 
     @property
     def additional_keys(self) -> list[str]:
