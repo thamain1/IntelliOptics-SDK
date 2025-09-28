@@ -3,9 +3,33 @@ from .client import IntelliOptics
 app = typer.Typer(add_completion=False)
 
 def _client():
+
+    """Construct an :class:`IntelliOptics` client using environment variables."""
+
+    api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
+    if api_token is None:
+        # Backwards compatibility with the historical misspelled variable name.
+        api_token = os.getenv("INTELLIOOPTICS_API_TOKEN")
+
+    return IntelliOptics(
+        endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
+
+        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
+
+        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN"),
+
+    api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
+    if not api_token:
+        typer.echo("INTELLIOPTICS_API_TOKEN environment variable is required")
+        raise typer.Exit(code=1)
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
         api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
+
+
+        api_token=api_token,
+
+
     )
 
 @app.command()
@@ -15,6 +39,28 @@ def status():
 @app.command()
 def whoami():
     identity = _client().whoami()
+
     serializer = getattr(identity, "model_dump", None) or getattr(identity, "dict", None)
     payload = serializer() if serializer else identity
     print(json.dumps(payload, indent=2))
+
+    if hasattr(identity, "model_dump"):
+        payload = identity.model_dump()
+    elif hasattr(identity, "dict"):
+        payload = identity.dict()
+    else:
+        payload = identity
+    print(json.dumps(payload, indent=2))
+
+    serializer = getattr(identity, "model_dump", None)
+
+    if callable(serializer):
+        data = serializer()
+    else:  # pragma: no cover - Pydantic v1 fallback
+        data = identity.dict()
+
+    if serializer is None:
+        serializer = identity.dict
+    data = serializer()
+
+    print(json.dumps(data, indent=2))
