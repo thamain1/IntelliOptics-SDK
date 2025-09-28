@@ -48,7 +48,9 @@ The SDK and CLI are configured through environment variables:
 
 ## Command line interface
 
-Once installed, the CLI entrypoint is available as `intellioptics`:
+Once installed, the CLI entrypoint is available as `intellioptics`. It reads the same
+environment variables as the Python client (`INTELLIOPTICS_ENDPOINT`,
+`INTELLIOPTICS_API_TOKEN`, and optional `DISABLE_TLS_VERIFY`):
 
 ```bash
 # Verify that your environment variables are wired up
