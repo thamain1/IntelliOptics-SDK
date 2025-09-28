@@ -4,8 +4,8 @@ import httpx
 from .types import Answer, Detector
 from .exceptions import AuthError, ApiError
 
-DEFAULT_BASE_URL = os.getenv("INTELLOPTICS_BASE_URL", "https://api.intellioptics.co")
-DEFAULT_TOKEN = os.getenv("INTELLOPTICS_API_TOKEN")
+DEFAULT_BASE_URL = os.getenv("INTELLIOPTICS_BASE_URL", "https://api.intellioptics.co")
+DEFAULT_TOKEN = os.getenv("INTELLIOPTICS_API_TOKEN")
 
 class IntelliOptics:
     """
@@ -15,7 +15,7 @@ class IntelliOptics:
         self.base_url = base_url.rstrip("/")
         self.api_token = api_token or DEFAULT_TOKEN
         if not self.api_token:
-            raise AuthError("Missing API token. Set INTELLOPTICS_API_TOKEN or pass api_token=...")
+            raise AuthError("Missing API token. Set INTELLIOPTICS_API_TOKEN or pass api_token=...")
         self._client = httpx.Client(
             base_url=self.base_url,
             headers={"Authorization": f"Bearer {self.api_token}"},
