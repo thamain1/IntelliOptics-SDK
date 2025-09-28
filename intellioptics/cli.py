@@ -5,7 +5,7 @@ app = typer.Typer(add_completion=False)
 def _client():
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN") or os.getenv("INTELLIOPTICS_API_TOKEN"),
+        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
     )
 
 @app.command()
@@ -14,4 +14,11 @@ def status():
 
 @app.command()
 def whoami():
-    print(json.dumps(_client().whoami(), indent=2))
+    identity = _client().whoami()
+    if hasattr(identity, "model_dump"):
+        payload = identity.model_dump()
+    elif hasattr(identity, "dict"):
+        payload = identity.dict()
+    else:
+        payload = identity
+    print(json.dumps(payload, indent=2))
