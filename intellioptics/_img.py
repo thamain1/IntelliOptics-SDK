@@ -20,21 +20,33 @@ except Exception:  # pragma: no cover
 ImageLike = Union[str, bytes, bytearray, IO[bytes], BufferedIOBase, "Image.Image", "np.ndarray"]
 
 
-def _coerce_file_like(image: ImageLike) -> bytes | None:
-    if isinstance(image, (bytes, bytearray)):
-        return bytes(image)
+def _looks_like_jpeg(data: bytes) -> bool:
+    return len(data) >= 2 and data[0:2] == b"\xff\xd8"
 
-    if hasattr(image, "read") and callable(image.read):  # file-like object
-        data = image.read()
-        if isinstance(data, bytes):
-            return data
+
+def _ensure_jpeg_bytes(data: bytes) -> bytes:
+    if _looks_like_jpeg(data):
+        return data
+
+    if Image is None:
+        raise RuntimeError("Pillow is required to convert non-JPEG inputs to JPEG")
+
+    with Image.open(BytesIO(data)) as pil_image:  # type: ignore[attr-defined]
+        return _encode_with_pillow(pil_image)
+
+
+def _read_file_like(stream: Any) -> bytes:
+    data = stream.read()
+    if not isinstance(data, bytes):
         raise TypeError("File-like objects must return bytes when read()")
 
-    if isinstance(image, (str, Path)):
-        path = Path(image)
-        return path.read_bytes()
+    if hasattr(stream, "seek") and callable(stream.seek):
+        try:  # pragma: no cover - best effort rewind
+            stream.seek(0)
+        except Exception:
+            pass
 
-    return None
+    return data
 
 
 def _encode_with_pillow(pil_image: "Image.Image") -> bytes:
@@ -63,15 +75,22 @@ def _encode_numpy(array: "np.ndarray") -> bytes:
 def to_jpeg_bytes(image: ImageLike) -> bytes:
     """Normalise supported image inputs into a JPEG byte payload."""
 
-    data = _coerce_file_like(image)
-    if data is not None:
-        return data
-
-    if Image is not None and hasattr(image, "__class__") and image.__class__.__module__.startswith("PIL"):  # type: ignore[attr-defined]
-        return _encode_with_pillow(image)  # type: ignore[arg-type]
+    if Image is not None and isinstance(image, Image.Image):  # type: ignore[arg-type]
+        return _encode_with_pillow(image)
 
     if np is not None and isinstance(image, np.ndarray):  # type: ignore[attr-defined]
         return _encode_numpy(image)
+
+    if isinstance(image, (bytes, bytearray)):
+        return _ensure_jpeg_bytes(bytes(image))
+
+    if hasattr(image, "read") and callable(image.read):  # file-like object
+        data = _read_file_like(image)
+        return _ensure_jpeg_bytes(data)
+
+    if isinstance(image, (str, Path)):
+        data = Path(image).read_bytes()
+        return _ensure_jpeg_bytes(data)
 
     raise TypeError("Unsupported image type")
 
