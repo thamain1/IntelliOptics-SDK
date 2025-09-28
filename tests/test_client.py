@@ -1,9 +1,11 @@
 import asyncio
 import base64
+from io import BytesIO
 from typing import Any
 from unittest.mock import AsyncMock, Mock
 
 import pytest
+from PIL import Image
 
 from intellioptics import AsyncIntelliOptics, ExperimentalApi, IntelliOptics
 from intellioptics.errors import ApiTokenError
@@ -35,6 +37,12 @@ def _make_async_client() -> tuple[AsyncIntelliOptics, Any]:
     client._http = http  # type: ignore[attr-defined]
     client.experimental = ExperimentalApi(async_client=client)
     return client, http
+
+
+def _sample_jpeg_bytes() -> bytes:
+    buffer = BytesIO()
+    Image.new("RGB", (4, 4), color=(128, 64, 32)).save(buffer, format="JPEG")
+    return buffer.getvalue()
 
 
 def test_init_requires_api_token(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -94,7 +102,7 @@ def test_submit_image_query_includes_optional_fields() -> None:
 
     result = client.submit_image_query(
         detector="det-1",
-        image=b"jpeg-bytes",
+        image=_sample_jpeg_bytes(),
         wait=0.0,
         patience_time=45.0,
         confidence_threshold=0.9,
@@ -147,7 +155,7 @@ def test_submit_image_query_defaults_match_docs() -> None:
     client = _make_client()
     client._http.post_json.return_value = {"id": "iq-default", "status": "PENDING", "detector_id": "det-1"}
 
-    client.submit_image_query(detector="det-1", image=b"jpeg-bytes")
+    client.submit_image_query(detector="det-1", image=_sample_jpeg_bytes())
 
     form = client._http.post_json.call_args.kwargs["data"]
     assert form["wait"] == 30.0
