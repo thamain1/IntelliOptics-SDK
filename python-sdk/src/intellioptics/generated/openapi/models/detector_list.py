@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+
 """Envelope for detector listings."""
 
 from __future__ import annotations
@@ -8,6 +11,8 @@ from typing import Any, List, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.detector_out import DetectorOut
+from typing import cast, Union
 from .detector_out import DetectorOut
 
 T = TypeVar("T", bound="DetectorList")
@@ -15,6 +20,26 @@ T = TypeVar("T", bound="DetectorList")
 
 @_attrs_define
 class DetectorList:
+    """
+        Attributes:
+            items (list['DetectorOut']):
+    """
+
+    items: list['DetectorOut']
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        items = []
+        for items_item_data in self.items:
+            items_item = items_item_data.to_dict()
+            items.append(items_item)
+
+        field_dict: dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({
+            "items": items,
+        })
+
     """Response wrapper for ``GET /v1/detectors``."""
 
     items: List[DetectorOut]
@@ -29,8 +54,20 @@ class DetectorList:
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
+        items = []
+        _items = d.pop("items")
+        for items_item_data in (_items):
+            items_item = DetectorOut.from_dict(items_item_data)
+
+            items.append(items_item)
+
+        detector_list = cls(
+            items=items,
+        )
+
         items = [DetectorOut.from_dict(item) for item in d.pop("items", [])]
         detector_list = cls(items=items)
+
         detector_list.additional_properties = d
         return detector_list
 

@@ -1,3 +1,26 @@
+
+from http import HTTPStatus
+from typing import Any, Optional, Union, cast
+
+import httpx
+
+from ...client import AuthenticatedClient, Client
+from ...types import Response, UNSET
+from ... import errors
+
+from ...models.http_validation_error import HTTPValidationError
+from ...models.user_identity import UserIdentity
+from typing import cast
+
+
+def _get_kwargs(
+) -> dict[str, Any]:
+
+
+
+
+    _kwargs: dict[str, Any] = {
+
 """Generated client for GET /v1/users/me."""
 
 from __future__ import annotations
@@ -16,10 +39,43 @@ from ...types import Response
 
 def _get_kwargs() -> dict[str, Any]:
     return {
+
         "method": "get",
         "url": "/v1/users/me",
     }
 
+
+
+    return _kwargs
+
+
+
+def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Union[UserIdentity, HTTPValidationError]]:
+    if response.status_code == 200:
+        response_200 = UserIdentity.from_dict(response.json())
+
+
+
+        return response_200
+
+    if response.status_code == 401:
+        response_401 = response.json()
+        return response_401
+
+    if response.status_code == 422:
+        response_422 = HTTPValidationError.from_dict(response.json())
+
+
+
+        return response_422
+
+    if client.raise_on_unexpected_status:
+        raise errors.UnexpectedStatus(response.status_code, response.content)
+    else:
+        return None
+
+
+def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[Union[Any, UserIdentity, HTTPValidationError]]:
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
@@ -36,6 +92,7 @@ def _parse_response(
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Response[Union[HTTPValidationError, UserIdentity]]:
+
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -45,15 +102,61 @@ def _build_response(
 
 
 def sync_detailed(
+
+    *,
+    client: Union[AuthenticatedClient, Client],
+) -> Response[Union[Any, UserIdentity, HTTPValidationError]]:
+    """Get Current User"""
+
+
+
+    kwargs = _get_kwargs(
+    )
+
+    response = client.get_httpx_client().request(
+        **kwargs,
+    )
+
+
     *, client: Union[AuthenticatedClient, Client]
 ) -> Response[Union[HTTPValidationError, UserIdentity]]:
     """Get Current User"""
 
     response = client.get_httpx_client().request(**_get_kwargs())
+
     return _build_response(client=client, response=response)
 
 
 def sync(
+
+    *,
+    client: Union[AuthenticatedClient, Client],
+) -> Optional[Union[Any, UserIdentity, HTTPValidationError]]:
+    """Get Current User"""
+
+
+
+    return sync_detailed(
+        client=client,
+)
+
+
+async def asyncio_detailed(
+    *,
+    client: Union[AuthenticatedClient, Client],
+) -> Response[Union[Any, UserIdentity, HTTPValidationError]]:
+    """Get Current User"""
+
+
+
+    kwargs = _get_kwargs(
+    )
+
+    response = await client.get_async_httpx_client().request(
+        **kwargs
+    )
+
+
     *, client: Union[AuthenticatedClient, Client]
 ) -> Optional[Union[HTTPValidationError, UserIdentity]]:
     """Get Current User"""
@@ -67,10 +170,23 @@ async def asyncio_detailed(
     """Get Current User"""
 
     response = await client.get_async_httpx_client().request(**_get_kwargs())
+
     return _build_response(client=client, response=response)
 
 
 async def asyncio(
+
+    *,
+    client: Union[AuthenticatedClient, Client],
+) -> Optional[Union[Any, UserIdentity, HTTPValidationError]]:
+    """Get Current User"""
+
+
+
+    return (await asyncio_detailed(
+        client=client,
+    )).parsed
+
     *, client: Union[AuthenticatedClient, Client]
 ) -> Optional[Union[HTTPValidationError, UserIdentity]]:
     """Get Current User"""

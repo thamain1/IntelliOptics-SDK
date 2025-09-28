@@ -1,4 +1,7 @@
 
+from collections.abc import Mapping
+from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+
 """Authenticated user identity payload."""
 
 from __future__ import annotations
@@ -13,14 +16,27 @@ from typing import Any, TypeVar, Union, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..types import UNSET, Unset
+from ..types import UNSET, Unset
+from typing import cast, Union
+from typing import Union
 
 from ..types import UNSET, Unset
+
 
 T = TypeVar("T", bound="UserIdentity")
 
 
 @_attrs_define
 class UserIdentity:
+    """
+        Attributes:
+            id (str):
+            email (Union[None, Unset, str]):
+            name (Union[None, Unset, str]):
+            tenant (Union[None, Unset, str]):
+            roles (Union[Unset, list[str]]):
+
 
     """Details returned by ``GET /v1/users/me``."""
 
@@ -52,6 +68,7 @@ class UserIdentity:
         name (Union[None, Unset, str]):
         tenant (Union[None, Unset, str]):
         roles (Union[Unset, list[str]]):
+
     """
 
     id: str
@@ -82,17 +99,30 @@ class UserIdentity:
         else:
             tenant = self.tenant
 
+
+        roles: Union[Unset, list[str]]
+        if isinstance(self.roles, Unset):
+            roles = UNSET
+        else:
+
         roles: Union[Unset, list[str]] = UNSET
         if not isinstance(self.roles, Unset):
+
             roles = self.roles
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
+
+        field_dict.update({
+            "id": id,
+        })
+
         field_dict.update(
             {
                 "id": id,
             }
         )
+
         if email is not UNSET:
             field_dict["email"] = email
         if name is not UNSET:
@@ -115,6 +145,7 @@ class UserIdentity:
             tenant=d.pop("tenant", None),
             roles=list(d.pop("roles", [])),
         )
+
 
         id = d.pop("id")
 
@@ -144,6 +175,16 @@ class UserIdentity:
             return cast(Union[None, Unset, str], data)
 
         tenant = _parse_tenant(d.pop("tenant", UNSET))
+
+
+        def _parse_roles(data: object) -> Union[Unset, list[str]]:
+            if isinstance(data, Unset):
+                return data
+            if isinstance(data, list):
+                return cast(Union[Unset, list[str]], data)
+            return cast(Union[Unset, list[str]], data)
+
+        roles = _parse_roles(d.pop("roles", UNSET))
 
         roles = cast(list[str], d.pop("roles", UNSET))
 

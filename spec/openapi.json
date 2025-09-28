@@ -40,6 +40,32 @@
       }
     },
     "/v1/detectors": {
+      "get": {
+        "summary": "List Detectors",
+        "operationId": "list_detectors_v1_detectors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectorList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Create Detector",
         "operationId": "create_detector_v1_detectors_post",
@@ -347,12 +373,22 @@
               }
             }
           },
+
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+
           "422": {
             "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+
                 }
               }
             }
@@ -362,6 +398,8 @@
     },
     "/v1/labels": {
       "post": {
+        "summary": "Submit Label",
+        "operationId": "submit_label_v1_labels_post",
         "summary": "Create Label",
         "operationId": "create_label_v1_labels_post",
 
@@ -374,7 +412,11 @@
           "content": {
             "application/json": {
               "schema": {
+
+                "$ref": "#/components/schemas/LabelSubmission"
+
                 "$ref": "#/components/schemas/LabelCreate"
+
               }
             }
           },
@@ -386,8 +428,12 @@
             "content": {
               "application/json": {
                 "schema": {
+
+                  "$ref": "#/components/schemas/LabelSubmissionResponse"
+
                   "$ref": "#/components/schemas/LabelRecord"
                   "$ref": "#/components/schemas/LabelAck"
+
                 }
               }
             }
@@ -1080,6 +1126,15 @@
         "title": "ValidationError"
       },
       "DetectorList": {
+        "type": "object",
+        "title": "DetectorList",
+        "properties": {
+          "items": {
+            "type": "array",
+            "title": "Items",
+            "items": {
+              "$ref": "#/components/schemas/DetectorOut"
+            }
         "title": "DetectorList",
         "type": "object",
         "properties": {
@@ -1089,6 +1144,7 @@
               "$ref": "#/components/schemas/DetectorOut"
             },
             "title": "Items"
+
           }
         },
         "required": [
@@ -1096,14 +1152,38 @@
         ]
       },
       "UserIdentity": {
+        "type": "object",
+        "title": "UserIdentity",
+
         "title": "UserIdentity",
         "type": "object",
+
         "properties": {
           "id": {
             "type": "string",
             "title": "Id"
           },
           "email": {
+
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Email"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Name"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+
             "type": "string",
             "title": "Email"
           },
@@ -1113,24 +1193,41 @@
           },
           "tenant": {
             "type": "string",
+
             "title": "Tenant"
           },
           "roles": {
             "type": "array",
+
+            "title": "Roles",
+            "items": {
+              "type": "string"
+            },
+
             "items": {
               "type": "string"
             },
             "title": "Roles",
+
             "default": []
           }
         },
         "required": [
           "id"
+
+        ],
+        "additionalProperties": true
+      },
+      "LabelSubmission": {
+        "type": "object",
+        "title": "LabelSubmission",
+
         ]
       },
       "LabelCreate": {
         "title": "LabelCreate",
         "type": "object",
+
         "properties": {
           "image_query_id": {
             "type": "string",
@@ -1154,7 +1251,12 @@
           },
           "metadata": {
             "type": "object",
+
+            "title": "Metadata",
+            "additionalProperties": true
+
             "title": "Metadata"
+
           }
         },
         "required": [
@@ -1162,6 +1264,12 @@
           "label"
         ]
       },
+
+      "LabelSubmissionResponse": {
+        "type": "object",
+        "title": "LabelSubmissionResponse",
+        "additionalProperties": true
+
       "LabelRecord": {
         "title": "LabelRecord",
         "allOf": [
@@ -1183,6 +1291,7 @@
             }
           }
         ]
+
       }
     }
   }
