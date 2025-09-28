@@ -5,34 +5,24 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.answer_out import AnswerOut
-from ...models.http_validation_error import HTTPValidationError
+from ...models.user_identity import UserIdentity
 from ...types import Response
 
 
-def _get_kwargs(
-    iq_id: str,
-) -> dict[str, Any]:
+def _get_kwargs() -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": f"/v1/image-queries/{iq_id}",
+        "url": "/v1/users/me",
     }
 
     return _kwargs
 
 
-def _parse_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
+def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[UserIdentity]:
     if response.status_code == 200:
-        response_200 = AnswerOut.from_dict(response.json())
+        response_200 = UserIdentity.from_dict(response.json())
 
         return response_200
-
-    if response.status_code == 422:
-        response_422 = HTTPValidationError.from_dict(response.json())
-
-        return response_422
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -40,9 +30,7 @@ def _parse_response(
         return None
 
 
-def _build_response(
-    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
+def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[UserIdentity]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -52,26 +40,20 @@ def _build_response(
 
 
 def sync_detailed(
-    iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """Get Image Query
-
-    Args:
-        iq_id (str):
+) -> Response[UserIdentity]:
+    """Get Current User
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
+        Response[UserIdentity]
     """
 
-    kwargs = _get_kwargs(
-        iq_id=iq_id,
-    )
+    kwargs = _get_kwargs()
 
     response = client.get_httpx_client().request(
         **kwargs,
@@ -81,50 +63,39 @@ def sync_detailed(
 
 
 def sync(
-    iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """Get Image Query
-
-    Args:
-        iq_id (str):
+) -> Optional[UserIdentity]:
+    """Get Current User
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
+        UserIdentity
     """
 
     return sync_detailed(
-        iq_id=iq_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Response[Union[AnswerOut, HTTPValidationError]]:
-    """Get Image Query
-
-    Args:
-        iq_id (str):
+) -> Response[UserIdentity]:
+    """Get Current User
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[AnswerOut, HTTPValidationError]]
+        Response[UserIdentity]
     """
 
-    kwargs = _get_kwargs(
-        iq_id=iq_id,
-    )
+    kwargs = _get_kwargs()
 
     response = await client.get_async_httpx_client().request(**kwargs)
 
@@ -132,26 +103,21 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    iq_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-) -> Optional[Union[AnswerOut, HTTPValidationError]]:
-    """Get Image Query
-
-    Args:
-        iq_id (str):
+) -> Optional[UserIdentity]:
+    """Get Current User
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[AnswerOut, HTTPValidationError]
+        UserIdentity
     """
 
     return (
         await asyncio_detailed(
-            iq_id=iq_id,
             client=client,
         )
     ).parsed
