@@ -95,11 +95,21 @@ my_detector = client.create_detector("safety-inspections", labels=["ppe", "no_pp
 
 # Submit an image for automated analysis
 with open("inspection.jpg", "rb") as image_file:
-    query = client.submit_image_query(detector=my_detector.id, image=image_file, wait=1.0)
+    query = client.submit_image_query(
+        detector=my_detector.id,
+        image=image_file,
+        prompt="Identify required safety gear",
+        wait=1.0,
+        metadata={"site": "plant-a", "shift": 2},
+    )
 
 # Poll until the model is confident enough (defaults to 90%)
 confident = client.wait_for_confident_result(query, confidence_threshold=0.95)
 print(confident.status, confident.label, confident.confidence)
+
+# Responses now expose the canonical ImageQuery payload used throughout the SDK.
+print(confident.model_dump())
+# {'id': 'iq-123', 'detector_id': 'det-456', 'status': 'DONE', 'label': 'ppe', 'confidence': 0.98}
 ```
 
 Successful calls to the image query endpoints now emit payloads that mirror the SDK models. A
@@ -120,9 +130,44 @@ typical response looks like:
 }
 ```
 
+### Image query payloads
+
+The API provides two entry-points for submitting imagery:
+
+- `POST /v1/image-queries` expects `multipart/form-data`. Non-binary fields are simple form fields,
+  so numeric inputs such as `wait` (seconds to hold the HTTP connection) and `confidence_threshold`
+  should be provided as plain values that can be parsed as floats. If you need to attach structured
+  `metadata`, JSON-encode it yourself (for example `{"metadata": json.dumps({...})}`) before adding
+  it to the form body. String fields such as `prompt` or `inspection_id` can be included directly.
+- `POST /v1/image-queries-json` accepts an `application/json` payload. In this mode the same fields
+  are provided with their natural JSON types (e.g. `wait`/`confidence_threshold` as numbers and
+  `metadata` as a nested JSON object). This endpoint is convenient when the image is already hosted
+  elsewhere and you only need to pass references plus metadata.
+
 The helper functions `ask_ml` and `ask_confident` wrap common flows for asynchronous and
 confidence-thresholded queries. When you need ground-truth data, call `add_label` to attach human
 labels (optionally with metadata) to a given image query.
+
+### Image query payloads
+
+`POST /v1/image-queries` accepts `multipart/form-data` payloads. The SDK automatically builds the
+multipart body, but when constructing the request manually submit fields using the following
+conventions:
+
+- `detector_id` (**required**) – string identifier of the detector to run.
+- `prompt` (optional) – free-form text prompt that can guide analysis.
+- `wait` (optional, default `0`) – number of seconds to wait for a synchronous response before
+  returning immediately.
+- `confidence_threshold` (optional) – float representing the minimum confidence required before the
+  backend marks a result as complete.
+- `metadata` (optional) – JSON-encoded string. When submitting multipart bodies, serialize your
+  structured metadata with `json.dumps` and send the resulting text value.
+- `inspection_id` (optional) – string correlation identifier for downstream systems.
+- `image` (optional) – binary file part containing the image payload.
+
+For `POST /v1/image-queries-json`, send the same fields inside an `application/json` body. In that
+variant `metadata` is an object rather than a JSON string, so include it directly as nested JSON
+data.
 
 ### Working with images
 
@@ -147,5 +192,4 @@ pytest
 
 ## Support
 
-For issues, feedback, or feature requests, please contact the IntelliOptics team through your
-customer support channel or reach out to your IntelliOptics solutions engineer.
+For issues, feedback, or feature requests, please contact jmorgan@4wardmotions.con.
