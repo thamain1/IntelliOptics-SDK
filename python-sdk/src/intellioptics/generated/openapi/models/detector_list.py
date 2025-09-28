@@ -1,51 +1,41 @@
+"""Envelope for detector listings."""
 
-from typing import Any, Dict, List, Type, TypeVar
+from __future__ import annotations
+
 from collections.abc import Mapping
-from typing import Any, TypeVar
+from typing import Any, List, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="FeedbackInBboxesType0Item")
+from .detector_out import DetectorOut
+
+T = TypeVar("T", bound="DetectorList")
 
 
 @_attrs_define
-class FeedbackInBboxesType0Item:
-    """ """
+class DetectorList:
+    """Response wrapper for ``GET /v1/detectors``."""
 
+    items: List[DetectorOut]
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-    def to_dict(self) -> Dict[str, Any]:
-        field_dict: Dict[str, Any] = {}
 
     def to_dict(self) -> dict[str, Any]:
         field_dict: dict[str, Any] = {}
-
         field_dict.update(self.additional_properties)
-
+        field_dict["items"] = [item.to_dict() for item in self.items]
         return field_dict
 
     @classmethod
-
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        d = src_dict.copy()
-
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
-
-        feedback_in_bboxes_type_0_item = cls()
-
-        feedback_in_bboxes_type_0_item.additional_properties = d
-        return feedback_in_bboxes_type_0_item
+        items = [DetectorOut.from_dict(item) for item in d.pop("items", [])]
+        detector_list = cls(items=items)
+        detector_list.additional_properties = d
+        return detector_list
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:
