@@ -1,46 +1,32 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 from ..models.answer_out_answer import AnswerOutAnswer
 from ..types import UNSET, Unset
-from typing import cast, Union
-from typing import Union
-
-
-
-
-
 
 T = TypeVar("T", bound="AnswerOut")
 
 
-
 @_attrs_define
 class AnswerOut:
-    """ 
-        Attributes:
-            image_query_id (str):
-            answer (AnswerOutAnswer):
-            confidence (float):
-            latency_ms (Union[None, Unset, int]):
-            model_version (Union[None, Unset, str]):  Default: 'demo-v0'.
-     """
+    """
+    Attributes:
+        image_query_id (str):
+        answer (AnswerOutAnswer):
+        confidence (float):
+        latency_ms (Union[None, Unset, int]):
+        model_version (Union[None, Unset, str]):  Default: 'demo-v0'.
+    """
 
     image_query_id: str
     answer: AnswerOutAnswer
     confidence: float
     latency_ms: Union[None, Unset, int] = UNSET
-    model_version: Union[None, Unset, str] = 'demo-v0'
+    model_version: Union[None, Unset, str] = "demo-v0"
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-
-
 
     def to_dict(self) -> dict[str, Any]:
         image_query_id = self.image_query_id
@@ -61,14 +47,15 @@ class AnswerOut:
         else:
             model_version = self.model_version
 
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "image_query_id": image_query_id,
-            "answer": answer,
-            "confidence": confidence,
-        })
+        field_dict.update(
+            {
+                "image_query_id": image_query_id,
+                "answer": answer,
+                "confidence": confidence,
+            }
+        )
         if latency_ms is not UNSET:
             field_dict["latency_ms"] = latency_ms
         if model_version is not UNSET:
@@ -76,17 +63,12 @@ class AnswerOut:
 
         return field_dict
 
-
-
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
         image_query_id = d.pop("image_query_id")
 
         answer = AnswerOutAnswer(d.pop("answer"))
-
-
-
 
         confidence = d.pop("confidence")
 
@@ -99,7 +81,6 @@ class AnswerOut:
 
         latency_ms = _parse_latency_ms(d.pop("latency_ms", UNSET))
 
-
         def _parse_model_version(data: object) -> Union[None, Unset, str]:
             if data is None:
                 return data
@@ -109,7 +90,6 @@ class AnswerOut:
 
         model_version = _parse_model_version(d.pop("model_version", UNSET))
 
-
         answer_out = cls(
             image_query_id=image_query_id,
             answer=answer,
@@ -117,7 +97,6 @@ class AnswerOut:
             latency_ms=latency_ms,
             model_version=model_version,
         )
-
 
         answer_out.additional_properties = d
         return answer_out
