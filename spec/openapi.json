@@ -489,6 +489,9 @@
             "title": "Detector Id"
           },
           "prompt": {
+
+            "type": "string",
+
             "anyOf": [
               {
                 "type": "string"
@@ -497,15 +500,31 @@
                 "type": "null"
               }
             ],
+
             "title": "Prompt"
           },
           "wait": {
             "type": "number",
+
+            "title": "Wait",
+
             "title": "Wait Seconds",
+
             "default": 0
           },
           "confidence_threshold": {
             "type": "number",
+
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "type": "string",
+            "title": "Metadata",
+            "description": "JSON encoded metadata payload"
+          },
+          "inspection_id": {
+            "type": "string",
+
             "title": "Confidence Threshold",
             "default": 0.9
           },
@@ -530,6 +549,7 @@
                 "type": "null"
               }
             ],
+            
             "title": "Inspection Id"
           },
           "image": {
@@ -810,6 +830,9 @@
             "title": "Detector Id"
           },
           "prompt": {
+
+            "type": "string",
+
             "anyOf": [
               {
                 "type": "string"
@@ -818,6 +841,7 @@
                 "type": "null"
               }
             ],
+
             "title": "Prompt"
           },
           "image": {
@@ -833,11 +857,26 @@
           },
           "wait": {
             "type": "number",
+
+            "title": "Wait",
+
             "title": "Wait Seconds",
+
             "default": 0
           },
           "confidence_threshold": {
             "type": "number",
+
+            "title": "Confidence Threshold"
+          },
+          "metadata": {
+            "type": "object",
+            "title": "Metadata",
+            "additionalProperties": {}
+          },
+          "inspection_id": {
+            "type": "string",
+
             "title": "Confidence Threshold",
             "default": 0.9
           },
@@ -862,6 +901,7 @@
                 "type": "null"
               }
             ],
+
             "title": "Inspection Id"
           }
         },

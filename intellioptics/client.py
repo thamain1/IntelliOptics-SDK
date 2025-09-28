@@ -97,7 +97,12 @@ class IntelliOptics:
     # Image queries
     def submit_image_query(self, detector: Optional[Union[Detector, str]] = None, image: Optional[Union[str, bytes, IO[bytes]]] = None,
                            prompt: Optional[str] = None, wait: Optional[float] = None,
+
+                           confidence_threshold: Optional[float] = None,
+                           metadata: Optional[Union[Dict[str, Any], str]] = None,
+
                            confidence_threshold: Optional[float] = None, metadata: Optional[Dict[str, Any]] = None,
+
                            inspection_id: Optional[str] = None) -> ImageQuery:
 
     def submit_image_query(
@@ -119,6 +124,7 @@ class IntelliOptics:
             "prompt": prompt,
             "wait": wait,
             "confidence_threshold": confidence_threshold,
+            "metadata": metadata,
             "inspection_id": inspection_id,
             "metadata": json.dumps(metadata) if metadata is not None else None,
         }
@@ -137,6 +143,10 @@ class IntelliOptics:
 
 
         form = {k: v for k, v in form.items() if v is not None}
+
+        if "metadata" in form and not isinstance(form["metadata"], str):
+            form["metadata"] = json.dumps(form["metadata"])
+
 
         payload = self._http.post_json("/v1/image-queries", files=files, data=form)
         return ImageQuery(**_normalize_image_query_payload(payload))
