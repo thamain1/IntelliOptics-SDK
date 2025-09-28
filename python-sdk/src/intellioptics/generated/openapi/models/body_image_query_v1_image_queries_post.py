@@ -1,10 +1,22 @@
+
+from io import BytesIO
+from typing import (
+    Any,
+    Dict,
+    List,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
 from collections.abc import Mapping
 from io import BytesIO
 from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-
+from ..types import UNSET, File, FileJsonType, Unset
 from .. import types
 from ..types import UNSET, File, FileTypes, Unset
 
@@ -23,14 +35,19 @@ class BodyImageQueryV1ImageQueriesPost:
     detector_id: str
     wait: Union[Unset, bool] = True
     image: Union[File, None, Unset] = UNSET
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+
         detector_id = self.detector_id
 
         wait = self.wait
 
-        image: Union[FileTypes, None, Unset]
+        image: Union[FileJsonType, None, Unset]
         if isinstance(self.image, Unset):
             image = UNSET
         elif isinstance(self.image, File):
@@ -39,8 +56,47 @@ class BodyImageQueryV1ImageQueriesPost:
         else:
             image = self.image
 
+
+        field_dict: Dict[str, Any] = {}
+
         field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "detector_id": detector_id,
+            }
+        )
+        if wait is not UNSET:
+            field_dict["wait"] = wait
+        if image is not UNSET:
+            field_dict["image"] = image
+
+        return field_dict
+
+
+    def to_multipart(self) -> Dict[str, Any]:
+        detector_id = (None, str(self.detector_id).encode(), "text/plain")
+
+        wait = (
+            self.wait
+            if isinstance(self.wait, Unset)
+            else (None, str(self.wait).encode(), "text/plain")
+        )
+
+        image: Union[Tuple[None, bytes, str], Unset]
+
+        if isinstance(self.image, Unset):
+            image = UNSET
+        elif isinstance(self.image, File):
+            image = self.image.to_tuple()
+        else:
+            image = (None, str(self.image).encode(), "text/plain")
+
+        field_dict: Dict[str, Any] = {}
+        for prop_name, prop in self.additional_properties.items():
+            field_dict[prop_name] = (None, str(prop).encode(), "text/plain")
+
         field_dict.update(
             {
                 "detector_id": detector_id,
@@ -73,8 +129,8 @@ class BodyImageQueryV1ImageQueriesPost:
         return files
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         detector_id = d.pop("detector_id")
 
         wait = d.pop("wait", UNSET)
@@ -106,7 +162,7 @@ class BodyImageQueryV1ImageQueriesPost:
         return body_image_query_v1_image_queries_post
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

@@ -1,8 +1,23 @@
+from __future__ import annotations
+from typing import Any, Mapping, TypeVar, cast, List
+
+"""Data model for creating detectors."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, TypeVar
+
+from typing import Any, Dict, List, Type, TypeVar, Union
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+
+from ..models.detector_create_mode import DetectorCreateMode
+from ..types import UNSET, Unset
 
 from ..models.detector_create_mode import DetectorCreateMode
 from ..types import UNSET, Unset
@@ -12,6 +27,28 @@ T = TypeVar("T", bound="DetectorCreate")
 
 @_attrs_define
 class DetectorCreate:
+    """Detector creation payload."""
+
+    name: str
+    labels: List[str] = _attrs_field(factory=list)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    """Payload accepted by ``POST /v1/detectors``.
+
+    Attributes:
+        name: Human friendly detector name.
+        labels: Optional label hints for the detector.
+    """
+
+@_attrs_define
+class DetectorCreate:
+
+    name: str
+    labels: list[str] = _attrs_field(factory=list)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+
     """
     Attributes:
         name (str):
@@ -24,19 +61,32 @@ class DetectorCreate:
     mode: DetectorCreateMode
     query_text: str
     threshold: Union[Unset, float] = 0.75
+
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+
         name = self.name
+        labels = self.labels
 
-        mode = self.mode.value
-
-        query_text = self.query_text
-
-        threshold = self.threshold
+        field_dict: Dict[str, Any] = {}
 
         field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
+
+        field_dict.update({
+            "name": name,
+            "labels": labels,
+        })
+            "name": self.name,
+            "labels": list(self.labels),
+        })
+
         field_dict.update(
             {
                 "name": name,
@@ -50,9 +100,14 @@ class DetectorCreate:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         name = d.pop("name")
+
+        labels = cast(List[str], d.pop("labels", []))
+
+        labels = list(d.pop("labels", []))
+
 
         mode = DetectorCreateMode(d.pop("mode"))
 
@@ -60,18 +115,17 @@ class DetectorCreate:
 
         threshold = d.pop("threshold", UNSET)
 
+
         detector_create = cls(
             name=name,
-            mode=mode,
-            query_text=query_text,
-            threshold=threshold,
+            labels=labels,
         )
 
         detector_create.additional_properties = d
         return detector_create
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

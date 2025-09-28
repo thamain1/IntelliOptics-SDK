@@ -1,3 +1,5 @@
+
+from typing import Any, Dict, List, Type, TypeVar, Union, cast
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union, cast
 
@@ -11,6 +13,17 @@ T = TypeVar("T", bound="ValidationError")
 class ValidationError:
     """
     Attributes:
+        loc (List[Union[int, str]]):
+        msg (str):
+        type (str):
+    """
+
+    loc: List[Union[int, str]]
+    msg: str
+    type: str
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
         loc (list[Union[int, str]]):
         msg (str):
         type_ (str):
@@ -32,12 +45,16 @@ class ValidationError:
 
         type_ = self.type_
 
+        type = self.type
+
+        field_dict: Dict[str, Any] = {}
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "loc": loc,
                 "msg": msg,
+                "type": type,
                 "type": type_,
             }
         )
@@ -45,8 +62,8 @@ class ValidationError:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         loc = []
         _loc = d.pop("loc")
         for loc_item_data in _loc:
@@ -60,19 +77,19 @@ class ValidationError:
 
         msg = d.pop("msg")
 
-        type_ = d.pop("type")
+        type = d.pop("type")
 
         validation_error = cls(
             loc=loc,
             msg=msg,
-            type_=type_,
+            type=type,
         )
 
         validation_error.additional_properties = d
         return validation_error
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:
