@@ -1,25 +1,25 @@
-"""Typed models used by the IntelliOptics SDK."""
+"""Pydantic models exposed as part of the public SDK surface."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Literal, Mapping, Optional
+from typing import Any, Dict, List, Mapping, Optional
 
 from pydantic import BaseModel, Field
 
-try:  # pragma: no cover - compatibility shim for pydantic v1
+try:  # pragma: no cover - pydantic v2
     from pydantic import ConfigDict
-except ImportError:  # pragma: no cover
-    ConfigDict = None  # type: ignore[misc, assignment]
+except ImportError:  # pragma: no cover - pydantic v1 fallback
+    ConfigDict = None  # type: ignore[assignment]
 
 
 class _BaseModel(BaseModel):
-    """Base class that allows extra fields across Pydantic versions."""
+    """Allow extra fields regardless of the installed Pydantic version."""
 
-    if ConfigDict is not None:  # pragma: no branch - executed on Pydantic v2
+    if ConfigDict is not None:  # pragma: no branch
         model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
-    else:  # pragma: no cover - executed on Pydantic v1
+    else:  # pragma: no cover - executed on pydantic v1
         class Config:
             extra = "allow"
 
@@ -63,12 +63,9 @@ class UserIdentity(_BaseModel):
 
 class FeedbackIn(_BaseModel):
     image_query_id: str
-    correct_label: Literal["YES", "NO", "COUNT", "UNCLEAR"]
+    correct_label: str
     bboxes: Optional[List[Mapping[str, Any]]] = None
-
-
-SnoozeTimeUnit = Literal["SECONDS", "MINUTES", "HOURS", "DAYS"]
-Channel = Literal["TEXT", "EMAIL"]
+    notes: Optional[str] = None
 
 
 class Condition(_BaseModel):
@@ -77,9 +74,9 @@ class Condition(_BaseModel):
 
 
 class Action(_BaseModel):
-    channel: Channel
+    channel: str
     recipient: str
-    include_image: bool
+    include_image: bool = False
 
 
 class PayloadTemplate(_BaseModel):
@@ -104,25 +101,11 @@ class Rule(_BaseModel):
     enabled: bool = True
     snooze_time_enabled: bool = False
     snooze_time_value: int = 0
-    snooze_time_unit: SnoozeTimeUnit = "DAYS"
+    snooze_time_unit: str = "SECONDS"
     human_review_required: bool = False
     condition: Condition
     action: Optional[Action | List[Action]] = None
     webhook_action: Optional[List[WebhookAction]] = None
-
-
-class PaginatedDetectorList(_BaseModel):
-    count: int
-    next: Optional[str] = None
-    previous: Optional[str] = None
-    results: List[Detector] = Field(default_factory=list)
-
-
-class PaginatedImageQueryList(_BaseModel):
-    count: int
-    next: Optional[str] = None
-    previous: Optional[str] = None
-    results: List[ImageQuery] = Field(default_factory=list)
 
 
 class PaginatedRuleList(_BaseModel):
@@ -137,3 +120,4 @@ class HTTPResponse:
     status_code: int
     headers: Mapping[str, str]
     body: Any
+
