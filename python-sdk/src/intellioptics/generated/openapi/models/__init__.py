@@ -1,4 +1,4 @@
-""" Contains all the data models used in inputs/outputs """
+"""Contains all the data models used in inputs/outputs"""
 
 from .answer_out import AnswerOut
 from .answer_out_answer import AnswerOutAnswer
@@ -13,6 +13,9 @@ from .http_validation_error import HTTPValidationError
 from .image_query_json import ImageQueryJson
 from .label_create import LabelCreate
 from .label_record import LabelRecord
+from .label_ack import LabelAck
+from .label_create import LabelCreate
+from .label_create_metadata_type_0 import LabelCreateMetadataType0
 from .user_identity import UserIdentity
 from .validation_error import ValidationError
 
@@ -30,6 +33,9 @@ __all__ = (
     "ImageQueryJson",
     "LabelCreate",
     "LabelRecord",
+    "LabelAck",
+    "LabelCreate",
+    "LabelCreateMetadataType0",
     "UserIdentity",
     "ValidationError",
 )

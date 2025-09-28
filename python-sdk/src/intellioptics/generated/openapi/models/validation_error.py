@@ -1,40 +1,38 @@
+
+from typing import Any, Dict, List, Type, TypeVar, Union, cast
 from collections.abc import Mapping
-from typing import Any, TypeVar, Optional, BinaryIO, TextIO, TYPE_CHECKING, Generator
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-from typing import cast
-from typing import cast, Union
-
-
-
-
-
-
 T = TypeVar("T", bound="ValidationError")
-
 
 
 @_attrs_define
 class ValidationError:
-    """ 
-        Attributes:
-            loc (list[Union[int, str]]):
-            msg (str):
-            type_ (str):
-     """
+    """
+    Attributes:
+        loc (List[Union[int, str]]):
+        msg (str):
+        type (str):
+    """
+
+    loc: List[Union[int, str]]
+    msg: str
+    type: str
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        loc (list[Union[int, str]]):
+        msg (str):
+        type_ (str):
+    """
 
     loc: list[Union[int, str]]
     msg: str
     type_: str
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-
-
-
 
     def to_dict(self) -> dict[str, Any]:
         loc = []
@@ -43,31 +41,31 @@ class ValidationError:
             loc_item = loc_item_data
             loc.append(loc_item)
 
-
-
         msg = self.msg
 
-        type_ = self.type_
+        type = self.type
 
-
+        field_dict: Dict[str, Any] = {}
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({
-            "loc": loc,
-            "msg": msg,
-            "type": type_,
-        })
+        field_dict.update(
+            {
+                "loc": loc,
+                "msg": msg,
+                "type": type,
+                "type": type_,
+            }
+        )
 
         return field_dict
 
-
-
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         loc = []
         _loc = d.pop("loc")
-        for loc_item_data in (_loc):
+        for loc_item_data in _loc:
+
             def _parse_loc_item(data: object) -> Union[int, str]:
                 return cast(Union[int, str], data)
 
@@ -75,23 +73,21 @@ class ValidationError:
 
             loc.append(loc_item)
 
-
         msg = d.pop("msg")
 
-        type_ = d.pop("type")
+        type = d.pop("type")
 
         validation_error = cls(
             loc=loc,
             msg=msg,
-            type_=type_,
+            type=type,
         )
-
 
         validation_error.additional_properties = d
         return validation_error
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:
