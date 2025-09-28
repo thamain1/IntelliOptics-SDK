@@ -21,7 +21,14 @@ def status():
 def whoami():
     identity = _client().whoami()
     serializer = getattr(identity, "model_dump", None)
+
+    if callable(serializer):
+        data = serializer()
+    else:  # pragma: no cover - Pydantic v1 fallback
+        data = identity.dict()
+
     if serializer is None:
         serializer = identity.dict
     data = serializer()
+
     print(json.dumps(data, indent=2))

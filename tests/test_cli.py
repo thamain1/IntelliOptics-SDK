@@ -1,4 +1,30 @@
 import json
+import importlib
+import sys
+import types
+
+try:  # pragma: no cover - executed when Typer is installed
+    import typer  # type: ignore # noqa: F401
+except ModuleNotFoundError:  # pragma: no cover - executed when Typer is missing
+    typer_stub = types.ModuleType("typer")
+
+    class _DummyTyper:  # pragma: no cover - executed in tests
+        def __init__(self, **kwargs):
+            pass
+
+        def command(self, *args, **kwargs):
+            def decorator(func):
+                return func
+
+            return decorator
+
+    typer_stub.Typer = _DummyTyper  # type: ignore[attr-defined]
+    sys.modules.setdefault("typer", typer_stub)
+
+cli = importlib.import_module("intellioptics.cli")
+whoami = cli.whoami
+from intellioptics.models import UserIdentity
+
 import sys
 import types
 
@@ -31,6 +57,13 @@ def test_whoami_outputs_json(monkeypatch, capsys):
         roles=["admin", "user"],
     )
 
+
+    class DummyClient:
+        def whoami(self):
+            return identity
+
+    monkeypatch.setattr("intellioptics.cli._client", lambda: DummyClient())
+
     class FakeClient:
         def whoami(self):
             return identity
@@ -40,6 +73,11 @@ def test_whoami_outputs_json(monkeypatch, capsys):
     whoami()
 
     captured = capsys.readouterr()
+
+    data = json.loads(captured.out)
+    serializer = getattr(identity, "model_dump", identity.dict)
+    assert data == serializer()
+
     output = json.loads(captured.out)
     assert output["id"] == identity.id
     assert output["email"] == identity.email
