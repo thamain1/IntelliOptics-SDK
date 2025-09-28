@@ -14,9 +14,14 @@ class Detector(BaseModel):
     name: str
     mode: str
     query_text: str
+
+    threshold: Optional[float] = None
+    status: Optional[str] = None
+
     threshold: float
     status: Optional[str] = "active"
     labels: List[str] = Field(default_factory=list)
+
 
 class ImageQuery(BaseModel):
     id: str
