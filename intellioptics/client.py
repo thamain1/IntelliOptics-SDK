@@ -12,17 +12,25 @@ from typing import Any, Iterable, Mapping, Sequence, Union
 
 from ._http import AsyncHttpClient, HttpClient
 from ._img import to_jpeg_bytes
-from .errors import ApiTokenError, ExperimentalFeatureUnavailable
+from .errors import ApiTokenError, ExperimentalFeatureUnavailable, IntelliOpticsClientError
 from .models import (
     Action,
+    ActionList,
+    ChannelEnum,
     Condition,
     Detector,
+    DetectorGroup,
     FeedbackIn,
     HTTPResponse,
     ImageQuery,
+    ModeEnum,
+    PaginatedDetectorList,
+    PaginatedImageQueryList,
     PayloadTemplate,
+    ROI,
     QueryResult,
     Rule,
+    SnoozeTimeUnitEnum,
     UserIdentity,
     WebhookAction,
 )
@@ -75,20 +83,28 @@ def _build_image_query_request(
     detector: Detector | str | None,
     image: ImageArg | None,
     *,
-    prompt: str | None,
     wait: bool | float | None,
+    patience_time: float | None,
     confidence_threshold: float | None,
+    human_review: str | None,
     metadata: Mapping[str, Any] | str | None,
     inspection_id: str | None,
+    image_query_id: str | None,
+    want_async: bool,
+    request_timeout: float | None,
 ) -> tuple[dict[str, Any], dict[str, tuple[str, bytes, str]] | None]:
     detector_id = _detector_identifier(detector)
     form: dict[str, Any] = {
         "detector_id": detector_id,
-        "prompt": prompt,
         "wait": _serialize_wait(wait),
+        "patience_time": patience_time,
         "confidence_threshold": confidence_threshold,
+        "human_review": human_review,
         "metadata": _dump_metadata(metadata),
         "inspection_id": inspection_id,
+        "image_query_id": image_query_id,
+        "want_async": "true" if want_async else None,
+        "request_timeout": request_timeout,
     }
 
     files: dict[str, tuple[str, bytes, str]] | None = None
@@ -119,20 +135,17 @@ def _normalize_image_query_payload(payload: Mapping[str, Any]) -> dict[str, Any]
     if not isinstance(result_block, Mapping):
         result_block = {}
 
-    data: dict[str, Any] = {
-        "id": payload.get("id") or payload.get("image_query_id"),
-        "detector_id": payload.get("detector_id"),
-        "status": _resolve_status(payload),
-        "result_type": payload.get("result_type"),
-    }
-
-    confidence = payload.get("confidence", result_block.get("confidence"))
-    if confidence is not None:
-        data["confidence"] = confidence
-
     label = payload.get("label") or result_block.get("label") or payload.get("answer")
+    confidence = payload.get("confidence", result_block.get("confidence"))
+
+    result: dict[str, Any] = dict(result_block)
     if label is not None:
-        data["label"] = label
+        result.setdefault("label", label)
+    if confidence is not None:
+        result.setdefault("confidence", confidence)
+
+    if "count" not in result and payload.get("count") is not None:
+        result["count"] = payload["count"]
 
     extra: dict[str, Any] = {}
     raw_extra = payload.get("extra")
@@ -144,14 +157,61 @@ def _normalize_image_query_payload(payload: Mapping[str, Any]) -> dict[str, Any]
         if value is not None:
             extra.setdefault(key, value)
 
-    for key, value in result_block.items():
-        if key not in {"label", "confidence"} and value is not None:
-            extra.setdefault(key, value)
+    for key, value in result.items():
+        if key not in {"label", "confidence", "count"} and isinstance(value, Mapping):
+            # nested mappings are included as-is; skip copying to extra
+            continue
 
     if extra:
-        data["extra"] = extra
+        existing_extra = result.get("extra")
+        if isinstance(existing_extra, Mapping):
+            merged = dict(existing_extra)
+            merged.update(extra)
+            result["extra"] = merged
+        else:
+            result["extra"] = extra
 
-    return data
+    metadata = payload.get("metadata")
+    if isinstance(metadata, str):
+        try:
+            metadata = json.loads(metadata)
+        except Exception:  # pragma: no cover - defensive
+            pass
+
+    rois = payload.get("rois")
+    if not isinstance(rois, Iterable):
+        rois = None
+
+    confidence_threshold = payload.get("confidence_threshold")
+    if confidence_threshold is None:
+        confidence_threshold = 0.9
+
+    patience_time = payload.get("patience_time")
+    if patience_time is None:
+        patience_time = 30.0
+
+    done_processing = payload.get("done_processing")
+    if done_processing is None:
+        done_processing = False
+
+    data: dict[str, Any] = {
+        "id": payload.get("id") or payload.get("image_query_id"),
+        "detector_id": payload.get("detector_id"),
+        "confidence_threshold": confidence_threshold,
+        "patience_time": patience_time,
+        "created_at": payload.get("created_at"),
+        "done_processing": done_processing,
+        "metadata": metadata,
+        "query": payload.get("query") or payload.get("prompt"),
+        "result": result or None,
+        "result_type": payload.get("result_type"),
+        "rois": list(rois) if rois is not None else None,
+        "text": payload.get("text"),
+        "type": payload.get("type"),
+        "status": _resolve_status(payload),
+    }
+
+    return {key: value for key, value in data.items() if value is not None or key == "status"}
 
 
 def _coerce_image_query_items(payload: Any) -> list[Mapping[str, Any]]:
@@ -343,23 +403,216 @@ class IntelliOptics:
         payload = self._http.get_json("/v1/users/me")
         return UserIdentity(**payload)
 
-    def create_detector(self, name: str, *, mode: str, query_text: str, threshold: float | None = None) -> Detector:
+    def create_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        mode: ModeEnum | str = ModeEnum.BINARY,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+        class_names: Sequence[str] | str | None = None,
+        mode_configuration: Mapping[str, Any] | None = None,
+    ) -> Detector:
         payload: dict[str, Any] = {
             "name": name,
-            "mode": mode,
-            "query_text": query_text,
+            "query": query,
+            "mode": mode.value if isinstance(mode, ModeEnum) else mode,
+            "group_name": group_name,
+            "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "pipeline_config": pipeline_config,
+            "metadata": _dump_metadata(metadata),
+            "mode_configuration": dict(mode_configuration) if mode_configuration else None,
         }
-        if threshold is not None:
-            payload["threshold"] = threshold
-        data = self._http.post_json("/v1/detectors", json=payload)
+
+        if class_names is not None:
+            if isinstance(class_names, str):
+                payload["class_names"] = [class_names]
+            else:
+                payload["class_names"] = list(class_names)
+
+        serialized = {key: value for key, value in payload.items() if value is not None}
+        data = self._http.post_json("/v1/detectors", json=serialized)
         return Detector(**data)
 
-    def list_detectors(self) -> list[Detector]:
-        payload = self._http.get_json("/v1/detectors")
-        items = payload.get("items") if isinstance(payload, Mapping) else payload
+    def list_detectors(self, page: int = 1, page_size: int = 10) -> PaginatedDetectorList:
+        params = {"page": page, "page_size": page_size}
+        payload = self._http.get_json("/v1/detectors", params=params)
+
+        if not isinstance(payload, Mapping):
+            items = payload if isinstance(payload, Sequence) else []
+            payload = {"count": len(items), "results": items, "next": None, "previous": None}
+
+        items = payload.get("results")
+        if not isinstance(items, Sequence):
+            items = payload.get("items")
         if not isinstance(items, Sequence):
             items = []
-        return [Detector(**item) for item in items]
+
+        data = {
+            "count": payload.get("count", len(items)),
+            "next": payload.get("next"),
+            "previous": payload.get("previous"),
+            "results": list(items),
+        }
+        return PaginatedDetectorList(**data)
+
+    def create_binary_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        return self.create_detector(
+            name,
+            query,
+            mode=ModeEnum.BINARY,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            patience_time=patience_time,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+        )
+
+    def create_multiclass_detector(
+        self,
+        name: str,
+        query: str,
+        class_names: Sequence[str],
+        *,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        return self.create_detector(
+            name,
+            query,
+            mode=ModeEnum.MULTICLASS,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            patience_time=patience_time,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+            class_names=class_names,
+        )
+
+    def create_counting_detector(
+        self,
+        name: str,
+        query: str,
+        class_name: str,
+        *,
+        max_count: int | None = None,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        mode_config = {"class_name": class_name}
+        if max_count is not None:
+            mode_config["max_count"] = max_count
+        return self.create_detector(
+            name,
+            query,
+            mode=ModeEnum.COUNTING,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            patience_time=patience_time,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+            class_names=[class_name],
+            mode_configuration=mode_config,
+        )
+
+    def create_detector_group(self, name: str, description: str | None = None) -> DetectorGroup:
+        payload = {"name": name, "description": description}
+        serialized = {key: value for key, value in payload.items() if value is not None}
+        response = self._http.post_json("/v1/detector-groups", json=serialized)
+        return DetectorGroup(**response)
+
+    def list_detector_groups(self) -> list[DetectorGroup]:
+        payload = self._http.get_json("/v1/detector-groups")
+        groups = payload if isinstance(payload, Sequence) else payload.get("results") if isinstance(payload, Mapping) else []
+        if not isinstance(groups, Sequence):
+            groups = []
+        return [DetectorGroup(**group) for group in groups]
+
+    def delete_detector(self, detector: Detector | str) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        self._http.delete(f"/v1/detectors/{detector_id}")
+
+    def create_roi(
+        self,
+        label: str,
+        top_left: Sequence[float],
+        bottom_right: Sequence[float],
+    ) -> ROI:
+        return ROI(label=label, top_left=tuple(top_left), bottom_right=tuple(bottom_right))
+
+    def get_detector_by_name(self, name: str) -> Detector:
+        page = 1
+        while True:
+            detectors = self.list_detectors(page=page, page_size=50)
+            for detector in detectors.results:
+                if detector.name == name:
+                    return detector
+            if not detectors.next:
+                break
+            page += 1
+        raise IntelliOpticsClientError(f"Detector named '{name}' was not found")
+
+    def get_or_create_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        try:
+            existing = self.get_detector_by_name(name)
+        except IntelliOpticsClientError:
+            existing = None
+
+        if existing is not None:
+            mismatches: list[str] = []
+            if existing.query != query:
+                mismatches.append("query")
+            if group_name is not None and existing.group_name != group_name:
+                mismatches.append("group_name")
+            if confidence_threshold is not None and existing.confidence_threshold != confidence_threshold:
+                mismatches.append("confidence_threshold")
+            if metadata is not None and existing.metadata != metadata:
+                mismatches.append("metadata")
+            if mismatches:
+                details = ", ".join(mismatches)
+                raise ValueError(f"Existing detector has different configuration for: {details}")
+            return existing
+
+        return self.create_detector(
+            name,
+            query,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+        )
 
     def get_detector(self, detector_id: str) -> Detector:
         payload = self._http.get_json(f"/v1/detectors/{detector_id}")
@@ -370,20 +623,31 @@ class IntelliOptics:
         detector: Detector | str | None = None,
         image: ImageArg | None = None,
         *,
-        prompt: str | None = None,
-        wait: bool | float | None = None,
+        wait: float | None = 30.0,
+        patience_time: float | None = None,
         confidence_threshold: float | None = None,
+        human_review: str | None = None,
+        want_async: bool = False,
         metadata: Mapping[str, Any] | str | None = None,
         inspection_id: str | None = None,
+        image_query_id: str | None = None,
+        request_timeout: float | None = None,
     ) -> ImageQuery:
+        if want_async and wait not in (0, 0.0, False, None):
+            raise ValueError("wait must be 0 when want_async=True")
+
         form, files = _build_image_query_request(
             detector,
             image,
-            prompt=prompt,
             wait=wait,
+            patience_time=patience_time,
             confidence_threshold=confidence_threshold,
+            human_review=human_review,
             metadata=metadata,
             inspection_id=inspection_id,
+            image_query_id=image_query_id,
+            want_async=want_async,
+            request_timeout=request_timeout,
         )
         payload = self._http.post_json("/v1/image-queries", data=form, files=files)
         return ImageQuery(**_normalize_image_query_payload(payload))
@@ -393,11 +657,15 @@ class IntelliOptics:
         detector: Detector | str | None = None,
         *,
         image: str | None = None,
-        wait: bool | float | None = None,
+        wait: float | None = 30.0,
         confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        human_review: str | None = None,
+        want_async: bool = False,
         metadata: Mapping[str, Any] | None = None,
         inspection_id: str | None = None,
-        prompt: str | None = None,
+        image_query_id: str | None = None,
+        request_timeout: float | None = None,
     ) -> ImageQuery:
         detector_id = _detector_identifier(detector)
         payload: dict[str, Any] = {
@@ -405,9 +673,13 @@ class IntelliOptics:
             "image": image,
             "wait": wait,
             "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "human_review": human_review,
             "metadata": dict(metadata) if isinstance(metadata, Mapping) else metadata,
             "inspection_id": inspection_id,
-            "prompt": prompt,
+            "image_query_id": image_query_id,
+            "want_async": want_async,
+            "request_timeout": request_timeout,
         }
         serialized = {key: value for key, value in payload.items() if value is not None}
         response = self._http.post_json("/v1/image-queries-json", json=serialized)
@@ -417,29 +689,69 @@ class IntelliOptics:
         payload = self._http.get_json(f"/v1/image-queries/{image_query_id}")
         return ImageQuery(**_normalize_image_query_payload(payload))
 
+    def get_image(self, image_query_id: str) -> bytes:
+        response = self._http.request_raw("GET", f"/v1/image-queries/{image_query_id}/image")
+        return response.content or b""
+
     def list_image_queries(
         self,
         *,
+        page: int = 1,
+        page_size: int = 10,
         detector_id: str | None = None,
-        status: str | None = None,
-        limit: int | None = None,
-        cursor: str | None = None,
-    ) -> list[ImageQuery]:
-        params = {
-            "detector_id": detector_id,
-            "status": status,
-            "limit": limit,
-            "cursor": cursor,
-        }
+    ) -> PaginatedImageQueryList:
+        params = {"page": page, "page_size": page_size, "detector_id": detector_id}
         params = {key: value for key, value in params.items() if value is not None}
         payload = self._http.get_json("/v1/image-queries", params=params or None)
-        return [ImageQuery(**_normalize_image_query_payload(item)) for item in _coerce_image_query_items(payload)]
+
+        if not isinstance(payload, Mapping):
+            items = _coerce_image_query_items(payload)
+            payload = {"count": len(items), "results": items, "next": None, "previous": None}
+
+        raw_items = payload.get("results")
+        if not isinstance(raw_items, Iterable):
+            raw_items = _coerce_image_query_items(payload)
+
+        normalized_items = [
+            ImageQuery(**_normalize_image_query_payload(item)) for item in _coerce_image_query_items(raw_items)
+        ]
+
+        data = {
+            "count": payload.get("count", len(normalized_items)),
+            "next": payload.get("next"),
+            "previous": payload.get("previous"),
+            "results": normalized_items,
+        }
+        return PaginatedImageQueryList(**data)
 
     def get_result(self, image_query_id: str) -> QueryResult:
         payload = self._http.get_json(f"/v1/image-queries/{image_query_id}")
         normalized = _normalize_image_query_payload(payload)
-        normalized.pop("detector_id", None)
-        return QueryResult(**normalized)
+        result_block = normalized.get("result")
+        if not isinstance(result_block, Mapping):
+            result_block = {}
+
+        extra: dict[str, Any] = {}
+        raw_extra = result_block.get("extra")
+        if isinstance(raw_extra, Mapping):
+            extra.update(raw_extra)
+
+        for key, value in result_block.items():
+            if key not in {"label", "confidence", "extra"} and value is not None:
+                extra.setdefault(key, value)
+
+        detector_id = normalized.get("detector_id")
+        if detector_id is not None:
+            extra.setdefault("detector_id", detector_id)
+
+        return QueryResult(
+            id=normalized.get("id", image_query_id),
+            status=normalized.get("status", "PENDING"),
+            label=result_block.get("label"),
+            confidence=result_block.get("confidence"),
+            result_type=normalized.get("result_type"),
+            extra=extra or None,
+        )
 
     def submit_feedback(
         self,
@@ -452,50 +764,154 @@ class IntelliOptics:
 
     def add_label(
         self,
-        image_query_id: str,
-        label: str,
-        *,
-        confidence: float | None = None,
-        detector_id: str | None = None,
-        user_id: str | None = None,
-        metadata: Mapping[str, Any] | None = None,
-    ) -> dict[str, Any]:
+        image_query: ImageQuery | str,
+        label: Union[str, int],
+        rois: Sequence[ROI] | str | None = None,
+    ) -> None:
+        image_query_id = image_query.id if isinstance(image_query, ImageQuery) else image_query
+        if not isinstance(image_query_id, str):
+            raise TypeError("image_query must be an ImageQuery or string id")
+
+        if hasattr(label, "value"):
+            value = getattr(label, "value")
+        else:
+            value = label
+        label_value = str(value)
+
         payload: dict[str, Any] = {
             "image_query_id": image_query_id,
-            "label": label,
-            "confidence": confidence,
-            "detector_id": detector_id,
-            "user_id": user_id,
-            "metadata": dict(metadata) if isinstance(metadata, Mapping) else metadata,
+            "label": label_value,
         }
-        serialized = {key: value for key, value in payload.items() if value is not None}
-        return self._http.post_json("/v1/labels", json=serialized)
+
+        if rois is not None:
+            if isinstance(rois, str):
+                payload["rois"] = rois
+            else:
+                payload["rois"] = [
+                    _serialize_model(roi) if hasattr(roi, "model_dump") or hasattr(roi, "dict") else dict(roi)
+                    for roi in rois
+                ]
+
+        self._http.post_json("/v1/labels", json=payload)
+
+    def start_inspection(self) -> str:
+        response = self._http.post_json("/v1/inspections", json={})
+        if isinstance(response, Mapping):
+            for key in ("id", "inspection_id", "result"):
+                value = response.get(key)
+                if isinstance(value, str):
+                    return value
+        if isinstance(response, str):
+            return response
+        return str(response)
+
+    def stop_inspection(self, inspection_id: str) -> str:
+        response = self._http.post_json(f"/v1/inspections/{inspection_id}/stop", json={})
+        if isinstance(response, Mapping):
+            for key in ("status", "result"):
+                value = response.get(key)
+                if isinstance(value, str):
+                    return value
+        if isinstance(response, str):
+            return response
+        return str(response)
+
+    def update_inspection_metadata(
+        self,
+        inspection_id: str,
+        user_provided_key: str,
+        user_provided_value: str,
+    ) -> None:
+        payload = {
+            "user_provided_key": user_provided_key,
+            "user_provided_value": user_provided_value,
+        }
+        self._http.post_json(f"/v1/inspections/{inspection_id}/metadata", json=payload)
+
+    def update_detector_confidence_threshold(
+        self,
+        detector: Detector | str,
+        confidence_threshold: float,
+    ) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        self._http.patch_json(
+            f"/v1/detectors/{detector_id}",
+            json={"confidence_threshold": confidence_threshold},
+        )
+
+    def update_detector_escalation_type(
+        self,
+        detector: Detector | str,
+        escalation_type: str,
+    ) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        allowed = {"STANDARD", "NO_HUMAN_LABELING"}
+        escalation = escalation_type.upper()
+        if escalation not in allowed:
+            raise ValueError("escalation_type must be STANDARD or NO_HUMAN_LABELING")
+        self._http.patch_json(
+            f"/v1/detectors/{detector_id}",
+            json={"escalation_type": escalation},
+        )
+
+    def update_detector_status(
+        self,
+        detector: Detector | str,
+        enabled: bool,
+    ) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        self._http.patch_json(
+            f"/v1/detectors/{detector_id}",
+            json={"enabled": bool(enabled)},
+        )
 
     # ------------------------------------------------------------------
     # Convenience helpers
     # ------------------------------------------------------------------
-    def ask_ml(self, detector: Detector | str, image: ImageArg, wait: bool | None = None) -> ImageQuery:
-        return self.submit_image_query(detector=detector, image=image, wait=wait)
+    def ask_ml(
+        self,
+        detector: Detector | str,
+        image: ImageArg,
+        *,
+        wait: float | None = 30.0,
+        metadata: Mapping[str, Any] | str | None = None,
+        inspection_id: str | None = None,
+    ) -> ImageQuery:
+        return self.submit_image_query(
+            detector=detector,
+            image=image,
+            wait=wait,
+            metadata=metadata,
+            inspection_id=inspection_id,
+        )
 
     def ask_async(
         self,
         detector: Detector | str,
         image: ImageArg,
         *,
-        wait: bool | float | None = None,
+        patience_time: float | None = None,
         confidence_threshold: float | None = None,
+        human_review: str | None = None,
         metadata: Mapping[str, Any] | str | None = None,
         inspection_id: str | None = None,
-        prompt: str | None = None,
     ) -> ImageQuery:
         return self.submit_image_query(
             detector=detector,
             image=image,
-            wait=wait,
+            wait=0.0,
+            patience_time=patience_time,
             confidence_threshold=confidence_threshold,
+            human_review=human_review,
             metadata=metadata,
             inspection_id=inspection_id,
-            prompt=prompt,
+            want_async=True,
         )
 
     def ask_confident(
@@ -503,15 +919,28 @@ class IntelliOptics:
         detector: Detector | str,
         image: ImageArg,
         *,
-        confidence_threshold: float = 0.9,
-        timeout_sec: float = 30.0,
+        confidence_threshold: float | None = None,
+        wait: float | None = 30.0,
+        metadata: Mapping[str, Any] | str | None = None,
+        inspection_id: str | None = None,
+        timeout_sec: float | None = None,
         poll_interval: float = 0.5,
     ) -> ImageQuery:
-        query = self.submit_image_query(detector=detector, image=image)
+        query = self.submit_image_query(
+            detector=detector,
+            image=image,
+            wait=wait,
+            confidence_threshold=confidence_threshold,
+            metadata=metadata,
+            inspection_id=inspection_id,
+        )
+
+        threshold = confidence_threshold if confidence_threshold is not None else query.confidence_threshold or 0.9
+        timeout = timeout_sec if timeout_sec is not None else (wait if wait is not None else 30.0)
         return self.wait_for_confident_result(
             query,
-            confidence_threshold=confidence_threshold,
-            timeout_sec=timeout_sec,
+            confidence_threshold=threshold,
+            timeout_sec=timeout,
             poll_interval=poll_interval,
         )
 
@@ -530,9 +959,33 @@ class IntelliOptics:
         while True:
             current = self.get_image_query(query_id)
             last_query = current
+            result = current.result
+            result_confidence = getattr(result, "confidence", None)
             if current.status in {"DONE", "ERROR"}:
-                if current.confidence is None or current.confidence >= confidence_threshold:
+                if result is None or result_confidence is None or result_confidence >= confidence_threshold:
                     return current
+            elif result_confidence is not None and result_confidence >= confidence_threshold:
+                return current
+            if time.time() >= deadline:
+                return last_query
+            time.sleep(poll_interval)
+
+    def wait_for_ml_result(
+        self,
+        image_query: ImageQuery | str,
+        *,
+        timeout_sec: float = 30.0,
+        poll_interval: float = 0.5,
+    ) -> ImageQuery:
+        query_id = image_query.id if isinstance(image_query, ImageQuery) else image_query
+        deadline = time.time() + timeout_sec
+        last_query: ImageQuery | None = None
+
+        while True:
+            current = self.get_image_query(query_id)
+            last_query = current
+            if current.result is not None:
+                return current
             if time.time() >= deadline:
                 return last_query
             time.sleep(poll_interval)
@@ -576,27 +1029,55 @@ class AsyncIntelliOptics:
     async def create_detector(
         self,
         name: str,
+        query: str,
         *,
-        mode: str,
-        query_text: str,
-        threshold: float | None = None,
+        mode: ModeEnum | str = ModeEnum.BINARY,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+        class_names: Sequence[str] | str | None = None,
+        mode_configuration: Mapping[str, Any] | None = None,
     ) -> Detector:
         payload: dict[str, Any] = {
             "name": name,
-            "mode": mode,
-            "query_text": query_text,
+            "query": query,
+            "mode": mode.value if isinstance(mode, ModeEnum) else mode,
+            "group_name": group_name,
+            "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "pipeline_config": pipeline_config,
+            "metadata": _dump_metadata(metadata),
+            "mode_configuration": dict(mode_configuration) if mode_configuration else None,
         }
-        if threshold is not None:
-            payload["threshold"] = threshold
-        data = await self._http.post_json("/v1/detectors", json=payload)
+        if class_names is not None:
+            payload["class_names"] = [class_names] if isinstance(class_names, str) else list(class_names)
+        serialized = {key: value for key, value in payload.items() if value is not None}
+        data = await self._http.post_json("/v1/detectors", json=serialized)
         return Detector(**data)
 
-    async def list_detectors(self) -> list[Detector]:
-        payload = await self._http.get_json("/v1/detectors")
-        items = payload.get("items") if isinstance(payload, Mapping) else payload
+    async def list_detectors(self, page: int = 1, page_size: int = 10) -> PaginatedDetectorList:
+        params = {"page": page, "page_size": page_size}
+        payload = await self._http.get_json("/v1/detectors", params=params)
+
+        if not isinstance(payload, Mapping):
+            items = payload if isinstance(payload, Sequence) else []
+            payload = {"count": len(items), "results": items, "next": None, "previous": None}
+
+        items = payload.get("results")
+        if not isinstance(items, Sequence):
+            items = payload.get("items")
         if not isinstance(items, Sequence):
             items = []
-        return [Detector(**item) for item in items]
+
+        data = {
+            "count": payload.get("count", len(items)),
+            "next": payload.get("next"),
+            "previous": payload.get("previous"),
+            "results": list(items),
+        }
+        return PaginatedDetectorList(**data)
 
     async def get_detector(self, detector_id: str) -> Detector:
         payload = await self._http.get_json(f"/v1/detectors/{detector_id}")
@@ -607,20 +1088,31 @@ class AsyncIntelliOptics:
         detector: Detector | str | None = None,
         image: ImageArg | None = None,
         *,
-        prompt: str | None = None,
-        wait: bool | float | None = None,
+        wait: float | None = 30.0,
+        patience_time: float | None = None,
         confidence_threshold: float | None = None,
+        human_review: str | None = None,
+        want_async: bool = False,
         metadata: Mapping[str, Any] | str | None = None,
         inspection_id: str | None = None,
+        image_query_id: str | None = None,
+        request_timeout: float | None = None,
     ) -> ImageQuery:
+        if want_async and wait not in (0, 0.0, False, None):
+            raise ValueError("wait must be 0 when want_async=True")
+
         form, files = _build_image_query_request(
             detector,
             image,
-            prompt=prompt,
             wait=wait,
+            patience_time=patience_time,
             confidence_threshold=confidence_threshold,
+            human_review=human_review,
             metadata=metadata,
             inspection_id=inspection_id,
+            image_query_id=image_query_id,
+            want_async=want_async,
+            request_timeout=request_timeout,
         )
         payload = await self._http.post_json("/v1/image-queries", data=form, files=files)
         return ImageQuery(**_normalize_image_query_payload(payload))
@@ -630,11 +1122,15 @@ class AsyncIntelliOptics:
         detector: Detector | str | None = None,
         *,
         image: str | None = None,
-        wait: bool | float | None = None,
+        wait: float | None = 30.0,
         confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        human_review: str | None = None,
+        want_async: bool = False,
         metadata: Mapping[str, Any] | None = None,
         inspection_id: str | None = None,
-        prompt: str | None = None,
+        image_query_id: str | None = None,
+        request_timeout: float | None = None,
     ) -> ImageQuery:
         detector_id = _detector_identifier(detector)
         payload: dict[str, Any] = {
@@ -642,9 +1138,13 @@ class AsyncIntelliOptics:
             "image": image,
             "wait": wait,
             "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "human_review": human_review,
             "metadata": dict(metadata) if isinstance(metadata, Mapping) else metadata,
             "inspection_id": inspection_id,
-            "prompt": prompt,
+            "image_query_id": image_query_id,
+            "want_async": want_async,
+            "request_timeout": request_timeout,
         }
         serialized = {key: value for key, value in payload.items() if value is not None}
         response = await self._http.post_json("/v1/image-queries-json", json=serialized)
@@ -657,26 +1157,62 @@ class AsyncIntelliOptics:
     async def list_image_queries(
         self,
         *,
+        page: int = 1,
+        page_size: int = 10,
         detector_id: str | None = None,
-        status: str | None = None,
-        limit: int | None = None,
-        cursor: str | None = None,
-    ) -> list[ImageQuery]:
-        params = {
-            "detector_id": detector_id,
-            "status": status,
-            "limit": limit,
-            "cursor": cursor,
-        }
+    ) -> PaginatedImageQueryList:
+        params = {"page": page, "page_size": page_size, "detector_id": detector_id}
         params = {key: value for key, value in params.items() if value is not None}
         payload = await self._http.get_json("/v1/image-queries", params=params or None)
-        return [ImageQuery(**_normalize_image_query_payload(item)) for item in _coerce_image_query_items(payload)]
+
+        if not isinstance(payload, Mapping):
+            items = _coerce_image_query_items(payload)
+            payload = {"count": len(items), "results": items, "next": None, "previous": None}
+
+        raw_items = payload.get("results")
+        if not isinstance(raw_items, Iterable):
+            raw_items = _coerce_image_query_items(payload)
+
+        normalized_items = [
+            ImageQuery(**_normalize_image_query_payload(item)) for item in _coerce_image_query_items(raw_items)
+        ]
+
+        data = {
+            "count": payload.get("count", len(normalized_items)),
+            "next": payload.get("next"),
+            "previous": payload.get("previous"),
+            "results": normalized_items,
+        }
+        return PaginatedImageQueryList(**data)
 
     async def get_result(self, image_query_id: str) -> QueryResult:
         payload = await self._http.get_json(f"/v1/image-queries/{image_query_id}")
         normalized = _normalize_image_query_payload(payload)
-        normalized.pop("detector_id", None)
-        return QueryResult(**normalized)
+        result_block = normalized.get("result")
+        if not isinstance(result_block, Mapping):
+            result_block = {}
+
+        extra: dict[str, Any] = {}
+        raw_extra = result_block.get("extra")
+        if isinstance(raw_extra, Mapping):
+            extra.update(raw_extra)
+
+        for key, value in result_block.items():
+            if key not in {"label", "confidence", "extra"} and value is not None:
+                extra.setdefault(key, value)
+
+        detector_id = normalized.get("detector_id")
+        if detector_id is not None:
+            extra.setdefault("detector_id", detector_id)
+
+        return QueryResult(
+            id=normalized.get("id", image_query_id),
+            status=normalized.get("status", "PENDING"),
+            label=result_block.get("label"),
+            confidence=result_block.get("confidence"),
+            result_type=normalized.get("result_type"),
+            extra=extra or None,
+        )
 
     async def submit_feedback(
         self,
@@ -689,50 +1225,77 @@ class AsyncIntelliOptics:
 
     async def add_label(
         self,
-        image_query_id: str,
-        label: str,
-        *,
-        confidence: float | None = None,
-        detector_id: str | None = None,
-        user_id: str | None = None,
-        metadata: Mapping[str, Any] | None = None,
-    ) -> dict[str, Any]:
+        image_query: ImageQuery | str,
+        label: Union[str, int],
+        rois: Sequence[ROI] | str | None = None,
+    ) -> None:
+        image_query_id = image_query.id if isinstance(image_query, ImageQuery) else image_query
+        if not isinstance(image_query_id, str):
+            raise TypeError("image_query must be an ImageQuery or string id")
+
+        if hasattr(label, "value"):
+            value = getattr(label, "value")
+        else:
+            value = label
+        label_value = str(value)
+
         payload: dict[str, Any] = {
             "image_query_id": image_query_id,
-            "label": label,
-            "confidence": confidence,
-            "detector_id": detector_id,
-            "user_id": user_id,
-            "metadata": dict(metadata) if isinstance(metadata, Mapping) else metadata,
+            "label": label_value,
         }
-        serialized = {key: value for key, value in payload.items() if value is not None}
-        return await self._http.post_json("/v1/labels", json=serialized)
+
+        if rois is not None:
+            if isinstance(rois, str):
+                payload["rois"] = rois
+            else:
+                payload["rois"] = [
+                    _serialize_model(roi) if hasattr(roi, "model_dump") or hasattr(roi, "dict") else dict(roi)
+                    for roi in rois
+                ]
+
+        await self._http.post_json("/v1/labels", json=payload)
 
     async def delete_image_query(self, image_query_id: str) -> None:
         await self._http.delete(f"/v1/image-queries/{image_query_id}")
 
-    async def ask_ml(self, detector: Detector | str, image: ImageArg, wait: bool | None = None) -> ImageQuery:
-        return await self.submit_image_query(detector=detector, image=image, wait=wait)
+    async def ask_ml(
+        self,
+        detector: Detector | str,
+        image: ImageArg,
+        *,
+        wait: float | None = 30.0,
+        metadata: Mapping[str, Any] | str | None = None,
+        inspection_id: str | None = None,
+    ) -> ImageQuery:
+        return await self.submit_image_query(
+            detector=detector,
+            image=image,
+            wait=wait,
+            metadata=metadata,
+            inspection_id=inspection_id,
+        )
 
     async def ask_async(
         self,
         detector: Detector | str,
         image: ImageArg,
         *,
-        wait: bool | float | None = None,
+        patience_time: float | None = None,
         confidence_threshold: float | None = None,
+        human_review: str | None = None,
         metadata: Mapping[str, Any] | str | None = None,
         inspection_id: str | None = None,
-        prompt: str | None = None,
     ) -> ImageQuery:
         return await self.submit_image_query(
             detector=detector,
             image=image,
-            wait=wait,
+            wait=0.0,
+            patience_time=patience_time,
             confidence_threshold=confidence_threshold,
+            human_review=human_review,
             metadata=metadata,
             inspection_id=inspection_id,
-            prompt=prompt,
+            want_async=True,
         )
 
     async def ask_confident(
@@ -740,15 +1303,28 @@ class AsyncIntelliOptics:
         detector: Detector | str,
         image: ImageArg,
         *,
-        confidence_threshold: float = 0.9,
-        timeout_sec: float = 30.0,
+        confidence_threshold: float | None = None,
+        wait: float | None = 30.0,
+        metadata: Mapping[str, Any] | str | None = None,
+        inspection_id: str | None = None,
+        timeout_sec: float | None = None,
         poll_interval: float = 0.5,
     ) -> ImageQuery:
-        query = await self.submit_image_query(detector=detector, image=image)
+        query = await self.submit_image_query(
+            detector=detector,
+            image=image,
+            wait=wait,
+            confidence_threshold=confidence_threshold,
+            metadata=metadata,
+            inspection_id=inspection_id,
+        )
+
+        threshold = confidence_threshold if confidence_threshold is not None else query.confidence_threshold or 0.9
+        timeout = timeout_sec if timeout_sec is not None else (wait if wait is not None else 30.0)
         return await self.wait_for_confident_result(
             query,
-            confidence_threshold=confidence_threshold,
-            timeout_sec=timeout_sec,
+            confidence_threshold=threshold,
+            timeout_sec=timeout,
             poll_interval=poll_interval,
         )
 
@@ -767,9 +1343,33 @@ class AsyncIntelliOptics:
         while True:
             current = await self.get_image_query(query_id)
             last_query = current
+            result = current.result
+            result_confidence = getattr(result, "confidence", None)
             if current.status in {"DONE", "ERROR"}:
-                if current.confidence is None or current.confidence >= confidence_threshold:
+                if result is None or result_confidence is None or result_confidence >= confidence_threshold:
                     return current
+            elif result_confidence is not None and result_confidence >= confidence_threshold:
+                return current
+            if time.time() >= deadline:
+                return last_query
+            await asyncio.sleep(poll_interval)
+
+    async def wait_for_ml_result(
+        self,
+        image_query: ImageQuery | str,
+        *,
+        timeout_sec: float = 30.0,
+        poll_interval: float = 0.5,
+    ) -> ImageQuery:
+        query_id = image_query.id if isinstance(image_query, ImageQuery) else image_query
+        deadline = time.time() + timeout_sec
+        last_query: ImageQuery | None = None
+
+        while True:
+            current = await self.get_image_query(query_id)
+            last_query = current
+            if current.result is not None:
+                return current
             if time.time() >= deadline:
                 return last_query
             await asyncio.sleep(poll_interval)
@@ -839,6 +1439,53 @@ class ExperimentalApi:
         if self._owns_sync_http and self._http is not None:
             self._http.close()
 
+    def _create_detector_via_api(self, payload: Mapping[str, Any]) -> Detector:
+        response = self._sync_http().post_json("/v1/detectors", json={k: v for k, v in payload.items() if v is not None})
+        return Detector(**response)
+
+    def _create_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        mode: ModeEnum | str,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+        class_names: Sequence[str] | str | None = None,
+        mode_configuration: Mapping[str, Any] | None = None,
+    ) -> Detector:
+        if self._sync_client is not None:
+            return self._sync_client.create_detector(
+                name,
+                query,
+                mode=mode,
+                group_name=group_name,
+                confidence_threshold=confidence_threshold,
+                patience_time=patience_time,
+                pipeline_config=pipeline_config,
+                metadata=metadata,
+                class_names=class_names,
+                mode_configuration=mode_configuration,
+            )
+
+        payload: dict[str, Any] = {
+            "name": name,
+            "query": query,
+            "mode": mode.value if isinstance(mode, ModeEnum) else mode,
+            "group_name": group_name,
+            "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "pipeline_config": pipeline_config,
+            "metadata": _dump_metadata(metadata),
+            "mode_configuration": dict(mode_configuration) if mode_configuration else None,
+        }
+        if class_names is not None:
+            payload["class_names"] = [class_names] if isinstance(class_names, str) else list(class_names)
+        return self._create_detector_via_api(payload)
+
     def create_alert(
         self,
         detector: Detector | str,
@@ -871,44 +1518,34 @@ class ExperimentalApi:
     def create_rule(
         self,
         detector: Detector | str,
-        name: str,
-        channel: str,
+        rule_name: str,
+        channel: str | ChannelEnum,
         recipient: str,
         *,
+        alert_on: str = "CHANGED_TO",
+        enabled: bool = True,
         include_image: bool = False,
-        condition_verb: str = "CHANGED_TO",
         condition_parameters: Mapping[str, Any] | str | None = None,
-        webhook_url: str | None = None,
-        webhook_include_image: bool | None = None,
-        webhook_headers: Mapping[str, str] | None = None,
-        webhook_payload_template: str | None = None,
+        snooze_time_enabled: bool = False,
+        snooze_time_value: int = 3600,
+        snooze_time_unit: str = "SECONDS",
+        human_review_required: bool = False,
     ) -> Rule:
-        parameters = _parse_jsonish(condition_parameters) or {}
-        condition = Condition(verb=condition_verb, parameters=parameters)
-        action = Action(channel=channel.upper(), recipient=recipient, include_image=include_image)
-
-        webhook_actions = None
-        if webhook_url:
-            payload_template = None
-            if webhook_payload_template is not None:
-                payload_template = PayloadTemplate(
-                    template=webhook_payload_template,
-                    headers=dict(webhook_headers or {}),
-                )
-            webhook_actions = [
-                WebhookAction(
-                    url=webhook_url,
-                    include_image=webhook_include_image,
-                    payload_template=payload_template,
-                )
-            ]
+        parameters = _parse_jsonish(condition_parameters)
+        channel_value = channel.value if isinstance(channel, ChannelEnum) else str(channel).upper()
+        condition = Condition(verb=alert_on.upper(), parameters=parameters or {})
+        action = Action(channel=channel_value, recipient=recipient, include_image=include_image)
 
         return self.create_alert(
             detector,
-            name,
+            rule_name,
             condition,
             actions=[action],
-            webhook_actions=webhook_actions,
+            enabled=enabled,
+            snooze_time_enabled=snooze_time_enabled,
+            snooze_time_value=snooze_time_value,
+            snooze_time_unit=snooze_time_unit,
+            human_review_required=human_review_required,
         )
 
     def create_note(
@@ -935,14 +1572,72 @@ class ExperimentalApi:
 
         return self._sync_http().post_json(f"/v1/detectors/{detector_id}/notes", data=data, files=files)
 
-    def delete_all_rules(self, detector: Detector | str) -> int:
-        detector_id = _detector_identifier(detector)
-        if detector_id is None:
-            raise ValueError("detector is required")
-        payload = self._sync_http().delete("/v1/rules", params={"detector_id": detector_id})
+    def create_bounding_box_detector(
+        self,
+        name: str,
+        query: str,
+        class_name: str,
+        *,
+        max_num_bboxes: int | None = None,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        mode_config: dict[str, Any] = {"class_name": class_name}
+        if max_num_bboxes is not None:
+            mode_config["max_num_bboxes"] = max_num_bboxes
+        return self._create_detector(
+            name,
+            query,
+            mode=ModeEnum.BOUNDING_BOX,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            patience_time=patience_time,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+            class_names=[class_name],
+            mode_configuration=mode_config,
+        )
+
+    def create_text_recognition_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Mapping[str, Any] | str | None = None,
+    ) -> Detector:
+        return self._create_detector(
+            name,
+            query,
+            mode=ModeEnum.TEXT,
+            group_name=group_name,
+            confidence_threshold=confidence_threshold,
+            patience_time=patience_time,
+            pipeline_config=pipeline_config,
+            metadata=metadata,
+        )
+
+    def delete_all_rules(self, detector: Detector | str | None = None) -> int:
+        params: dict[str, Any] | None = None
+        if detector is not None:
+            detector_id = _detector_identifier(detector)
+            if detector_id is None:
+                raise ValueError("detector is required")
+            params = {"detector_id": detector_id}
+
+        payload = self._sync_http().delete("/v1/rules", params=params)
         if isinstance(payload, Mapping) and "deleted" in payload:
             return int(payload["deleted"])
         return 0
+
+    def delete_rule(self, action_id: int) -> None:
+        self._sync_http().delete(f"/v1/rules/{action_id}")
 
     def make_generic_api_request(
         self,
@@ -951,12 +1646,15 @@ class ExperimentalApi:
         method: str,
         headers: Mapping[str, str] | None = None,
         body: Any | None = None,
+        files: Mapping[str, Any] | None = None,
         data: Any | None = None,
     ) -> HTTPResponse:
         http_method = method.upper()
         request_kwargs: dict[str, Any] = {"headers": headers}
         if body is not None:
             request_kwargs["json"] = body
+        if files is not None:
+            request_kwargs["files"] = files
         if data is not None:
             request_kwargs["data"] = data
 
@@ -974,4 +1672,69 @@ class ExperimentalApi:
         directory = Path(output_dir)
         directory.mkdir(parents=True, exist_ok=True)
         directory.joinpath(filename).write_bytes(response.content or b"")
+
+    def get_detector_metrics(self, detector: Detector | str) -> dict:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/metrics")
+        return dict(payload)
+
+    def get_detector_evaluation(self, detector: Detector | str) -> dict:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/evaluation")
+        return dict(payload)
+
+    def get_notes(self, detector: Detector | str) -> Mapping[str, Any]:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/notes")
+        return payload if isinstance(payload, Mapping) else {}
+
+    def get_raw_headers(self) -> Mapping[str, str]:
+        return dict(self._sync_http().headers)
+
+    def get_rule(self, action_id: int) -> Rule:
+        payload = self._sync_http().get_json(f"/v1/rules/{action_id}")
+        return Rule(**payload)
+
+    def list_rules(self, page: int = 1, page_size: int = 10) -> PaginatedRuleList:
+        params = {"page": page, "page_size": page_size}
+        payload = self._sync_http().get_json("/v1/rules", params=params)
+        if not isinstance(payload, Mapping):
+            items = payload if isinstance(payload, Sequence) else []
+            payload = {"count": len(items), "results": items, "next": None, "previous": None}
+        return PaginatedRuleList(**payload)
+
+    def make_action(self, channel: str, recipient: str, include_image: bool) -> Action:
+        return Action(channel=channel.upper(), recipient=recipient, include_image=include_image)
+
+    def make_condition(self, verb: str, parameters: dict) -> Condition:
+        return Condition(verb=verb, parameters=parameters)
+
+    def make_payload_template(self, template: str, headers: Mapping[str, str] | None = None) -> PayloadTemplate:
+        return PayloadTemplate(template=template, headers=dict(headers) if headers else None)
+
+    def make_webhook_action(
+        self,
+        url: str,
+        include_image: bool,
+        payload_template: PayloadTemplate | None = None,
+    ) -> WebhookAction:
+        return WebhookAction(url=url, include_image=include_image, payload_template=payload_template)
+
+    def reset_detector(self, detector: Detector | str) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        self._sync_http().post_json(f"/v1/detectors/{detector_id}/reset")
+
+    def update_detector_name(self, detector: Detector | str, name: str) -> None:
+        detector_id = _detector_identifier(detector)
+        if detector_id is None:
+            raise ValueError("detector is required")
+        self._sync_http().patch_json(f"/v1/detectors/{detector_id}", json={"name": name})
 
