@@ -22,6 +22,7 @@ def _get_kwargs(
         "url": "/v1/image-queries/{iq_id}".format(
             iq_id=iq_id,
         ),
+
 ) -> dict[str, Any]:
     _kwargs: dict[str, Any] = {
         "method": "get",
@@ -34,6 +35,9 @@ def _get_kwargs(
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[AnswerOut, HTTPValidationError]]:
+    if response.status_code == 200:
+        response_200 = AnswerOut.from_dict(response.json())
+
 
     if response.status_code == HTTPStatus.OK:
 

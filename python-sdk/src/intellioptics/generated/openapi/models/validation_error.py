@@ -43,6 +43,8 @@ class ValidationError:
 
         msg = self.msg
 
+        type_ = self.type_
+
         type = self.type
 
         field_dict: Dict[str, Any] = {}

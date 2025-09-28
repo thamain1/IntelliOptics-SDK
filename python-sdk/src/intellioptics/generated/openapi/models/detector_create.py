@@ -19,6 +19,9 @@ from attrs import field as _attrs_field
 from ..models.detector_create_mode import DetectorCreateMode
 from ..types import UNSET, Unset
 
+from ..models.detector_create_mode import DetectorCreateMode
+from ..types import UNSET, Unset
+
 T = TypeVar("T", bound="DetectorCreate")
 
 
@@ -37,11 +40,15 @@ class DetectorCreate:
         labels: Optional label hints for the detector.
     """
 
+@_attrs_define
+class DetectorCreate:
+
     name: str
     labels: list[str] = _attrs_field(factory=list)
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+
     """
     Attributes:
         name (str):
@@ -54,6 +61,7 @@ class DetectorCreate:
     mode: DetectorCreateMode
     query_text: str
     threshold: Union[Unset, float] = 0.75
+
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -97,7 +105,6 @@ class DetectorCreate:
         name = d.pop("name")
 
         labels = cast(List[str], d.pop("labels", []))
-
 
         labels = list(d.pop("labels", []))
 

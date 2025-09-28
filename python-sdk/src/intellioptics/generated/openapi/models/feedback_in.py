@@ -65,7 +65,6 @@ class FeedbackIn:
         else:
             bboxes = self.bboxes
 
-
         field_dict: Dict[str, Any] = {}
 
         field_dict: dict[str, Any] = {}
@@ -86,7 +85,6 @@ class FeedbackIn:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.feedback_in_bboxes_type_0_item import FeedbackInBboxesType0Item
 
-
         d = src_dict.copy()
 
         d = dict(src_dict)
@@ -95,6 +93,7 @@ class FeedbackIn:
 
         correct_label = FeedbackInCorrectLabel(d.pop("correct_label"))
 
+        def _parse_bboxes(data: object) -> Union[None, Unset, list["FeedbackInBboxesType0Item"]]:
 
         def _parse_bboxes(
             data: object,
@@ -113,6 +112,9 @@ class FeedbackIn:
                 _bboxes_type_0 = data
                 for bboxes_type_0_item_data in _bboxes_type_0:
 
+                    bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(bboxes_type_0_item_data)
+
+
                     bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(
                         bboxes_type_0_item_data
                     )
@@ -125,6 +127,7 @@ class FeedbackIn:
                 return bboxes_type_0
             except:  # noqa: E722
                 pass
+            return cast(Union[None, Unset, list["FeedbackInBboxesType0Item"]], data)
 
             return cast(Union[List["FeedbackInBboxesType0Item"], None, Unset], data)
 

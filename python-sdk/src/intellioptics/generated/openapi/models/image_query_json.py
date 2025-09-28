@@ -39,6 +39,7 @@ class ImageQueryJson:
 
         wait = self.wait
 
+
         field_dict: Dict[str, Any] = {}
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)

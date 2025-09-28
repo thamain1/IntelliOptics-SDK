@@ -1,5 +1,7 @@
 from http import HTTPStatus
+
 from typing import Any, Dict, Optional, Union
+
 from typing import Any, Optional, Union
 
 import httpx
@@ -15,10 +17,12 @@ from ...types import Response
 def _get_kwargs(
     *,
     body: DetectorCreate,
+
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
 
     _kwargs: Dict[str, Any] = {
+
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
@@ -42,6 +46,9 @@ def _get_kwargs(
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[DetectorOut, HTTPValidationError]]:
+    if response.status_code == 200:
+        response_200 = DetectorOut.from_dict(response.json())
+
 
     if response.status_code == HTTPStatus.OK:
 

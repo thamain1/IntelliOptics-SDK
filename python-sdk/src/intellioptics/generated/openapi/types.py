@@ -10,6 +10,7 @@ from typing import (
     Tuple,
     TypeVar,
 )
+
 from typing import IO, BinaryIO, Generic, Literal, Optional, TypeVar, Union
 
 from attrs import define
@@ -23,6 +24,7 @@ class Unset:
 UNSET: Unset = Unset()
 
 FileJsonType = Tuple[Optional[str], BinaryIO, Optional[str]]
+
 
 
 

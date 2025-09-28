@@ -1,4 +1,11 @@
 from http import HTTPStatus
+from typing import Any, Optional, Union
+
+import httpx
+
+from ... import errors
+from ...client import AuthenticatedClient, Client
+from ...types import Response
 
 from typing import Any, Dict, Optional, Union
 
@@ -28,6 +35,7 @@ def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Any]:
     if response.status_code == HTTPStatus.OK:
+
 def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Any]:
     if response.status_code == 200:
         return None

@@ -19,6 +19,12 @@ T = TypeVar("T", bound="HTTPValidationError")
 class HTTPValidationError:
     """
     Attributes:
+        detail (Union[Unset, list['ValidationError']]):
+    """
+
+    detail: Union[Unset, list["ValidationError"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
         detail (Union[Unset, List['ValidationError']]):
     """
 

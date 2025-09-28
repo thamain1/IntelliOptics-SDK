@@ -13,13 +13,12 @@ from typing import Any, TypeVar
 from typing import Any, Dict, List, Type, TypeVar, Union
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union
-
-
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.detector_out_mode import DetectorOutMode
 from ..types import UNSET, Unset
+
 
 T = TypeVar("T", bound="DetectorOut")
 
@@ -35,6 +34,8 @@ class DetectorOut:
 
     """Serialized detector returned by the IntelliOptics API."""
 
+@_attrs_define
+class DetectorOut:
     id: str
     name: str
     labels: list[str] = _attrs_field(factory=list)
@@ -81,10 +82,21 @@ class DetectorOut:
 
         field_dict: Dict[str, Any] = {}
 
-
         field_dict: dict[str, Any] = {}
 
         field_dict.update(self.additional_properties)
+
+        field_dict.update(
+            {
+                "id": id,
+                "name": name,
+                "mode": mode,
+                "query_text": query_text,
+                "threshold": threshold,
+            }
+        )
+        if status is not UNSET:
+            field_dict["status"] = status
         
         field_dict.update({
 

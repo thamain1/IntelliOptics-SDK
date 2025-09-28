@@ -18,6 +18,7 @@ try:
     from .generated.openapi.api.default.image_query_json_v1_image_queries_json_post import sync as _image_query_json_sync
     from .generated.openapi.api.default.get_image_query_v1_image_queries_iq_id_get import sync as _get_image_query_sync
     from .generated.openapi.api.default.feedback_v1_feedback_post import sync as _feedback_sync
+    from .generated.openapi.api.default.create_label_v1_labels_post import sync as _create_label_sync
     from .generated.openapi.api.default.add_label_v1_labels_post import sync as _add_label_sync
 
     from .generated.openapi.models.detector_create import DetectorCreate
@@ -28,6 +29,8 @@ try:
     from .generated.openapi.models.label_record import LabelRecord
     from .generated.openapi.models.image_query_json import ImageQueryJson
     from .generated.openapi.models.feedback_in import FeedbackIn
+    from .generated.openapi.models.label_in import LabelIn
+    from .generated.openapi.models.label_out import LabelOut
     from .generated.openapi.models.label_create import LabelCreate
     from .generated.openapi.models.label_ack import LabelAck
     from .generated.openapi.models.label_create_metadata_type_0 import LabelCreateMetadataType0
@@ -44,6 +47,7 @@ except Exception:
     _image_query_json_sync = None  # type: ignore[assignment]
     _get_image_query_sync = None  # type: ignore[assignment]
     _feedback_sync = None  # type: ignore[assignment]
+    _create_label_sync = None  # type: ignore[assignment]
     _add_label_sync = None  # type: ignore[assignment]
     DetectorCreate = _t.Any  # type: ignore[assignment]
     DetectorOut = _t.Any  # type: ignore[assignment]
@@ -53,6 +57,8 @@ except Exception:
     LabelRecord = _t.Any  # type: ignore[assignment]
     ImageQueryJson = _t.Any  # type: ignore[assignment]
     FeedbackIn = _t.Any  # type: ignore[assignment]
+    LabelIn = _t.Any  # type: ignore[assignment]
+    LabelOut = _t.Any  # type: ignore[assignment]
     LabelCreate = _t.Any  # type: ignore[assignment]
     LabelAck = _t.Any  # type: ignore[assignment]
     LabelCreateMetadataType0 = _t.Any  # type: ignore[assignment]
@@ -247,6 +253,15 @@ class IntelliOptics:
         body = FeedbackIn(**kwargs)
         return _feedback_sync(client=self._client, body=body)
 
+    def add_label(self, **kwargs) -> "LabelOut":
+        """
+        Attach a human-provided label to an image query.
+        kwargs must match LabelIn schema (e.g., image_query_id=..., label=..., confidence=...).
+        """
+        if self._client is None or _create_label_sync is None or LabelIn is _t.Any:
+            raise RuntimeError("Generated client not available; re-run codegen or check installation.")
+        body = LabelIn(**kwargs)
+        return _create_label_sync(client=self._client, body=body)
     # ---- users ----
     def whoami(self) -> "UserIdentity":
         if self._client is None or _get_current_user_sync is None or UserIdentity is _t.Any:
