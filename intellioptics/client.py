@@ -1,5 +1,7 @@
 import json
 import os, time
+from collections.abc import Mapping
+from typing import Any, Optional, Union, IO, List, Dict
 import json
 import json
 import os
@@ -48,6 +50,65 @@ def _normalize_image_query_payload(payload: dict) -> dict:
     # Strip keys with None values except for required ones.
     return {k: v for k, v in normalized.items() if v is not None or k in {"id", "status"}}
 from ._img import to_jpeg_bytes
+
+def _resolve_status(payload: Mapping[str, Any]) -> str:
+    status = payload.get("status")
+    if isinstance(status, str) and status:
+        return status
+    if payload.get("done_processing") is True:
+        return "DONE"
+    if payload.get("done_processing") is False:
+        return "PROCESSING"
+    if payload.get("answer") is not None or payload.get("result"):
+        return "DONE"
+    return "PENDING"
+
+
+def _normalize_image_query_payload(payload: Mapping[str, Any]) -> Dict[str, Any]:
+    if not isinstance(payload, Mapping):
+        return payload  # type: ignore[return-value]
+
+    raw = dict(payload)
+    result_block = raw.get("result")
+    if not isinstance(result_block, Mapping):
+        result_block = {}
+
+    data: Dict[str, Any] = {
+        "id": raw.get("id") or raw.get("image_query_id"),
+        "detector_id": raw.get("detector_id"),
+        "status": _resolve_status(raw),
+        "result_type": raw.get("result_type"),
+    }
+
+    confidence = raw.get("confidence")
+    if confidence is None:
+        confidence = result_block.get("confidence")
+    if confidence is not None:
+        data["confidence"] = confidence
+
+    label = raw.get("label") or result_block.get("label") or raw.get("answer")
+    if label is not None:
+        data["label"] = label
+
+    extra: Dict[str, Any] = {}
+    raw_extra = raw.get("extra")
+    if isinstance(raw_extra, Mapping):
+        extra.update(raw_extra)
+
+    for key in ("latency_ms", "model_version", "done_processing"):
+        value = raw.get(key)
+        if value is not None:
+            extra.setdefault(key, value)
+
+    for key, value in result_block.items():
+        if key not in {"label", "confidence"} and value is not None:
+            extra.setdefault(key, value)
+
+    if extra:
+        data["extra"] = extra
+
+    return data
+
 
 class IntelliOptics:
     def __init__(self, endpoint: Optional[str] = None, api_token: Optional[str] = None,
@@ -144,6 +205,9 @@ class IntelliOptics:
 
         form = {k: v for k, v in form.items() if v is not None}
 
+        payload = self._http.post_json("/v1/image-queries", files=files, data=form)
+        return ImageQuery(**_normalize_image_query_payload(payload))
+
         if "metadata" in form and not isinstance(form["metadata"], str):
             form["metadata"] = json.dumps(form["metadata"])
 
@@ -212,9 +276,12 @@ class IntelliOptics:
 
     def get_result(self, image_query_id: str) -> QueryResult:
         payload = self._http.get_json(f"/v1/image-queries/{image_query_id}")
+        return QueryResult(**_normalize_image_query_payload(payload))
+
         normalized = _normalize_image_query_payload(payload)
         normalized.pop("detector_id", None)
         return QueryResult(**normalized)
+
 
     # Helpers similar to GL
     def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[bool] = None) -> ImageQuery:

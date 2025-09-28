@@ -112,6 +112,24 @@ print(confident.model_dump())
 # {'id': 'iq-123', 'detector_id': 'det-456', 'status': 'DONE', 'label': 'ppe', 'confidence': 0.98}
 ```
 
+Successful calls to the image query endpoints now emit payloads that mirror the SDK models. A
+typical response looks like:
+
+```json
+{
+  "id": "iq-123",
+  "detector_id": "det-456",
+  "status": "DONE",
+  "result_type": "binary",
+  "label": "YES",
+  "confidence": 0.97,
+  "extra": {
+    "latency_ms": 420,
+    "model_version": "demo-v0"
+  }
+}
+```
+
 ### Image query payloads
 
 The API provides two entry-points for submitting imagery:

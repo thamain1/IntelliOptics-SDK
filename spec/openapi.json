@@ -411,6 +411,10 @@
       "ImageQuery": {
         "type": "object",
         "title": "ImageQuery",
+        "required": [
+          "id",
+          "status"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -427,6 +431,20 @@
             ],
             "title": "Detector Id"
           },
+          
+          },
+          "detector_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detector Id"
+          },
+
           "status": {
             "type": "string",
             "title": "Status"
@@ -476,11 +494,15 @@
             ],
             "title": "Extra"
           }
+
+        }
+
         },
         "required": [
           "id",
           "status"
         ]
+
       },
       "Body_image_query_v1_image_queries_post": {
         "properties": {
