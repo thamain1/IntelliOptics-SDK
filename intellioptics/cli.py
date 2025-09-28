@@ -9,6 +9,7 @@ def _client():
         raise typer.Exit(code=1)
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
+        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
         api_token=api_token,
     )
 
