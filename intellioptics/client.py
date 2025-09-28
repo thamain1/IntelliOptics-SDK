@@ -2,6 +2,7 @@ import os, time
 from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
 from .models import Detector, ImageQuery, QueryResult, FeedbackIn
+from .models import Detector, ImageQuery, QueryResult, UserIdentity
 from ._http import HttpClient
 from ._img import to_jpeg_bytes
 
@@ -20,9 +21,9 @@ class IntelliOptics:
         )
 
     # Basic health
-    def whoami(self) -> dict:
-        # Replace with a real identity endpoint when available
-        return self._http.get_json("/v1/health")
+    def whoami(self) -> UserIdentity:
+        data = self._http.get_json("/v1/users/me")
+        return UserIdentity(**data)
 
     # Detectors
     def create_detector(self, name: str, labels: Optional[List[str]] = None) -> Detector:
