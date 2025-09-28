@@ -1,6 +1,6 @@
-
 import json
-
+import os, time
+import json
 import json
 import os
 import time
@@ -122,6 +122,9 @@ class IntelliOptics:
             "inspection_id": inspection_id,
             "metadata": json.dumps(metadata) if metadata is not None else None,
         }
+
+        if metadata is not None:
+            form["metadata"] = json.dumps(metadata) if isinstance(metadata, dict) else metadata
 
         if metadata is not None:
             form["metadata"] = json.dumps(metadata)
