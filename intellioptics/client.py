@@ -1,3 +1,8 @@
+
+import json
+import os
+import time
+from typing import Optional, Union, IO, List
 import os, time
 from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
@@ -66,6 +71,15 @@ class IntelliOptics:
 
         img = to_jpeg_bytes(image) if image is not None else None
         files = {"image": ("image.jpg", img, "image/jpeg")} if img else None
+        form = {
+            "detector_id": detector.id if isinstance(detector, Detector) else detector,
+            "prompt": prompt,
+            "wait": wait,
+            "confidence_threshold": confidence_threshold,
+            "inspection_id": inspection_id,
+            "metadata": json.dumps(metadata) if metadata is not None else None,
+        }
+
 
         form = {k: v for k, v in form.items() if v is not None}
         return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))

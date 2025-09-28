@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from intellioptics.client import IntelliOptics
@@ -294,6 +296,28 @@ def test_init_uses_environment_defaults(monkeypatch):
     serializer = getattr(identity, "model_dump", identity.dict)
     assert serializer() == identity_payload
 
+
+def test_submit_image_query_forwards_metadata(monkeypatch):
+    client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
+
+    captured = {}
+
+    def fake_post_json(path, *, files=None, data=None):
+        captured["path"] = path
+        captured["files"] = files
+        captured["data"] = data
+        return {"id": "iq-123"}
+
+    monkeypatch.setattr(client._http, "post_json", fake_post_json)
+
+    metadata = {"foo": "bar", "nested": {"answer": 42}}
+
+    iq = client.submit_image_query(detector="det-1", metadata=metadata)
+
+    assert iq.id == "iq-123"
+    assert captured["path"] == "/v1/image-queries"
+    assert captured["files"] is None
+    assert json.loads(captured["data"]["metadata"]) == metadata
 
 def test_submit_feedback_posts_feedback_payload(monkeypatch):
     client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
