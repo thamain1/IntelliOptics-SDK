@@ -1,5 +1,8 @@
 from http import HTTPStatus
+
 from typing import Any, Dict, Optional, Union
+
+from typing import Any, Optional, Union
 
 import httpx
 
@@ -13,17 +16,28 @@ from ...types import Response
 def _get_kwargs(
     *,
     body: FeedbackIn,
+
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
 
     _kwargs: Dict[str, Any] = {
+
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+
+    _kwargs: dict[str, Any] = {
+
         "method": "post",
         "url": "/v1/feedback",
     }
 
+
     _body = body.to_dict()
 
     _kwargs["json"] = _body
+
+    _kwargs["json"] = body.to_dict()
+
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -33,7 +47,11 @@ def _get_kwargs(
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
 ) -> Optional[Union[Any, HTTPValidationError]]:
+
     if response.status_code == HTTPStatus.OK:
+
+    if response.status_code == 200:
+
         response_200 = response.json()
         return response_200
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:

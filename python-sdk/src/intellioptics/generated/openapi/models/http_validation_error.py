@@ -1,4 +1,7 @@
+
 from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -24,13 +27,24 @@ class HTTPValidationError:
 
     def to_dict(self) -> Dict[str, Any]:
         detail: Union[Unset, List[Dict[str, Any]]] = UNSET
+
+        detail (Union[Unset, list['ValidationError']]):
+    """
+
+    detail: Union[Unset, list["ValidationError"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+        detail: Union[Unset, list[dict[str, Any]]] = UNSET
         if not isinstance(self.detail, Unset):
             detail = []
             for detail_item_data in self.detail:
                 detail_item = detail_item_data.to_dict()
                 detail.append(detail_item)
 
+
         field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if detail is not UNSET:
@@ -43,6 +57,7 @@ class HTTPValidationError:
         from ..models.validation_error import ValidationError
 
         d = src_dict.copy()
+        d = dict(src_dict)
         detail = []
         _detail = d.pop("detail", UNSET)
         for detail_item_data in _detail or []:

@@ -9,6 +9,7 @@ from ._http import make_httpx_client
 try:
     from .generated.openapi.client import AuthenticatedClient
     from .generated.openapi.api.default.healthz_healthz_get import sync as _healthz_sync
+    from .generated.openapi.api.default.whoami_v1_users_me_get import sync as _whoami_sync
     from .generated.openapi.api.default.create_detector_v1_detectors_post import sync as _create_detector_sync
     from .generated.openapi.api.default.get_detector_v1_detectors_detector_id_get import sync as _get_detector_sync
     from .generated.openapi.api.default.image_query_json_v1_image_queries_json_post import sync as _image_query_json_sync
@@ -23,9 +24,11 @@ try:
     from .generated.openapi.models.label_create import LabelCreate
     from .generated.openapi.models.label_ack import LabelAck
     from .generated.openapi.models.label_create_metadata_type_0 import LabelCreateMetadataType0
+    from .generated.openapi.models.user_identity import UserIdentity
 except Exception:
     AuthenticatedClient = _t.Any  # type: ignore[misc,assignment]
     _healthz_sync = None  # type: ignore[assignment]
+    _whoami_sync = None  # type: ignore[assignment]
     _create_detector_sync = None  # type: ignore[assignment]
     _get_detector_sync = None  # type: ignore[assignment]
     _image_query_json_sync = None  # type: ignore[assignment]
@@ -39,6 +42,7 @@ except Exception:
     LabelCreate = _t.Any  # type: ignore[assignment]
     LabelAck = _t.Any  # type: ignore[assignment]
     LabelCreateMetadataType0 = _t.Any  # type: ignore[assignment]
+    UserIdentity = _t.Any  # type: ignore[assignment]
 
 # Optional deps for image conversion helpers
 try:
@@ -142,6 +146,15 @@ class IntelliOptics:
             return True
         except Exception:
             return self.health()
+
+    # ---- identity ----
+    def whoami(self) -> "UserIdentity":
+        if self._client is None or _whoami_sync is None or UserIdentity is _t.Any:
+            raise RuntimeError("Generated client not available; re-run codegen or check installation.")
+        identity = _whoami_sync(client=self._client)
+        if identity is None:
+            raise RuntimeError("API returned an empty response for whoami().")
+        return identity
 
     # ---- detectors ----
     def create_detector(self, **kwargs) -> "DetectorOut":

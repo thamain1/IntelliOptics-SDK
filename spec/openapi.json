@@ -21,6 +21,24 @@
         }
       }
     },
+    "/v1/users/me": {
+      "get": {
+        "summary": "Get Current User",
+        "operationId": "whoami_v1_users_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdentity"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/detectors": {
       "post": {
         "summary": "Create Detector",
@@ -536,6 +554,13 @@
             "title": "Label Id"
           },
           "status": {
+      "UserIdentity": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "email": {
             "anyOf": [
               {
                 "type": "string"
@@ -575,6 +600,9 @@
             "title": "Confidence"
           },
           "detector_id": {
+            "title": "Email"
+          },
+          "name": {
             "anyOf": [
               {
                 "type": "string"
@@ -586,6 +614,9 @@
             "title": "Detector Id"
           },
           "user_id": {
+            "title": "Name"
+          },
+          "tenant": {
             "anyOf": [
               {
                 "type": "string"
@@ -607,6 +638,15 @@
               }
             ],
             "title": "Metadata"
+            "title": "Tenant"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles",
+            "default": []
           }
         },
         "type": "object",
@@ -615,6 +655,10 @@
           "label"
         ],
         "title": "LabelCreate"
+          "id"
+        ],
+        "title": "UserIdentity",
+        "additionalProperties": true
       },
       "ValidationError": {
         "properties": {

@@ -15,6 +15,7 @@ from .image_query_json import ImageQueryJson
 from .label_ack import LabelAck
 from .label_create import LabelCreate
 from .label_create_metadata_type_0 import LabelCreateMetadataType0
+from .user_identity import UserIdentity
 from .validation_error import ValidationError
 
 __all__ = (
@@ -33,5 +34,6 @@ __all__ = (
     "LabelAck",
     "LabelCreate",
     "LabelCreateMetadataType0",
+    "UserIdentity",
     "ValidationError",
 )

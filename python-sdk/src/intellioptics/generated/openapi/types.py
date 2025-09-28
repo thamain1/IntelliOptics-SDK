@@ -10,6 +10,7 @@ from typing import (
     Tuple,
     TypeVar,
 )
+from typing import IO, BinaryIO, Generic, Literal, Optional, TypeVar, Union
 
 from attrs import define
 
@@ -24,6 +25,7 @@ UNSET: Unset = Unset()
 FileJsonType = Tuple[Optional[str], BinaryIO, Optional[str]]
 
 
+
 @define
 class File:
     """Contains information for file uploads"""
@@ -33,6 +35,8 @@ class File:
     mime_type: Optional[str] = None
 
     def to_tuple(self) -> FileJsonType:
+    def to_tuple(self) -> FileTypes:
+
         """Return a tuple representation that httpx will accept for multipart/form-data"""
         return self.file_name, self.payload, self.mime_type
 

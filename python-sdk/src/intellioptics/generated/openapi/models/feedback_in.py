@@ -1,3 +1,4 @@
+
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -8,6 +9,9 @@ from typing import (
     Union,
     cast,
 )
+
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,14 +33,22 @@ class FeedbackIn:
         image_query_id (str):
         correct_label (FeedbackInCorrectLabel):
         bboxes (Union[List['FeedbackInBboxesType0Item'], None, Unset]):
+        bboxes (Union[None, Unset, list['FeedbackInBboxesType0Item']]):
     """
 
     image_query_id: str
     correct_label: FeedbackInCorrectLabel
+
     bboxes: Union[List["FeedbackInBboxesType0Item"], None, Unset] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+
+    bboxes: Union[None, Unset, list["FeedbackInBboxesType0Item"]] = UNSET
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+
         image_query_id = self.image_query_id
 
         correct_label = self.correct_label.value
@@ -53,7 +65,11 @@ class FeedbackIn:
         else:
             bboxes = self.bboxes
 
+
         field_dict: Dict[str, Any] = {}
+
+        field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -70,14 +86,22 @@ class FeedbackIn:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.feedback_in_bboxes_type_0_item import FeedbackInBboxesType0Item
 
+
         d = src_dict.copy()
+
+        d = dict(src_dict)
+
         image_query_id = d.pop("image_query_id")
 
         correct_label = FeedbackInCorrectLabel(d.pop("correct_label"))
 
+
         def _parse_bboxes(
             data: object,
         ) -> Union[List["FeedbackInBboxesType0Item"], None, Unset]:
+
+        def _parse_bboxes(data: object) -> Union[None, Unset, list["FeedbackInBboxesType0Item"]]:
+
             if data is None:
                 return data
             if isinstance(data, Unset):
@@ -88,16 +112,24 @@ class FeedbackIn:
                 bboxes_type_0 = []
                 _bboxes_type_0 = data
                 for bboxes_type_0_item_data in _bboxes_type_0:
+
                     bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(
                         bboxes_type_0_item_data
                     )
+
+                    bboxes_type_0_item = FeedbackInBboxesType0Item.from_dict(bboxes_type_0_item_data)
+
 
                     bboxes_type_0.append(bboxes_type_0_item)
 
                 return bboxes_type_0
             except:  # noqa: E722
                 pass
+
             return cast(Union[List["FeedbackInBboxesType0Item"], None, Unset], data)
+
+            return cast(Union[None, Unset, list["FeedbackInBboxesType0Item"]], data)
+
 
         bboxes = _parse_bboxes(d.pop("bboxes", UNSET))
 

@@ -1,3 +1,4 @@
+
 from io import BytesIO
 from typing import (
     Any,
@@ -9,11 +10,16 @@ from typing import (
     Union,
     cast,
 )
+from collections.abc import Mapping
+from io import BytesIO
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..types import UNSET, File, FileJsonType, Unset
+from .. import types
+from ..types import UNSET, File, FileTypes, Unset
 
 T = TypeVar("T", bound="BodyImageQueryV1ImageQueriesPost")
 
@@ -33,6 +39,11 @@ class BodyImageQueryV1ImageQueriesPost:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+
         detector_id = self.detector_id
 
         wait = self.wait
@@ -46,7 +57,11 @@ class BodyImageQueryV1ImageQueriesPost:
         else:
             image = self.image
 
+
         field_dict: Dict[str, Any] = {}
+
+        field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -59,6 +74,7 @@ class BodyImageQueryV1ImageQueriesPost:
             field_dict["image"] = image
 
         return field_dict
+
 
     def to_multipart(self) -> Dict[str, Any]:
         detector_id = (None, str(self.detector_id).encode(), "text/plain")
@@ -93,6 +109,25 @@ class BodyImageQueryV1ImageQueriesPost:
             field_dict["image"] = image
 
         return field_dict
+
+    def to_multipart(self) -> types.RequestFiles:
+        files: types.RequestFiles = []
+
+        files.append(("detector_id", (None, str(self.detector_id).encode(), "text/plain")))
+
+        if not isinstance(self.wait, Unset):
+            files.append(("wait", (None, str(self.wait).encode(), "text/plain")))
+
+        if not isinstance(self.image, Unset):
+            if isinstance(self.image, File):
+                files.append(("image", self.image.to_tuple()))
+            else:
+                files.append(("image", (None, str(self.image).encode(), "text/plain")))
+
+        for prop_name, prop in self.additional_properties.items():
+            files.append((prop_name, (None, str(prop).encode(), "text/plain")))
+
+        return files
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:

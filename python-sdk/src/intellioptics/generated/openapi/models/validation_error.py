@@ -1,4 +1,7 @@
+
 from typing import Any, Dict, List, Type, TypeVar, Union, cast
+from collections.abc import Mapping
+from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -21,6 +24,17 @@ class ValidationError:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        loc (list[Union[int, str]]):
+        msg (str):
+        type_ (str):
+    """
+
+    loc: list[Union[int, str]]
+    msg: str
+    type_: str
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         loc = []
         for loc_item_data in self.loc:
             loc_item: Union[int, str]
@@ -32,12 +46,14 @@ class ValidationError:
         type = self.type
 
         field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "loc": loc,
                 "msg": msg,
                 "type": type,
+                "type": type_,
             }
         )
 
