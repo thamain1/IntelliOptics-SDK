@@ -42,7 +42,7 @@ The SDK and CLI are configured through environment variables:
 | Variable | Description |
 | --- | --- |
 | `INTELLIOPTICS_ENDPOINT` | Base URL of the IntelliOptics API (for example `https://intellioptics-api-37558.azurewebsites.net`). |
-| `INTELLIOPTICS_API_TOKEN` | Personal access token used for authenticating requests. |
+| `INTELLIOPTICS_API_TOKEN` | Personal access token used for authenticating requests. This is the same variable consumed by the CLI when instantiating its client. |
 | `DISABLE_TLS_VERIFY` | Optional. Set to `1` to skip TLS certificate verification (useful for local testing). |
 
 

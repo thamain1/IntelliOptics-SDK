@@ -26,7 +26,9 @@ def _client():
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
         api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
 
+
         api_token=api_token,
+
 
     )
 
@@ -37,6 +39,10 @@ def status():
 @app.command()
 def whoami():
     identity = _client().whoami()
+
+    serializer = getattr(identity, "model_dump", None) or getattr(identity, "dict", None)
+    payload = serializer() if serializer else identity
+    print(json.dumps(payload, indent=2))
 
     if hasattr(identity, "model_dump"):
         payload = identity.model_dump()
