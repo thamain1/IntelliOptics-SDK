@@ -1,55 +1,155 @@
+
 from __future__ import annotations
 
 from typing import Any, Mapping, TypeVar, cast, List
 
+"""Detector representation returned by the API."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, TypeVar
+
+from typing import Any, Dict, List, Type, TypeVar, Union
+from collections.abc import Mapping
+from typing import Any, TypeVar, Union
+
+
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+from ..models.detector_out_mode import DetectorOutMode
+from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="DetectorOut")
 
 
 @_attrs_define
 class DetectorOut:
+
     """Detector representation returned by the API."""
 
     id: str
     name: str
     labels: List[str] = _attrs_field(factory=list)
+
+    """Serialized detector returned by the IntelliOptics API."""
+
+    id: str
+    name: str
+    labels: list[str] = _attrs_field(factory=list)
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+    """
+    Attributes:
+        id (str):
+        name (str):
+        mode (DetectorOutMode):
+        query_text (str):
+        threshold (float):
+        status (Union[Unset, str]):  Default: 'active'.
+    """
+
+    id: str
+    name: str
+    mode: DetectorOutMode
+    query_text: str
+    threshold: float
+    status: Union[Unset, str] = "active"
+
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
+
         id = self.id
         name = self.name
+
         labels = self.labels
 
+        mode = self.mode.value
+
+        query_text = self.query_text
+
+        threshold = self.threshold
+
+        status = self.status
+
+        field_dict: Dict[str, Any] = {}
+
+
         field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
+        
         field_dict.update({
+
             "id": id,
             "name": name,
             "labels": labels,
         })
 
+            "id": self.id,
+            "name": self.name,
+            "labels": list(self.labels),
+        })
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
+
+        field_dict.update(
+            {
+                "id": id,
+                "name": name,
+                "mode": mode,
+                "query_text": query_text,
+                "threshold": threshold,
+            }
+        )
+        if status is not UNSET:
+            field_dict["status"] = status
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         id = d.pop("id")
         name = d.pop("name")
+
         labels = cast(List[str], d.pop("labels", []))
 
+        mode = DetectorOutMode(d.pop("mode"))
+
+        query_text = d.pop("query_text")
+
+        threshold = d.pop("threshold")
+
+        status = d.pop("status", UNSET)
+
+
         detector_out = cls(
+
             id=id,
             name=name,
             labels=labels,
+            id=d.pop("id"),
+            name=d.pop("name"),
+            labels=list(d.pop("labels", [])),
+
         )
 
         detector_out.additional_properties = d
         return detector_out
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:
