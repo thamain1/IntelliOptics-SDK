@@ -1,8 +1,11 @@
 
 import json
+
+import json
 import os
 import time
 from typing import Optional, Union, IO, List
+
 import os, time
 from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
@@ -58,6 +61,11 @@ class IntelliOptics:
         return Detector(**self._http.get_json(f"/v1/detectors/{detector_id}"))
 
     # Image queries
+    def submit_image_query(self, detector: Optional[Union[Detector, str]] = None, image: Optional[Union[str, bytes, IO[bytes]]] = None,
+                           prompt: Optional[str] = None, wait: Optional[float] = None,
+                           confidence_threshold: Optional[float] = None, metadata: Optional[Dict[str, Any]] = None,
+                           inspection_id: Optional[str] = None) -> ImageQuery:
+
     def submit_image_query(
         self,
         detector: Optional[Union[Detector, str]] = None,
@@ -69,6 +77,7 @@ class IntelliOptics:
         if wait is not None:
             form["wait"] = "true" if wait else "false"
 
+
         img = to_jpeg_bytes(image) if image is not None else None
         files = {"image": ("image.jpg", img, "image/jpeg")} if img else None
         form = {
@@ -79,6 +88,10 @@ class IntelliOptics:
             "inspection_id": inspection_id,
             "metadata": json.dumps(metadata) if metadata is not None else None,
         }
+
+        if metadata is not None:
+            form["metadata"] = json.dumps(metadata)
+
 
 
         form = {k: v for k, v in form.items() if v is not None}
