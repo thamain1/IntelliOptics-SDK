@@ -4,6 +4,10 @@ import httpx
 from .types import Answer, Detector
 from .exceptions import AuthError, ApiError
 
+DEFAULT_BASE_URL = os.getenv(
+    "INTELLOPTICS_BASE_URL", "https://intellioptics-api-37558.azurewebsites.net"
+)
+DEFAULT_TOKEN = os.getenv("INTELLOPTICS_API_TOKEN")
 
 DEFAULT_BASE_URL = os.getenv(
     "INTELLIOPTICS_BASE_URL", "https://intellioptics-api-37558.azurewebsites.net"
