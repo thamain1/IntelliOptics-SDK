@@ -1,66 +1,59 @@
-import os, json, typer
+"""Command line interface for interacting with the IntelliOptics API."""
+
+from __future__ import annotations
+
+import json
+import os
+
+import typer
+
 from .client import IntelliOptics
+
 app = typer.Typer(add_completion=False)
 
-def _client():
 
+def _client() -> IntelliOptics:
     """Construct an :class:`IntelliOptics` client using environment variables."""
 
-    api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
-    if api_token is None:
-        # Backwards compatibility with the historical misspelled variable name.
-        api_token = os.getenv("INTELLIOOPTICS_API_TOKEN")
-
-    return IntelliOptics(
-        endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-
-        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
-
-        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN"),
-
-    api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
+    api_token = os.getenv("INTELLIOPTICS_API_TOKEN") or os.getenv("INTELLIOOPTICS_API_TOKEN")
     if not api_token:
-        typer.echo("INTELLIOPTICS_API_TOKEN environment variable is required")
+        typer.echo("INTELLIOPTICS_API_TOKEN environment variable is required", err=True)
         raise typer.Exit(code=1)
+
+    endpoint = os.getenv("INTELLIOPTICS_ENDPOINT")
+    disable_tls = os.getenv("DISABLE_TLS_VERIFY") == "1"
+
     return IntelliOptics(
-        endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
-
-
+        endpoint=endpoint,
         api_token=api_token,
-
-
+        disable_tls_verification=disable_tls,
     )
 
-@app.command()
-def status():
-    print(json.dumps({"ok": True, "endpoint": os.getenv("INTELLIOPTICS_ENDPOINT")}, indent=2))
 
 @app.command()
-def whoami():
+def status() -> None:
+    """Print basic environment information."""
+
+    typer.echo(
+        json.dumps(
+            {
+                "ok": True,
+                "endpoint": os.getenv("INTELLIOPTICS_ENDPOINT"),
+            },
+            indent=2,
+        )
+    )
+
+
+@app.command()
+def whoami() -> None:
+    """Return the identity associated with the configured API token."""
+
     identity = _client().whoami()
-
     serializer = getattr(identity, "model_dump", None) or getattr(identity, "dict", None)
     payload = serializer() if serializer else identity
-    print(json.dumps(payload, indent=2))
+    typer.echo(json.dumps(payload, indent=2))
 
-    if hasattr(identity, "model_dump"):
-        payload = identity.model_dump()
-    elif hasattr(identity, "dict"):
-        payload = identity.dict()
-    else:
-        payload = identity
-    print(json.dumps(payload, indent=2))
 
-    serializer = getattr(identity, "model_dump", None)
-
-    if callable(serializer):
-        data = serializer()
-    else:  # pragma: no cover - Pydantic v1 fallback
-        data = identity.dict()
-
-    if serializer is None:
-        serializer = identity.dict
-    data = serializer()
-
-    print(json.dumps(data, indent=2))
+if __name__ == "__main__":  # pragma: no cover
+    app()

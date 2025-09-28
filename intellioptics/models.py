@@ -1,73 +1,65 @@
+"""Typed models used by the IntelliOptics SDK."""
 
-from typing import Optional, List, Dict, Any, Literal
-from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from __future__ import annotations
+
+from typing import Any, Dict, List, Literal, Mapping, Optional
+
 from pydantic import BaseModel, Field
-try:
-    from pydantic import ConfigDict
-except ImportError:  # pragma: no cover - Pydantic v1 compatibility
-    ConfigDict = None  # type: ignore
-from typing import Optional, Any
 
-class Detector(BaseModel):
+try:  # pragma: no cover - compatibility shim for pydantic v1
+    from pydantic import ConfigDict
+except ImportError:  # pragma: no cover
+    ConfigDict = None  # type: ignore[misc, assignment]
+
+
+class _BaseModel(BaseModel):
+    """Base class that allows extra fields across Pydantic versions."""
+
+    if ConfigDict is not None:  # pragma: no branch - executed on Pydantic v2
+        model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
+    else:  # pragma: no cover - executed on Pydantic v1
+        class Config:
+            extra = "allow"
+
+
+class Detector(_BaseModel):
     id: str
     name: str
-
-    labels: list[str] = Field(default_factory=list)
-    mode: str
-    query_text: str
-
+    mode: Optional[str] = None
+    query_text: Optional[str] = None
     threshold: Optional[float] = None
     status: Optional[str] = None
-
-    threshold: float
-    status: Optional[str] = "active"
     labels: List[str] = Field(default_factory=list)
 
 
-class ImageQuery(BaseModel):
+class ImageQuery(_BaseModel):
     id: str
     detector_id: Optional[str] = None
     status: str = "PENDING"
     result_type: Optional[str] = None
     confidence: Optional[float] = None
     label: Optional[str] = None
-    extra: Optional[dict[str, Any]] = None
+    extra: Optional[Dict[str, Any]] = None
 
-class QueryResult(BaseModel):
+
+class QueryResult(_BaseModel):
     id: str
     status: str
     label: Optional[str] = None
     confidence: Optional[float] = None
     result_type: Optional[str] = None
-    extra: Optional[dict[str, Any]] = None
+    extra: Optional[Dict[str, Any]] = None
 
 
-class FeedbackIn(BaseModel):
-    image_query_id: str
-    correct_label: Literal["YES", "NO", "COUNT", "UNCLEAR"]
-    bboxes: Optional[List[Dict[str, Any]]] = None
-class UserIdentity(BaseModel):
+class UserIdentity(_BaseModel):
     id: str
     email: Optional[str] = None
     name: Optional[str] = None
     tenant: Optional[str] = None
-    roles: list[str] = Field(default_factory=list)
-
-    if ConfigDict is not None:  # pragma: no branch
-        model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
-    else:  # pragma: no cover - executed on Pydantic v1
-        class Config:
-            extra = "allow"
+    roles: List[str] = Field(default_factory=list)
 
 
-class FeedbackIn(BaseModel):
+class FeedbackIn(_BaseModel):
     image_query_id: str
-    correct_label: str
-    bboxes: Optional[List[Dict[str, Any]]] = None
-
-    if ConfigDict is not None:  # pragma: no branch
-        model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
-    else:  # pragma: no cover - executed on Pydantic v1
-        class Config:
-            extra = "allow"
+    correct_label: Literal["YES", "NO", "COUNT", "UNCLEAR"]
+    bboxes: Optional[List[Mapping[str, Any]]] = None

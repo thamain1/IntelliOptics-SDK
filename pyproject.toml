@@ -28,5 +28,3 @@ exclude = ["backend*", "infra*", "sdk*", "spec*"]
 testpaths = ["tests"]
 pythonpath = ["."]
 
-pythonpath = ["."]
-
