@@ -106,6 +106,20 @@ print(confident.model_dump())
 # {'id': 'iq-123', 'detector_id': 'det-456', 'status': 'DONE', 'label': 'ppe', 'confidence': 0.98}
 ```
 
+### Image query payloads
+
+The API provides two entry-points for submitting imagery:
+
+- `POST /v1/image-queries` expects `multipart/form-data`. Non-binary fields are simple form fields,
+  so numeric inputs such as `wait` (seconds to hold the HTTP connection) and `confidence_threshold`
+  should be provided as plain values that can be parsed as floats. If you need to attach structured
+  `metadata`, JSON-encode it yourself (for example `{"metadata": json.dumps({...})}`) before adding
+  it to the form body. String fields such as `prompt` or `inspection_id` can be included directly.
+- `POST /v1/image-queries-json` accepts an `application/json` payload. In this mode the same fields
+  are provided with their natural JSON types (e.g. `wait`/`confidence_threshold` as numbers and
+  `metadata` as a nested JSON object). This endpoint is convenient when the image is already hosted
+  elsewhere and you only need to pass references plus metadata.
+
 The helper functions `ask_ml` and `ask_confident` wrap common flows for asynchronous and
 confidence-thresholded queries. When you need ground-truth data, call `add_label` to attach human
 labels (optionally with metadata) to a given image query.
@@ -133,5 +147,4 @@ pytest
 
 ## Support
 
-For issues, feedback, or feature requests, please contact the IntelliOptics team through your
-customer support channel or reach out to your IntelliOptics solutions engineer.
+For issues, feedback, or feature requests, please contact jmorgan@4wardmotions.con.
