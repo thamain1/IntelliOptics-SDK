@@ -7,11 +7,13 @@ try:
     from pydantic import ConfigDict
 except ImportError:  # pragma: no cover - Pydantic v1 compatibility
     ConfigDict = None  # type: ignore
-from typing import Optional, List, Dict, Any
+from typing import Optional, Any
 
 class Detector(BaseModel):
     id: str
     name: str
+
+    labels: list[str] = Field(default_factory=list)
     mode: str
     query_text: str
 
@@ -30,7 +32,7 @@ class ImageQuery(BaseModel):
     result_type: Optional[str] = None
     confidence: Optional[float] = None
     label: Optional[str] = None
-    extra: Optional[Dict[str, Any]] = None
+    extra: Optional[dict[str, Any]] = None
 
 class QueryResult(BaseModel):
     id: str
@@ -38,7 +40,7 @@ class QueryResult(BaseModel):
     label: Optional[str] = None
     confidence: Optional[float] = None
     result_type: Optional[str] = None
-    extra: Optional[Dict[str, Any]] = None
+    extra: Optional[dict[str, Any]] = None
 
 
 class FeedbackIn(BaseModel):
@@ -50,7 +52,7 @@ class UserIdentity(BaseModel):
     email: Optional[str] = None
     name: Optional[str] = None
     tenant: Optional[str] = None
-    roles: List[str] = Field(default_factory=list)
+    roles: list[str] = Field(default_factory=list)
 
     if ConfigDict is not None:  # pragma: no branch
         model_config = ConfigDict(extra="allow")  # type: ignore[attr-defined]
