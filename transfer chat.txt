@@ -49,7 +49,7 @@ Copy code
 # === Global vars ===
 $RG        = "IntelliOptics"
 $APIAPP    = "intellioptics-api-37558"
-$API       = "https://intellioptics-api-37558.azurewebsites.net"   # or https://api.intellioptics.co
+$API       = "https://intellioptics-api-37558.azurewebsites.net"
 $TOKEN     = "<BEARER_TOKEN_REDACTED>"
 
 # Azure Service Bus (namespace scope connection string)
