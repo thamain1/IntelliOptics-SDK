@@ -127,6 +127,9 @@ class IntelliOptics:
             form["metadata"] = json.dumps(metadata) if isinstance(metadata, dict) else metadata
 
         if metadata is not None:
+            form["metadata"] = json.dumps(metadata) if isinstance(metadata, dict) else metadata
+
+        if metadata is not None:
             form["metadata"] = json.dumps(metadata)
 
 
