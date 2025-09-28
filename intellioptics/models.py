@@ -1,6 +1,7 @@
 
 from typing import Optional, List, Dict, Any, Literal
 from pydantic import BaseModel
+from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field
 try:
     from pydantic import ConfigDict
@@ -11,6 +12,10 @@ from typing import Optional, List, Dict, Any
 class Detector(BaseModel):
     id: str
     name: str
+    mode: str
+    query_text: str
+    threshold: float
+    status: Optional[str] = "active"
     labels: List[str] = Field(default_factory=list)
 
 class ImageQuery(BaseModel):
