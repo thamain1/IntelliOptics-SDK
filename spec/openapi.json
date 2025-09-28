@@ -4,17 +4,42 @@
     "title": "IntelliOptics API",
     "version": "0.1.0"
   },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
   "paths": {
     "/healthz": {
       "get": {
-        "summary": "Healthz",
+        "summary": "Health check",
         "operationId": "healthz_healthz_get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Service is healthy",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -23,15 +48,25 @@
     },
     "/v1/users/me": {
       "get": {
-        "summary": "Get Current User",
+        "summary": "Who am I",
         "operationId": "whoami_v1_users_me_get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Authenticated user info",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserIdentity"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -41,11 +76,11 @@
     },
     "/v1/detectors": {
       "get": {
-        "summary": "List Detectors",
+        "summary": "List detectors",
         "operationId": "list_detectors_v1_detectors_get",
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Detector list",
             "content": {
               "application/json": {
                 "schema": {
@@ -54,8 +89,8 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -67,21 +102,21 @@
         }
       },
       "post": {
-        "summary": "Create Detector",
+        "summary": "Create detector",
         "operationId": "create_detector_v1_detectors_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/DetectorCreate"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Created detector",
             "content": {
               "application/json": {
                 "schema": {
@@ -90,34 +125,8 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "summary": "List Detectors",
-        "operationId": "list_detectors_v1_detectors_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetectorList"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -131,22 +140,21 @@
     },
     "/v1/detectors/{detector_id}": {
       "get": {
-        "summary": "Get Detector",
-        "operationId": "get_detector_v1_detectors__detector_id__get",
+        "summary": "Get detector",
+        "operationId": "get_detector_v1_detectors_detector_id_get",
         "parameters": [
           {
             "name": "detector_id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "title": "Detector Id"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Detector details",
             "content": {
               "application/json": {
                 "schema": {
@@ -155,8 +163,8 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -170,31 +178,31 @@
     },
     "/v1/image-queries": {
       "post": {
-        "summary": "Image Query",
+        "summary": "Submit image query (multipart)",
         "operationId": "image_query_v1_image_queries_post",
         "requestBody": {
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_image_query_v1_image_queries_post"
+                "$ref": "#/components/schemas/ImageQueryMultipart"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Submitted image query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ImageQuery"
+                  "$ref": "#/components/schemas/AnswerOut"
                 }
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -206,33 +214,33 @@
         }
       }
     },
-    "/v1/image-queries-json": {
+    "/v1/image-queries/json": {
       "post": {
-        "summary": "Image Query Json",
+        "summary": "Submit image query (JSON)",
         "operationId": "image_query_json_v1_image_queries_json_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ImageQueryJson"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Submitted image query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ImageQuery"
+                  "$ref": "#/components/schemas/AnswerOut"
                 }
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -246,70 +254,31 @@
     },
     "/v1/image-queries/{iq_id}": {
       "get": {
-        "summary": "Get Image Query",
-        "operationId": "get_image_query_v1_image_queries__iq_id__get",
+        "summary": "Get image query",
+        "operationId": "get_image_query_v1_image_queries_iq_id_get",
         "parameters": [
           {
             "name": "iq_id",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "title": "Iq Id"
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Image query details",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ImageQuery"
+                  "$ref": "#/components/schemas/AnswerOut"
                 }
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/labels": {
-      "post": {
-        "summary": "Create Label",
-        "operationId": "create_label_v1_labels_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LabelIn"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LabelOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -323,72 +292,36 @@
     },
     "/v1/feedback": {
       "post": {
-        "summary": "Feedback",
+        "summary": "Submit feedback",
         "operationId": "feedback_v1_feedback_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/FeedbackIn"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/v1/users/me": {
-      "get": {
-        "summary": "Get Current User",
-        "operationId": "get_current_user_v1_users_me_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserIdentity"
-                }
-              }
-            }
-          },
-
-          "401": {
-            "description": "Unauthorized",
+            "description": "Acknowledged",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "additionalProperties": true
-
-          "422": {
-            "description": "Validation Error",
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
-
                 }
               }
             }
@@ -398,48 +331,31 @@
     },
     "/v1/labels": {
       "post": {
-        "summary": "Submit Label",
-        "operationId": "submit_label_v1_labels_post",
-        "summary": "Create Label",
-        "operationId": "create_label_v1_labels_post",
-
-    "/v1/labels": {
-      "post": {
-        "summary": "Add Label",
+        "summary": "Add label",
         "operationId": "add_label_v1_labels_post",
-
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-
-                "$ref": "#/components/schemas/LabelSubmission"
-
                 "$ref": "#/components/schemas/LabelCreate"
-
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "Successful Response",
+            "description": "Label created",
             "content": {
               "application/json": {
                 "schema": {
-
-                  "$ref": "#/components/schemas/LabelSubmissionResponse"
-
                   "$ref": "#/components/schemas/LabelRecord"
-                  "$ref": "#/components/schemas/LabelAck"
-
                 }
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
+          "default": {
+            "description": "Unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -454,824 +370,214 @@
   },
   "components": {
     "schemas": {
-      "ImageQuery": {
-        "type": "object",
-        "title": "ImageQuery",
-        "required": [
-          "id",
-          "status"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "detector_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detector Id"
-          },
-          
-          },
-          "detector_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detector Id"
-          },
-
-          "status": {
-            "type": "string",
-            "title": "Status"
-          },
-          "result_type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Result Type"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          },
-          "label": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Label"
-          },
-          "extra": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": {}
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Extra"
-          }
-
-        }
-
-        },
-        "required": [
-          "id",
-          "status"
-        ]
-
-      },
-      "Body_image_query_v1_image_queries_post": {
-        "properties": {
-          "detector_id": {
-            "type": "string",
-            "title": "Detector Id"
-          },
-          "prompt": {
-
-            "type": "string",
-
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-
-            "title": "Prompt"
-          },
-          "wait": {
-            "type": "number",
-
-            "title": "Wait",
-
-            "title": "Wait Seconds",
-
-            "default": 0
-          },
-          "confidence_threshold": {
-            "type": "number",
-
-            "title": "Confidence Threshold"
-          },
-          "metadata": {
-            "type": "string",
-            "title": "Metadata",
-            "description": "JSON encoded metadata payload"
-          },
-          "inspection_id": {
-            "type": "string",
-
-            "title": "Confidence Threshold",
-            "default": 0.9
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata",
-            "description": "JSON-encoded metadata blob when using multipart form submissions."
-          },
-          "inspection_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            
-            "title": "Inspection Id"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "binary"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          }
-        },
-        "type": "object",
-        "required": [
-          "detector_id"
-        ],
-        "title": "Body_image_query_v1_image_queries_post"
-      },
       "DetectorCreate": {
-        "title": "DetectorCreate",
         "type": "object",
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
-            "type": "string",
-            "title": "Name"
+            "type": "string"
           },
           "labels": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "title": "Labels",
             "default": []
           }
-        },
-        "required": [
-          "name"
-
-        ],
-        "title": "DetectorCreate"
-
-        ]
-
+        }
       },
       "DetectorOut": {
-        "title": "DetectorOut",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DetectorCreate"
           },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "labels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Labels",
-            "default": []
-          }
-        },
-        "required": [
-          "id",
-          "name"
-
-        ],
-        "title": "DetectorOut"
-
-        ]
-
-      },
-      "LabelIn": {
-        "properties": {
-          "image_query_id": {
-            "type": "string",
-            "title": "Image Query Id"
-          },
-          "label": {
-            "type": "string",
-            "title": "Label"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          },
-          "detector_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detector Id"
-          },
-          "user_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "User Id"
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata"
-          }
-        },
-        "type": "object",
-        "required": [
-          "image_query_id",
-          "label"
-        ],
-        "title": "LabelIn"
-      },
-      "LabelOut": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "image_query_id": {
-            "type": "string",
-            "title": "Image Query Id"
-          },
-          "label": {
-            "type": "string",
-            "title": "Label"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          },
-          "detector_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detector Id"
-          },
-          "user_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "User Id"
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata"
-          },
-          "created_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Created At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "image_query_id",
-          "label"
-        ],
-        "title": "LabelOut"
-      },
-      "FeedbackIn": {
-        "properties": {
-          "image_query_id": {
-            "type": "string",
-            "title": "Image Query Id"
-          },
-          "correct_label": {
-            "type": "string",
-            "enum": [
-              "YES",
-              "NO",
-              "COUNT",
-              "UNCLEAR"
-            ],
-            "title": "Correct Label"
-          },
-          "bboxes": {
-            "anyOf": [
-              {
-                "items": {
-                  "additionalProperties": true,
-                  "type": "object"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Bboxes"
-          }
-        },
-        "type": "object",
-        "required": [
-          "image_query_id",
-          "correct_label"
-        ],
-        "title": "FeedbackIn"
-      },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
-      },
-      "ImageQueryJson": {
-        "properties": {
-          "detector_id": {
-            "type": "string",
-            "title": "Detector Id"
-          },
-          "prompt": {
-
-            "type": "string",
-
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-
-            "title": "Prompt"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          },
-          "wait": {
-            "type": "number",
-
-            "title": "Wait",
-
-            "title": "Wait Seconds",
-
-            "default": 0
-          },
-          "confidence_threshold": {
-            "type": "number",
-
-            "title": "Confidence Threshold"
-          },
-          "metadata": {
+          {
             "type": "object",
-            "title": "Metadata",
-            "additionalProperties": {}
-          },
-          "inspection_id": {
-            "type": "string",
-
-            "title": "Confidence Threshold",
-            "default": 0.9
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": {}
-              },
-              {
-                "type": "null"
-              }
+            "required": [
+              "id"
             ],
-            "title": "Metadata"
-          },
-          "inspection_id": {
-            "anyOf": [
-              {
+            "properties": {
+              "id": {
                 "type": "string"
-              },
-              {
-                "type": "null"
               }
-            ],
-
-            "title": "Inspection Id"
+            }
           }
-        },
-        "type": "object",
-        "required": [
-          "detector_id"
-        ],
-        "title": "ImageQueryJson"
-      },
-      "LabelAck": {
-        "properties": {
-          "label_id": {
-            "type": "string",
-            "title": "Label Id"
-          },
-          "status": {
-      "UserIdentity": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "email": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Status"
-          }
-        },
-        "type": "object",
-        "required": [
-          "label_id"
-        ],
-        "title": "LabelAck"
-      },
-      "LabelCreate": {
-        "properties": {
-          "image_query_id": {
-            "type": "string",
-            "title": "Image Query Id"
-          },
-          "label": {
-            "type": "string",
-            "title": "Label"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          },
-          "detector_id": {
-            "title": "Email"
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detector Id"
-          },
-          "user_id": {
-            "title": "Name"
-          },
-          "tenant": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "User Id"
-          },
-          "metadata": {
-            "anyOf": [
-              {
-                "type": "object",
-                "additionalProperties": true
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Metadata"
-            "title": "Tenant"
-          },
-          "roles": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Roles",
-            "default": []
-          }
-        },
-        "type": "object",
-        "required": [
-          "image_query_id",
-          "label"
-        ],
-        "title": "LabelCreate"
-          "id"
-        ],
-        "title": "UserIdentity",
-        "additionalProperties": true
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          }
-        },
-        "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
-        "title": "ValidationError"
+        ]
       },
       "DetectorList": {
         "type": "object",
-        "title": "DetectorList",
+        "required": [
+          "items"
+        ],
         "properties": {
           "items": {
             "type": "array",
-            "title": "Items",
             "items": {
               "$ref": "#/components/schemas/DetectorOut"
             }
-        "title": "DetectorList",
-        "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DetectorOut"
-            },
-            "title": "Items"
-
           }
-        },
-        "required": [
-          "items"
-        ]
+        }
       },
-      "UserIdentity": {
+      "ImageQueryMultipart": {
         "type": "object",
-        "title": "UserIdentity",
-
-        "title": "UserIdentity",
-        "type": "object",
-
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "email": {
-
-            "type": [
-              "string",
-              "null"
-            ],
-            "title": "Email"
-          },
-          "name": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "title": "Name"
-          },
-          "tenant": {
-            "type": [
-              "string",
-              "null"
-            ],
-
-            "type": "string",
-            "title": "Email"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "tenant": {
-            "type": "string",
-
-            "title": "Tenant"
-          },
-          "roles": {
-            "type": "array",
-
-            "title": "Roles",
-            "items": {
-              "type": "string"
-            },
-
-            "items": {
-              "type": "string"
-            },
-            "title": "Roles",
-
-            "default": []
-          }
-        },
         "required": [
-          "id"
-
+          "detector_id"
         ],
-        "additionalProperties": true
-      },
-      "LabelSubmission": {
-        "type": "object",
-        "title": "LabelSubmission",
-
-        ]
-      },
-      "LabelCreate": {
-        "title": "LabelCreate",
-        "type": "object",
-
         "properties": {
-          "image_query_id": {
-            "type": "string",
-            "title": "Image Query Id"
-          },
-          "label": {
-            "type": "string",
-            "title": "Label"
-          },
-          "confidence": {
-            "type": "number",
-            "title": "Confidence"
-          },
           "detector_id": {
-            "type": "string",
-            "title": "Detector Id"
+            "type": "string"
           },
-          "user_id": {
+          "wait": {
+            "type": "number",
+            "nullable": true
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "nullable": true
+          },
+          "human_review": {
             "type": "string",
-            "title": "User Id"
+            "nullable": true
+          },
+          "metadata": {
+            "type": "string",
+            "nullable": true
+          },
+          "inspection_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          }
+        }
+      },
+      "ImageQueryJson": {
+        "type": "object",
+        "required": [
+          "detector_id"
+        ],
+        "properties": {
+          "detector_id": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "wait": {
+            "type": "number",
+            "nullable": true
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "nullable": true
+          },
+          "human_review": {
+            "type": "string",
+            "nullable": true
           },
           "metadata": {
             "type": "object",
-
-            "title": "Metadata",
-            "additionalProperties": true
-
-            "title": "Metadata"
-
+            "nullable": true
+          },
+          "inspection_id": {
+            "type": "string",
+            "nullable": true
           }
-        },
+        }
+      },
+      "AnswerOut": {
+        "type": "object",
+        "required": [
+          "image_query_id",
+          "answer",
+          "confidence"
+        ],
+        "properties": {
+          "image_query_id": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "latency_ms": {
+            "type": "integer",
+            "nullable": true
+          },
+          "model_version": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "FeedbackIn": {
+        "type": "object",
+        "required": [
+          "iq_id",
+          "correct_label"
+        ],
+        "properties": {
+          "iq_id": {
+            "type": "string"
+          },
+          "correct_label": {
+            "type": "string"
+          },
+          "bboxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "LabelCreate": {
+        "type": "object",
         "required": [
           "image_query_id",
           "label"
-        ]
+        ],
+        "properties": {
+          "image_query_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "nullable": true
+          },
+          "detector_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "user_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true
+          }
+        }
       },
-
-      "LabelSubmissionResponse": {
-        "type": "object",
-        "title": "LabelSubmissionResponse",
-        "additionalProperties": true
-
       "LabelRecord": {
-        "title": "LabelRecord",
         "allOf": [
           {
             "$ref": "#/components/schemas/LabelCreate"
@@ -1281,17 +587,71 @@
             "properties": {
               "id": {
                 "type": "string",
-                "title": "Id"
+                "nullable": true
               },
               "created_at": {
                 "type": "string",
                 "format": "date-time",
-                "title": "Created At"
+                "nullable": true
               }
             }
           }
         ]
-
+      },
+      "UserIdentity": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "properties": {
+          "loc": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
       }
     }
   }

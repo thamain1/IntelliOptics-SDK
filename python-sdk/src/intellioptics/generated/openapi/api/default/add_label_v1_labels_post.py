@@ -1,30 +1,28 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import httpx
 
-from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.http_validation_error import HTTPValidationError
-from ...models.label_ack import LabelAck
 from ...models.label_create import LabelCreate
+from ...models.label_record import LabelRecord
 from ...types import Response
 
 
 def _get_kwargs(
     *,
     body: LabelCreate,
-) -> Dict[str, Any]:
-    headers: Dict[str, Any] = {}
+) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
-    _kwargs: Dict[str, Any] = {
+    _kwargs: dict[str, Any] = {
         "method": "post",
         "url": "/v1/labels",
     }
 
-    _body = body.to_dict()
+    _kwargs["json"] = body.to_dict()
 
-    _kwargs["json"] = _body
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -33,24 +31,20 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[HTTPValidationError, LabelAck]]:
-    if response.status_code == HTTPStatus.OK:
-        response_200 = LabelAck.from_dict(response.json())
+) -> Union[HTTPValidationError, LabelRecord]:
+    if response.status_code == 200:
+        response_200 = LabelRecord.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-        response_422 = HTTPValidationError.from_dict(response.json())
 
-        return response_422
-    if client.raise_on_unexpected_status:
-        raise errors.UnexpectedStatus(response.status_code, response.content)
-    else:
-        return None
+    response_default = HTTPValidationError.from_dict(response.json())
+
+    return response_default
 
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[HTTPValidationError, LabelAck]]:
+) -> Response[Union[HTTPValidationError, LabelRecord]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -63,8 +57,8 @@ def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: LabelCreate,
-) -> Response[Union[HTTPValidationError, LabelAck]]:
-    """Add Label
+) -> Response[Union[HTTPValidationError, LabelRecord]]:
+    """Add label
 
     Args:
         body (LabelCreate):
@@ -74,7 +68,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[HTTPValidationError, LabelAck]]
+        Response[Union[HTTPValidationError, LabelRecord]]
     """
 
     kwargs = _get_kwargs(
@@ -92,8 +86,8 @@ def sync(
     *,
     client: Union[AuthenticatedClient, Client],
     body: LabelCreate,
-) -> Optional[Union[HTTPValidationError, LabelAck]]:
-    """Add Label
+) -> Optional[Union[HTTPValidationError, LabelRecord]]:
+    """Add label
 
     Args:
         body (LabelCreate):
@@ -103,7 +97,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[HTTPValidationError, LabelAck]
+        Union[HTTPValidationError, LabelRecord]
     """
 
     return sync_detailed(
@@ -116,8 +110,8 @@ async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: LabelCreate,
-) -> Response[Union[HTTPValidationError, LabelAck]]:
-    """Add Label
+) -> Response[Union[HTTPValidationError, LabelRecord]]:
+    """Add label
 
     Args:
         body (LabelCreate):
@@ -127,7 +121,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[HTTPValidationError, LabelAck]]
+        Response[Union[HTTPValidationError, LabelRecord]]
     """
 
     kwargs = _get_kwargs(
@@ -143,8 +137,8 @@ async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
     body: LabelCreate,
-) -> Optional[Union[HTTPValidationError, LabelAck]]:
-    """Add Label
+) -> Optional[Union[HTTPValidationError, LabelRecord]]:
+    """Add label
 
     Args:
         body (LabelCreate):
@@ -154,7 +148,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[HTTPValidationError, LabelAck]
+        Union[HTTPValidationError, LabelRecord]
     """
 
     return (

@@ -1,19 +1,5 @@
-"""Request payload for label submission."""
-
-from __future__ import annotations
-
 from collections.abc import Mapping
-from typing import Any, Dict, Optional, TypeVar
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    List,
-    Type,
-    TypeVar,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -29,45 +15,6 @@ T = TypeVar("T", bound="LabelCreate")
 
 @_attrs_define
 class LabelCreate:
-
-    """Body accepted by ``POST /v1/labels``."""
-
-    image_query_id: str
-    label: str
-    confidence: Optional[float] = None
-    detector_id: Optional[str] = None
-    user_id: Optional[str] = None
-    metadata: Optional[Dict[str, Any]] = None
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-    def to_dict(self) -> dict[str, Any]:
-        field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
-        field_dict.update({
-            "image_query_id": self.image_query_id,
-            "label": self.label,
-        })
-        if self.confidence is not None:
-            field_dict["confidence"] = self.confidence
-        if self.detector_id is not None:
-            field_dict["detector_id"] = self.detector_id
-        if self.user_id is not None:
-            field_dict["user_id"] = self.user_id
-        if self.metadata is not None:
-            field_dict["metadata"] = self.metadata
-        return field_dict
-
-    @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
-        label_create = cls(
-            image_query_id=d.pop("image_query_id"),
-            label=d.pop("label"),
-            confidence=d.pop("confidence", None),
-            detector_id=d.pop("detector_id", None),
-            user_id=d.pop("user_id", None),
-            metadata=d.pop("metadata", None),
-        )
     """
     Attributes:
         image_query_id (str):
@@ -84,9 +31,9 @@ class LabelCreate:
     detector_id: Union[None, Unset, str] = UNSET
     user_id: Union[None, Unset, str] = UNSET
     metadata: Union["LabelCreateMetadataType0", None, Unset] = UNSET
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         from ..models.label_create_metadata_type_0 import LabelCreateMetadataType0
 
         image_query_id = self.image_query_id
@@ -111,7 +58,7 @@ class LabelCreate:
         else:
             user_id = self.user_id
 
-        metadata: Union[Dict[str, Any], None, Unset]
+        metadata: Union[None, Unset, dict[str, Any]]
         if isinstance(self.metadata, Unset):
             metadata = UNSET
         elif isinstance(self.metadata, LabelCreateMetadataType0):
@@ -119,7 +66,7 @@ class LabelCreate:
         else:
             metadata = self.metadata
 
-        field_dict: Dict[str, Any] = {}
+        field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -139,10 +86,10 @@ class LabelCreate:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         from ..models.label_create_metadata_type_0 import LabelCreateMetadataType0
 
-        d = src_dict.copy()
+        d = dict(src_dict)
         image_query_id = d.pop("image_query_id")
 
         label = d.pop("label")
@@ -174,9 +121,7 @@ class LabelCreate:
 
         user_id = _parse_user_id(d.pop("user_id", UNSET))
 
-        def _parse_metadata(
-            data: object,
-        ) -> Union["LabelCreateMetadataType0", None, Unset]:
+        def _parse_metadata(data: object) -> Union["LabelCreateMetadataType0", None, Unset]:
             if data is None:
                 return data
             if isinstance(data, Unset):
@@ -206,11 +151,7 @@ class LabelCreate:
         return label_create
 
     @property
-
     def additional_keys(self) -> list[str]:
-
-    def additional_keys(self) -> List[str]:
-
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

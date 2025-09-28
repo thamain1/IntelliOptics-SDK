@@ -1,12 +1,9 @@
-
-from typing import Any, Dict, List, Type, TypeVar, Union, cast
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.answer_out_answer import AnswerOutAnswer
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="AnswerOut")
@@ -17,26 +14,23 @@ class AnswerOut:
     """
     Attributes:
         image_query_id (str):
-        answer (AnswerOutAnswer):
+        answer (str):
         confidence (float):
         latency_ms (Union[None, Unset, int]):
-        model_version (Union[None, Unset, str]):  Default: 'demo-v0'.
+        model_version (Union[None, Unset, str]):
     """
 
     image_query_id: str
-    answer: AnswerOutAnswer
+    answer: str
     confidence: float
     latency_ms: Union[None, Unset, int] = UNSET
-    model_version: Union[None, Unset, str] = "demo-v0"
-    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
-
-    def to_dict(self) -> Dict[str, Any]:
+    model_version: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         image_query_id = self.image_query_id
 
-        answer = self.answer.value
+        answer = self.answer
 
         confidence = self.confidence
 
@@ -52,8 +46,6 @@ class AnswerOut:
         else:
             model_version = self.model_version
 
-
-        field_dict: Dict[str, Any] = {}
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -71,11 +63,11 @@ class AnswerOut:
         return field_dict
 
     @classmethod
-    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        d = src_dict.copy()
+    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        d = dict(src_dict)
         image_query_id = d.pop("image_query_id")
 
-        answer = AnswerOutAnswer(d.pop("answer"))
+        answer = d.pop("answer")
 
         confidence = d.pop("confidence")
 
@@ -109,7 +101,7 @@ class AnswerOut:
         return answer_out
 
     @property
-    def additional_keys(self) -> List[str]:
+    def additional_keys(self) -> list[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

@@ -1,67 +1,31 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Union, cast
+from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="DetectorOut")
+T = TypeVar("T", bound="ImageQueryJsonMetadataType0")
 
 
 @_attrs_define
-class DetectorOut:
-    """
-    Attributes:
-        name (str):
-        id (str):
-        labels (Union[Unset, list[str]]):
-    """
+class ImageQueryJsonMetadataType0:
+    """ """
 
-    name: str
-    id: str
-    labels: Union[Unset, list[str]] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        name = self.name
-
-        id = self.id
-
-        labels: Union[Unset, list[str]] = UNSET
-        if not isinstance(self.labels, Unset):
-            labels = self.labels
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "name": name,
-                "id": id,
-            }
-        )
-        if labels is not UNSET:
-            field_dict["labels"] = labels
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
         d = dict(src_dict)
-        name = d.pop("name")
+        image_query_json_metadata_type_0 = cls()
 
-        id = d.pop("id")
-
-        labels = cast(list[str], d.pop("labels", UNSET))
-
-        detector_out = cls(
-            name=name,
-            id=id,
-            labels=labels,
-        )
-
-        detector_out.additional_properties = d
-        return detector_out
+        image_query_json_metadata_type_0.additional_properties = d
+        return image_query_json_metadata_type_0
 
     @property
     def additional_keys(self) -> list[str]:

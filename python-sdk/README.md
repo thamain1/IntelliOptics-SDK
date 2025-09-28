@@ -2,8 +2,8 @@
 
 Installable client library for the IntelliOptics API.
 
-> **Python**: 3.9+  
-> **Package name**: `intellioptics`  
+> **Python**: 3.9+
+> **Package name**: `intellioptics`
 > **Typing**: ships with `py.typed` (PEP 561)
 
 ## Install
@@ -27,18 +27,20 @@ io = IntelliOptics(api_token="YOUR_TOKEN")  # or set env vars
 
 print("healthy?", io.health_generated())
 
-
 det = io.create_detector(name="Widget Presence", labels=["widget", "no_widget"])
 
 me = io.whoami()
 print("authenticated as", me.email or me.id)
 
-det = io.create_detector(name="Widget Presence", labels=["widget", "no_widget"])
 for detector in io.list_detectors():
     print(det.id, det.name)
 
-
-res = io.submit_image_query(detector=det.id, image="image.jpg", wait=5.0, confidence_threshold=0.75)
+res = io.submit_image_query(
+    detector=det.id,
+    image="image.jpg",
+    wait=5.0,
+    confidence_threshold=0.75,
+)
 
 iq = io.get_image_query(res["id"])
 io.submit_feedback(iq_id=iq["id"], correct_label="YES", bboxes=[], notes="verified")

@@ -1,12 +1,8 @@
 from http import HTTPStatus
-
-from typing import Any, Dict, Optional, Union
-
 from typing import Any, Optional, Union
 
 import httpx
 
-from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.detector_create import DetectorCreate
 from ...models.detector_out import DetectorOut
@@ -17,12 +13,6 @@ from ...types import Response
 def _get_kwargs(
     *,
     body: DetectorCreate,
-
-) -> Dict[str, Any]:
-    headers: Dict[str, Any] = {}
-
-    _kwargs: Dict[str, Any] = {
-
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
@@ -30,10 +20,6 @@ def _get_kwargs(
         "method": "post",
         "url": "/v1/detectors",
     }
-
-    _body = body.to_dict()
-
-    _kwargs["json"] = _body
 
     _kwargs["json"] = body.to_dict()
 
@@ -45,26 +31,15 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[DetectorOut, HTTPValidationError]]:
+) -> Union[DetectorOut, HTTPValidationError]:
     if response.status_code == 200:
-        response_200 = DetectorOut.from_dict(response.json())
-
-
-    if response.status_code == HTTPStatus.OK:
-
-    if response.status_code == 200:
-
         response_200 = DetectorOut.from_dict(response.json())
 
         return response_200
-    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
-        response_422 = HTTPValidationError.from_dict(response.json())
 
-        return response_422
-    if client.raise_on_unexpected_status:
-        raise errors.UnexpectedStatus(response.status_code, response.content)
-    else:
-        return None
+    response_default = HTTPValidationError.from_dict(response.json())
+
+    return response_default
 
 
 def _build_response(
@@ -83,7 +58,7 @@ def sync_detailed(
     client: Union[AuthenticatedClient, Client],
     body: DetectorCreate,
 ) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    """Create detector
 
     Args:
         body (DetectorCreate):
@@ -112,7 +87,7 @@ def sync(
     client: Union[AuthenticatedClient, Client],
     body: DetectorCreate,
 ) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    """Create detector
 
     Args:
         body (DetectorCreate):
@@ -136,7 +111,7 @@ async def asyncio_detailed(
     client: Union[AuthenticatedClient, Client],
     body: DetectorCreate,
 ) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    """Create detector
 
     Args:
         body (DetectorCreate):
@@ -163,7 +138,7 @@ async def asyncio(
     client: Union[AuthenticatedClient, Client],
     body: DetectorCreate,
 ) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    """Create detector
 
     Args:
         body (DetectorCreate):
