@@ -35,6 +35,13 @@ pip install intellioptics
 > **Note:** The project declares the following runtime dependencies: `requests`, `pydantic (<3)`,
 > `Pillow`, and `typer`.
 
+## Repository layout
+
+The canonical Python package ships directly from this repository root. Source code lives in
+`intellioptics/` and its accompanying tests live in `tests/`. Legacy bundles that once mirrored the
+package under `sdk/`, `python-sdk/`, or zipped archives have been removed so downstream consumers
+only reference this single distribution.
+
 ## Configuration
 
 The SDK and CLI are configured through environment variables:
