@@ -295,6 +295,8 @@ def test_init_uses_environment_defaults(monkeypatch):
     assert serializer() == identity_payload
 
 
+def test_submit_image_query_forwards_metadata(monkeypatch):
+  
 def _image_query_response():
     return {"id": "iq-123", "status": "PENDING"}
 
@@ -401,6 +403,8 @@ def test_submit_image_query_preserves_non_dict_metadata(monkeypatch):
     client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
 
     captured = {}
+
+    def fake_post_json(path, *, files=None, data=None, **kwargs):
 
     def fake_post_json(path, *, files=None, data=None):
         captured["data"] = data
@@ -513,6 +517,15 @@ def test_get_detector_deserializes_labels(monkeypatch):
         return {"id": "iq-123"}
 
     monkeypatch.setattr(client._http, "post_json", fake_post_json)
+
+    metadata = {"foo": "bar"}
+
+    image_query = client.submit_image_query(detector="det-456", metadata=metadata)
+
+    assert captured["path"] == "/v1/image-queries"
+    assert captured["files"] is None
+    assert json.loads(captured["data"]["metadata"]) == metadata
+    assert image_query.id == "iq-123"
 
     metadata = {"foo": "bar", "nested": {"answer": 42}}
 
