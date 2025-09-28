@@ -1,37 +1,42 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+
+from typing import Any, Dict, Optional, Union
+
+from typing import Any, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import AuthenticatedClient, Client
 from ...models.feedback_in import FeedbackIn
 from ...models.http_validation_error import HTTPValidationError
-from typing import cast
-
+from ...types import Response
 
 
 def _get_kwargs(
     *,
     body: FeedbackIn,
 
+) -> Dict[str, Any]:
+    headers: Dict[str, Any] = {}
+
+    _kwargs: Dict[str, Any] = {
+
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
-
-    
-
-    
-
     _kwargs: dict[str, Any] = {
+
         "method": "post",
         "url": "/v1/feedback",
     }
 
-    _kwargs["json"] = body.to_dict()
 
+    _body = body.to_dict()
+
+    _kwargs["json"] = _body
+
+    _kwargs["json"] = body.to_dict()
 
     headers["Content-Type"] = "application/json"
 
@@ -39,26 +44,29 @@ def _get_kwargs(
     return _kwargs
 
 
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[Any, HTTPValidationError]]:
 
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Union[Any, HTTPValidationError]]:
+    if response.status_code == HTTPStatus.OK:
+
     if response.status_code == 200:
+
         response_200 = response.json()
         return response_200
-
-    if response.status_code == 422:
+    if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
         response_422 = HTTPValidationError.from_dict(response.json())
 
-
-
         return response_422
-
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[Union[Any, HTTPValidationError]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[Any, HTTPValidationError]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -71,9 +79,8 @@ def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: FeedbackIn,
-
 ) -> Response[Union[Any, HTTPValidationError]]:
-    """ Feedback
+    """Feedback
 
     Args:
         body (FeedbackIn):
@@ -84,12 +91,10 @@ def sync_detailed(
 
     Returns:
         Response[Union[Any, HTTPValidationError]]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         body=body,
-
     )
 
     response = client.get_httpx_client().request(
@@ -98,13 +103,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     *,
     client: Union[AuthenticatedClient, Client],
     body: FeedbackIn,
-
 ) -> Optional[Union[Any, HTTPValidationError]]:
-    """ Feedback
+    """Feedback
 
     Args:
         body (FeedbackIn):
@@ -115,22 +120,20 @@ def sync(
 
     Returns:
         Union[Any, HTTPValidationError]
-     """
-
+    """
 
     return sync_detailed(
         client=client,
-body=body,
-
+        body=body,
     ).parsed
+
 
 async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
     body: FeedbackIn,
-
 ) -> Response[Union[Any, HTTPValidationError]]:
-    """ Feedback
+    """Feedback
 
     Args:
         body (FeedbackIn):
@@ -141,27 +144,23 @@ async def asyncio_detailed(
 
     Returns:
         Response[Union[Any, HTTPValidationError]]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         body=body,
-
     )
 
-    response = await client.get_async_httpx_client().request(
-        **kwargs
-    )
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
     body: FeedbackIn,
-
 ) -> Optional[Union[Any, HTTPValidationError]]:
-    """ Feedback
+    """Feedback
 
     Args:
         body (FeedbackIn):
@@ -172,11 +171,11 @@ async def asyncio(
 
     Returns:
         Union[Any, HTTPValidationError]
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        client=client,
-body=body,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            client=client,
+            body=body,
+        )
+    ).parsed

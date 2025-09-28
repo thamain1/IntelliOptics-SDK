@@ -1,43 +1,30 @@
-
 from typing import Any, Dict, List, Type, TypeVar
-from collections.abc import Mapping
-from typing import Any, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="FeedbackInBboxesType0Item")
+T = TypeVar("T", bound="LabelCreateMetadataType0")
 
 
 @_attrs_define
-class FeedbackInBboxesType0Item:
+class LabelCreateMetadataType0:
     """ """
 
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
-
     def to_dict(self) -> Dict[str, Any]:
         field_dict: Dict[str, Any] = {}
-
-    def to_dict(self) -> dict[str, Any]:
-        field_dict: dict[str, Any] = {}
-
         field_dict.update(self.additional_properties)
 
         return field_dict
 
     @classmethod
-
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
+        label_create_metadata_type_0 = cls()
 
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
-
-        feedback_in_bboxes_type_0_item = cls()
-
-        feedback_in_bboxes_type_0_item.additional_properties = d
-        return feedback_in_bboxes_type_0_item
+        label_create_metadata_type_0.additional_properties = d
+        return label_create_metadata_type_0
 
     @property
     def additional_keys(self) -> List[str]:
