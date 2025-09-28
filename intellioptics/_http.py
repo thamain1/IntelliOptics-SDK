@@ -32,13 +32,31 @@ class HttpClient:
         self._session = requests.Session()
         self._session.headers.update(self.headers)
 
+
+    def request_raw(
+        self,
+        method: str,
+        path: str,
+        *,
+        headers: Mapping[str, str] | None = None,
+        **kwargs: Any,
+    ) -> requests.Response:
+        url = f"{self.base}{path}"
+        merged_headers: MutableMapping[str, str] = dict(self.headers)
+        if headers:
+            merged_headers.update(headers)
+
+
     def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         url = f"{self.base}{path}"
+
         response = self._session.request(
             method,
             url,
             timeout=self.timeout,
             verify=self.verify,
+            headers=merged_headers,
+
             **kwargs,
         )
 
@@ -47,6 +65,12 @@ class HttpClient:
             raise IntelliOpticsClientError(
                 f"{method.upper()} {path} failed with {response.status_code}: {content or 'no body'}"
             )
+
+
+        return response
+
+    def _request(self, method: str, path: str, **kwargs: Any) -> Any:
+        response = self.request_raw(method, path, **kwargs)
 
         if response.status_code == 204 or not response.content:
             return {}
@@ -97,14 +121,36 @@ class AsyncHttpClient:
             headers={"Authorization": f"Bearer {api_token}"},
         )
 
+    async def request_raw(
+        self,
+        method: str,
+        path: str,
+        *,
+        headers: Mapping[str, str] | None = None,
+        **kwargs: Any,
+    ) -> httpx.Response:
+        merged_headers = dict(self._client.headers)
+        if headers:
+            merged_headers.update(headers)
+
+        response = await self._client.request(method, path, headers=merged_headers, **kwargs)
+
     async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         response = await self._client.request(method, path, **kwargs)
+
 
         if not response.is_success:
             content = response.text.strip()
             raise IntelliOpticsClientError(
                 f"{method.upper()} {path} failed with {response.status_code}: {content or 'no body'}"
             )
+
+
+        return response
+
+    async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
+        response = await self.request_raw(method, path, **kwargs)
+
 
         if response.status_code == 204 or not response.content:
             return {}

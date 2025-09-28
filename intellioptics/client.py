@@ -8,12 +8,31 @@ import asyncio
 import json
 import os
 import time
+import zipfile
+from collections.abc import Mapping, Sequence
+from io import BytesIO
+from pathlib import Path
 from collections.abc import Mapping
 from typing import Any, Dict, IO, Iterable, Optional, Union
 
 from ._http import AsyncHttpClient, HttpClient
 from ._img import to_jpeg_bytes
 from .errors import ApiTokenError, ExperimentalFeatureUnavailable, IntelliOpticsClientError
+from .models import (
+    Action,
+    Condition,
+    Detector,
+    FeedbackIn,
+    HTTPResponse,
+    ImageQuery,
+    PaginatedRuleList,
+    PayloadTemplate,
+    QueryResult,
+    Rule,
+    UserIdentity,
+    WebhookAction,
+)
+
 from .models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
 
 
@@ -152,6 +171,82 @@ def _prepare_feedback_payload(
         payload = dict(feedback_model)
 
     return payload
+
+
+def _serialize_model(model: Any) -> Dict[str, Any]:
+    serializer = getattr(model, "model_dump", None) or getattr(model, "dict", None)
+    if serializer is not None:
+        return serializer(exclude_none=True)
+    if isinstance(model, Mapping):
+        return dict(model)
+    raise TypeError(f"Unsupported model type: {type(model)!r}")
+
+
+def _normalize_action_list(actions: Any) -> Optional[list[Action]]:
+    if actions is None:
+        return None
+    if isinstance(actions, Action):
+        return [actions]
+    if isinstance(actions, Mapping):
+        return [Action(**dict(actions))]
+    if isinstance(actions, Sequence) and not isinstance(actions, (str, bytes)):
+        normalized: list[Action] = []
+        for item in actions:
+            if isinstance(item, Action):
+                normalized.append(item)
+            elif isinstance(item, Mapping):
+                normalized.append(Action(**dict(item)))
+            else:
+                raise TypeError("Actions must be Action models or mapping objects")
+        return normalized
+    raise TypeError("Actions must be Action models or mapping objects")
+
+
+def _normalize_webhook_list(webhook_actions: Any) -> Optional[list[WebhookAction]]:
+    if webhook_actions is None:
+        return None
+    if isinstance(webhook_actions, WebhookAction):
+        return [webhook_actions]
+    if isinstance(webhook_actions, Mapping):
+        return [WebhookAction(**dict(webhook_actions))]
+    if isinstance(webhook_actions, Sequence) and not isinstance(webhook_actions, (str, bytes)):
+        normalized: list[WebhookAction] = []
+        for item in webhook_actions:
+            if isinstance(item, WebhookAction):
+                normalized.append(item)
+            elif isinstance(item, Mapping):
+                normalized.append(WebhookAction(**dict(item)))
+            else:
+                raise TypeError("Webhook actions must be WebhookAction models or mapping objects")
+        return normalized
+    raise TypeError("Webhook actions must be WebhookAction models or mapping objects")
+
+
+def _ensure_condition(condition: Condition | Mapping[str, Any]) -> Condition:
+    if isinstance(condition, Condition):
+        return condition
+    return Condition(**dict(condition))
+
+
+def _ensure_payload_template(template: PayloadTemplate | Mapping[str, Any] | None) -> Optional[PayloadTemplate]:
+    if template is None or isinstance(template, PayloadTemplate):
+        return template
+    return PayloadTemplate(**dict(template))
+
+
+def _detector_identifier(detector: Union[Detector, str]) -> str:
+    detector_id = detector.id if isinstance(detector, Detector) else detector
+    if not detector_id:
+        raise ValueError("Detector identifier must be provided")
+    return detector_id
+
+
+def _dump_metadata(metadata: Optional[Union[Mapping[str, Any], str]]) -> Optional[Union[str, Mapping[str, Any]]]:
+    if metadata is None:
+        return None
+    if isinstance(metadata, Mapping):
+        return json.dumps(dict(metadata))
+    return metadata
 
 
 class IntelliOptics:
@@ -638,6 +733,10 @@ class AsyncIntelliOptics:
 class ExperimentalApi:
     """Helper surface for preview and power-user workflows.
 
+    Provides a richer set of helpers for experimental endpoints. When the
+    backing service omits a feature the helpers raise
+    :class:`ExperimentalFeatureUnavailable` rather than exposing partially
+    initialised state.
     The backing API currently exposes a limited set of experimental endpoints. When
     a method is not implemented by the server this class raises
     :class:`ExperimentalFeatureUnavailable` with a descriptive error instead of an
@@ -646,6 +745,66 @@ class ExperimentalApi:
 
     def __init__(
         self,
+        endpoint: str | None = None,
+        api_token: str | None = None,
+        *,
+        disable_tls_verification: bool | None = None,
+        timeout: float = 30.0,
+        sync_client: IntelliOptics | None = None,
+        async_client: AsyncIntelliOptics | None = None,
+    ) -> None:
+        self._sync_client = sync_client
+        self._async_client = async_client
+        self._http: HttpClient | None = None
+        self._async_http: AsyncHttpClient | None = None
+        self._owns_sync_http = False
+
+        if sync_client is None and async_client is None:
+            endpoint = endpoint or os.getenv("INTELLIOPTICS_ENDPOINT")
+            api_token = api_token or os.getenv("INTELLIOPTICS_API_TOKEN")
+            if not api_token:
+                raise ApiTokenError("Missing INTELLIOPTICS_API_TOKEN")
+            if not endpoint:
+                raise IntelliOpticsClientError("Missing INTELLIOPTICS_ENDPOINT")
+
+            verify = not (disable_tls_verification or os.getenv("DISABLE_TLS_VERIFY") == "1")
+            self._http = HttpClient(
+                base_url=endpoint,
+                api_token=api_token,
+                verify=verify,
+                timeout=timeout,
+            )
+            self._owns_sync_http = True
+
+        if async_client is not None:
+            self._async_http = async_client._http
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+    def close(self) -> None:
+        if self._owns_sync_http and self._http is not None:
+            self._http.close()
+
+    def _sync_http(self) -> HttpClient:
+        if self._sync_client is not None:
+            return self._sync_client._http
+        if self._http is not None:
+            return self._http
+        raise IntelliOpticsClientError(
+            "This ExperimentalApi instance is bound to an async client; use the 'a*' coroutine helpers instead."
+        )
+
+    def _async_http_client(self) -> AsyncHttpClient:
+        if self._async_client is not None:
+            return self._async_client._http
+        if self._async_http is not None:
+            return self._async_http
+        raise IntelliOpticsClientError(
+            "This ExperimentalApi instance is bound to a sync client; use the synchronous helpers."
+        )
+
+    def _sync_client_required(self) -> IntelliOptics:
         *,
         sync_client: IntelliOptics | None = None,
         async_client: AsyncIntelliOptics | None = None,
@@ -665,6 +824,340 @@ class ExperimentalApi:
             )
         return self._sync_client
 
+    def _ensure_actions_payload(self, actions: Any) -> Optional[list[Dict[str, Any]]]:
+        normalized = _normalize_action_list(actions)
+        if not normalized:
+            return None
+        return [_serialize_model(action) for action in normalized]
+
+    def _ensure_webhook_payload(self, webhook_actions: Any) -> Optional[list[Dict[str, Any]]]:
+        normalized = _normalize_webhook_list(webhook_actions)
+        if not normalized:
+            return None
+        return [_serialize_model(action) for action in normalized]
+
+    def _build_alert_payload(
+        self,
+        detector: Union[Detector, str],
+        name: str,
+        condition: Condition | Mapping[str, Any],
+        *,
+        actions: Any = None,
+        webhook_actions: Any = None,
+        enabled: bool = True,
+        snooze_time_enabled: bool = False,
+        snooze_time_value: int = 3600,
+        snooze_time_unit: str = "SECONDS",
+        human_review_required: bool = False,
+    ) -> tuple[str, Dict[str, Any]]:
+        detector_id = _detector_identifier(detector)
+        condition_model = _ensure_condition(condition)
+
+        actions_payload = self._ensure_actions_payload(actions)
+        webhook_payload = self._ensure_webhook_payload(webhook_actions)
+
+        if not actions_payload and not webhook_payload:
+            raise ValueError("Provide at least one action or webhook action for the alert")
+
+        payload: Dict[str, Any] = {
+            "name": name,
+            "condition": _serialize_model(condition_model),
+            "enabled": enabled,
+            "snooze_time_enabled": snooze_time_enabled,
+            "snooze_time_value": snooze_time_value,
+            "snooze_time_unit": snooze_time_unit.upper(),
+            "human_review_required": human_review_required,
+        }
+
+        if actions_payload is not None:
+            payload["actions"] = actions_payload
+        if webhook_payload is not None:
+            payload["webhook_actions"] = webhook_payload
+
+        return detector_id, payload
+
+    # ------------------------------------------------------------------
+    # Detector helpers
+    # ------------------------------------------------------------------
+    def create_bounding_box_detector(
+        self,
+        name: str,
+        query: str,
+        class_name: str,
+        *,
+        max_num_bboxes: int | None = None,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Optional[Union[Mapping[str, Any], str]] = None,
+    ) -> Detector:
+        payload: Dict[str, Any] = {
+            "name": name,
+            "query": query,
+            "class_name": class_name,
+            "max_num_bboxes": max_num_bboxes,
+            "group_name": group_name,
+            "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "pipeline_config": pipeline_config,
+        }
+
+        serialized_metadata = _dump_metadata(metadata)
+        if serialized_metadata is not None:
+            payload["metadata"] = serialized_metadata
+
+        payload = {key: value for key, value in payload.items() if value is not None}
+        data = self._sync_http().post_json("/v1/detectors/bounding-box", json=payload)
+        return Detector(**data)
+
+    def create_text_recognition_detector(
+        self,
+        name: str,
+        query: str,
+        *,
+        group_name: str | None = None,
+        confidence_threshold: float | None = None,
+        patience_time: float | None = None,
+        pipeline_config: str | None = None,
+        metadata: Optional[Union[Mapping[str, Any], str]] = None,
+    ) -> Detector:
+        payload: Dict[str, Any] = {
+            "name": name,
+            "query": query,
+            "group_name": group_name,
+            "confidence_threshold": confidence_threshold,
+            "patience_time": patience_time,
+            "pipeline_config": pipeline_config,
+        }
+
+        serialized_metadata = _dump_metadata(metadata)
+        if serialized_metadata is not None:
+            payload["metadata"] = serialized_metadata
+
+        payload = {key: value for key, value in payload.items() if value is not None}
+        data = self._sync_http().post_json("/v1/detectors/text-recognition", json=payload)
+        return Detector(**data)
+
+    def update_detector_name(self, detector: Union[Detector, str], name: str) -> None:
+        detector_id = _detector_identifier(detector)
+        self._sync_http().patch_json(f"/v1/detectors/{detector_id}", json={"name": name})
+
+    def reset_detector(self, detector: Union[Detector, str]) -> None:
+        detector_id = _detector_identifier(detector)
+        self._sync_http().post_json(f"/v1/detectors/{detector_id}/reset")
+
+    def download_mlbinary(self, detector: Union[Detector, str], output_dir: str) -> None:
+        detector_id = _detector_identifier(detector)
+        response = self._sync_http().request_raw("GET", f"/v1/detectors/{detector_id}/mlbinary")
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        content = response.content or b""
+        if not content:
+            return
+
+        ctype = response.headers.get("Content-Type", "").lower()
+        if "zip" in ctype or content.startswith(b"PK"):
+            with zipfile.ZipFile(BytesIO(content)) as archive:
+                archive.extractall(output_path)
+            return
+
+        disposition = response.headers.get("Content-Disposition", "")
+        filename = None
+        if "filename=" in disposition:
+            filename = disposition.split("filename=")[-1].strip().strip('"')
+        if not filename:
+            filename = f"{detector_id}.bin"
+
+        file_path = output_path / filename
+        with open(file_path, "wb") as handle:
+            handle.write(content)
+
+    def get_detector_metrics(self, detector: Union[Detector, str]) -> Dict[str, Any]:
+        detector_id = _detector_identifier(detector)
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/metrics")
+        return dict(payload) if isinstance(payload, Mapping) else {"metrics": payload}
+
+    def get_detector_evaluation(self, detector: Union[Detector, str]) -> Dict[str, Any]:
+        detector_id = _detector_identifier(detector)
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/evaluation")
+        return dict(payload) if isinstance(payload, Mapping) else {"evaluation": payload}
+
+    def create_note(
+        self,
+        detector: Union[Detector, str],
+        note: str,
+        image: Optional[Union[str, bytes, IO[bytes]]] = None,
+    ) -> None:
+        detector_id = _detector_identifier(detector)
+        files = None
+        if image is not None:
+            image_bytes = to_jpeg_bytes(image)
+            files = {"image": ("note.jpg", image_bytes, "image/jpeg")}
+
+        data = {"note": note}
+        self._sync_http().post_json(f"/v1/detectors/{detector_id}/notes", data=data, files=files)
+
+    def get_notes(self, detector: Union[Detector, str]) -> Dict[str, Any]:
+        detector_id = _detector_identifier(detector)
+        payload = self._sync_http().get_json(f"/v1/detectors/{detector_id}/notes")
+        return dict(payload) if isinstance(payload, Mapping) else {"notes": payload}
+
+    # ------------------------------------------------------------------
+    # Alert & rule helpers
+    # ------------------------------------------------------------------
+    def create_alert(
+        self,
+        detector: Union[Detector, str],
+        name: str,
+        condition: Condition | Mapping[str, Any],
+        actions: Any | None = None,
+        webhook_actions: Any | None = None,
+        *,
+        enabled: bool = True,
+        snooze_time_enabled: bool = False,
+        snooze_time_value: int = 3600,
+        snooze_time_unit: str = "SECONDS",
+        human_review_required: bool = False,
+    ) -> Rule:
+        detector_id, payload = self._build_alert_payload(
+            detector,
+            name,
+            condition,
+            actions=actions,
+            webhook_actions=webhook_actions,
+            enabled=enabled,
+            snooze_time_enabled=snooze_time_enabled,
+            snooze_time_value=snooze_time_value,
+            snooze_time_unit=snooze_time_unit,
+            human_review_required=human_review_required,
+        )
+
+        data = self._sync_http().post_json(f"/v1/detectors/{detector_id}/alerts", json=payload)
+        return Rule(**data)
+
+    def create_rule(
+        self,
+        detector: Union[Detector, str],
+        rule_name: str,
+        channel: str,
+        recipient: str,
+        *,
+        alert_on: str = "CHANGED_TO",
+        enabled: bool = True,
+        include_image: bool = False,
+        condition_parameters: Optional[Union[str, Mapping[str, Any]]] = None,
+        snooze_time_enabled: bool = False,
+        snooze_time_value: int = 3600,
+        snooze_time_unit: str = "SECONDS",
+        human_review_required: bool = False,
+    ) -> Rule:
+        if condition_parameters is None:
+            parameters: Mapping[str, Any] = {}
+        elif isinstance(condition_parameters, str):
+            parameters = json.loads(condition_parameters)
+        elif isinstance(condition_parameters, Mapping):
+            parameters = condition_parameters
+        else:
+            raise TypeError("condition_parameters must be a mapping or JSON string")
+
+        condition = Condition(verb=alert_on, parameters=dict(parameters))
+        action = self.make_action(channel, recipient, include_image)
+        return self.create_alert(
+            detector,
+            rule_name,
+            condition,
+            actions=[action],
+            enabled=enabled,
+            snooze_time_enabled=snooze_time_enabled,
+            snooze_time_value=snooze_time_value,
+            snooze_time_unit=snooze_time_unit,
+            human_review_required=human_review_required,
+        )
+
+    def list_rules(self, page: int = 1, page_size: int = 10) -> PaginatedRuleList:
+        params = {"page": page, "page_size": page_size}
+        payload = self._sync_http().get_json("/v1/rules", params=params)
+        return PaginatedRuleList(**payload)
+
+    def get_rule(self, action_id: int) -> Rule:
+        payload = self._sync_http().get_json(f"/v1/rules/{action_id}")
+        return Rule(**payload)
+
+    def delete_rule(self, action_id: int) -> None:
+        self._sync_http().delete(f"/v1/rules/{action_id}")
+
+    def delete_all_rules(self, detector: Union[Detector, str] | None = None) -> int:
+        params = None
+        if detector is not None:
+            params = {"detector_id": _detector_identifier(detector)}
+        payload = self._sync_http().delete("/v1/rules", params=params)
+        if isinstance(payload, Mapping):
+            for key in ("deleted", "count", "removed"):
+                value = payload.get(key)
+                if isinstance(value, int):
+                    return value
+        if isinstance(payload, int):
+            return payload
+        return 0
+
+    def make_action(self, channel: str, recipient: str, include_image: bool) -> Action:
+        return Action(channel=channel.upper(), recipient=recipient, include_image=bool(include_image))
+
+    def make_condition(self, verb: str, parameters: Mapping[str, Any]) -> Condition:
+        return Condition(verb=verb, parameters=dict(parameters))
+
+    def make_payload_template(self, template: str, headers: Optional[Dict[str, str]] = None) -> PayloadTemplate:
+        return PayloadTemplate(template=template, headers=headers)
+
+    def make_webhook_action(
+        self,
+        url: str,
+        include_image: bool,
+        payload_template: PayloadTemplate | Mapping[str, Any] | None = None,
+    ) -> WebhookAction:
+        template = _ensure_payload_template(payload_template)
+        return WebhookAction(url=url, include_image=include_image, payload_template=template)
+
+    def get_raw_headers(self) -> Dict[str, str]:
+        http = self._sync_http()
+        return dict(http.headers)
+
+    def make_generic_api_request(
+        self,
+        *,
+        endpoint: str,
+        method: str,
+        headers: Optional[Dict[str, str]] = None,
+        body: Optional[Dict[str, Any]] = None,
+        files: Any = None,
+    ) -> HTTPResponse:
+        if not endpoint.startswith("/"):
+            raise ValueError("endpoint must start with '/' and be relative to the API base")
+
+        request_kwargs: Dict[str, Any] = {}
+        if files is not None:
+            request_kwargs["files"] = files
+            if body is not None:
+                request_kwargs["data"] = body
+        elif body is not None:
+            request_kwargs["json"] = body
+
+        response = self._sync_http().request_raw(method.upper(), endpoint, headers=headers, **request_kwargs)
+        content_type = response.headers.get("Content-Type", "").lower()
+        if "json" in content_type:
+            parsed_body: Any = response.json()
+        elif "text" in content_type or "xml" in content_type or "html" in content_type:
+            parsed_body = response.text
+        else:
+            parsed_body = response.content
+
+        return HTTPResponse(status_code=response.status_code, headers=dict(response.headers), body=parsed_body)
+
+    # ------------------------------------------------------------------
+    # Bridged helpers to the core client
+    # ------------------------------------------------------------------
     def list_image_queries(
         self,
         *,
@@ -673,6 +1166,7 @@ class ExperimentalApi:
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
     ) -> list[ImageQuery]:
+        client = self._sync_client_required()
         client = self._require_sync()
         return client.list_image_queries(
             detector_id=detector_id,
@@ -682,6 +1176,9 @@ class ExperimentalApi:
         )
 
     def delete_image_query(self, image_query_id: str) -> None:
+        client = self._sync_client_required()
+        client.delete_image_query(image_query_id)
+
         client = self._require_sync()
         client.delete_image_query(image_query_id)
 
@@ -703,6 +1200,15 @@ class ExperimentalApi:
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
     ) -> list[ImageQuery]:
+        http = self._async_http_client()
+        params = {"detector_id": detector_id, "status": status, "limit": limit, "cursor": cursor}
+        params = {key: value for key, value in params.items() if value is not None}
+        payload = await http.get_json("/v1/image-queries", params=params or None)
+        return [ImageQuery(**_normalize_image_query_payload(item)) for item in _coerce_image_query_items(payload)]
+
+    async def adelete_image_query(self, image_query_id: str) -> None:
+        http = self._async_http_client()
+        await http.delete(f"/v1/image-queries/{image_query_id}")
         client = self._require_async()
         return await client.list_image_queries(
             detector_id=detector_id,

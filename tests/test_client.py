@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import asyncio
+from pathlib import Path
 from typing import Any, Dict
 from unittest.mock import AsyncMock, Mock
 
@@ -10,7 +11,19 @@ import pytest
 from intellioptics import AsyncIntelliOptics, ExperimentalApi
 from intellioptics.client import IntelliOptics
 from intellioptics.errors import ApiTokenError, ExperimentalFeatureUnavailable
+from intellioptics.models import (
+    Action,
+    Condition,
+    Detector,
+    FeedbackIn,
+    ImageQuery,
+    QueryResult,
+    Rule,
+    UserIdentity,
+)
+
 from intellioptics.models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
+
 
 
 def test_init_requires_api_token(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -271,6 +284,130 @@ def test_experimental_unknown_method_raises() -> None:
 
     with pytest.raises(ExperimentalFeatureUnavailable):
         client.experimental.create_detector_group()  # type: ignore[attr-defined]
+
+
+def test_experimental_create_alert_builds_payload() -> None:
+    client = _make_client()
+    condition = Condition(verb="CHANGED_TO", parameters={"label": "YES"})
+    action = Action(channel="EMAIL", recipient="ops@example.com", include_image=True)
+    serialize_condition = getattr(condition, "model_dump", condition.dict)
+    serialize_action = getattr(action, "model_dump", action.dict)
+
+    client._http.post_json.return_value = {
+        "id": 1,
+        "detector_id": "det-1",
+        "detector_name": "Door",
+        "name": "Door alert",
+        "enabled": True,
+        "snooze_time_enabled": False,
+        "snooze_time_value": 3600,
+        "snooze_time_unit": "SECONDS",
+        "human_review_required": False,
+        "condition": serialize_condition(),
+        "action": serialize_action(),
+        "webhook_action": None,
+    }
+
+    rule = client.experimental.create_alert(
+        "det-1",
+        "Door alert",
+        condition,
+        actions=[action],
+    )
+
+    assert isinstance(rule, Rule)
+    call = client._http.post_json.call_args
+    assert call.args == ("/v1/detectors/det-1/alerts",)
+    payload = call.kwargs["json"]
+    assert payload["name"] == "Door alert"
+    assert payload["condition"]["verb"] == "CHANGED_TO"
+    assert payload["actions"][0]["channel"] == "EMAIL"
+
+
+def test_experimental_create_rule_parses_parameters() -> None:
+    client = _make_client()
+    client._http.post_json.return_value = {
+        "id": 2,
+        "detector_id": "det-9",
+        "detector_name": "Detector",
+        "name": "My rule",
+        "enabled": True,
+        "snooze_time_enabled": False,
+        "snooze_time_value": 3600,
+        "snooze_time_unit": "SECONDS",
+        "human_review_required": False,
+        "condition": {"verb": "CHANGED_TO", "parameters": {"label": "YES"}},
+        "action": {"channel": "EMAIL", "recipient": "ops@example.com", "include_image": False},
+        "webhook_action": None,
+    }
+
+    client.experimental.create_rule(
+        "det-9",
+        "My rule",
+        "email",
+        "ops@example.com",
+        condition_parameters='{"label": "YES"}',
+    )
+
+    payload = client._http.post_json.call_args.kwargs["json"]
+    assert payload["condition"]["parameters"]["label"] == "YES"
+    assert payload["actions"][0]["channel"] == "EMAIL"
+
+
+def test_experimental_create_note_attaches_image(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _make_client()
+    monkeypatch.setattr("intellioptics.client.to_jpeg_bytes", lambda _: b"img-bytes")
+
+    client.experimental.create_note("det-1", "Review this", image=b"raw")
+
+    call = client._http.post_json.call_args
+    assert call.args == ("/v1/detectors/det-1/notes",)
+    files = call.kwargs["files"]
+    assert files["image"][0] == "note.jpg"
+    assert files["image"][1] == b"img-bytes"
+    assert call.kwargs["data"] == {"note": "Review this"}
+
+
+def test_experimental_delete_all_rules_returns_count() -> None:
+    client = _make_client()
+    client._http.delete.return_value = {"deleted": 5}
+
+    assert client.experimental.delete_all_rules("det-1") == 5
+    client._http.delete.assert_called_once_with("/v1/rules", params={"detector_id": "det-1"})
+
+
+def test_experimental_make_generic_api_request_parses_json() -> None:
+    client = _make_client()
+    response = Mock()
+    response.status_code = 202
+    response.headers = {"Content-Type": "application/json"}
+    response.json.return_value = {"ok": True}
+    client._http.request_raw.return_value = response
+
+    result = client.experimental.make_generic_api_request(
+        endpoint="/v1/ping", method="post", body={"hello": "world"}
+    )
+
+    assert result.status_code == 202
+    assert result.body == {"ok": True}
+    client._http.request_raw.assert_called_once_with(
+        "POST", "/v1/ping", headers=None, json={"hello": "world"}
+    )
+
+
+def test_experimental_download_mlbinary_writes_file(tmp_path: Path) -> None:
+    client = _make_client()
+    response = Mock()
+    response.content = b"binary-data"
+    response.headers = {"Content-Type": "application/octet-stream", "Content-Disposition": 'attachment; filename="model.bin"'}
+    client._http.request_raw.return_value = response
+
+    output_dir = tmp_path / "mlbinary"
+    client.experimental.download_mlbinary("det-5", str(output_dir))
+
+    saved = output_dir.joinpath("model.bin")
+    assert saved.exists()
+    assert saved.read_bytes() == b"binary-data"
 
 
 def test_async_submit_image_query_uses_async_http() -> None:
