@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class DetectorOutMode(str, Enum):
     BINARY = "binary"
     COUNT = "count"
