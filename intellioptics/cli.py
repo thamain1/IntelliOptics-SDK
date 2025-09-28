@@ -11,6 +11,7 @@ def _client():
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
         api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
         api_token=api_token,
+
     )
 
 @app.command()
