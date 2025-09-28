@@ -15,7 +15,4 @@ class Answer:
 class Detector:
     id: str
     name: str
-    mode: Literal["binary", "count", "custom"]
-    query_text: str
-    threshold: float
-    status: str = "active"
+    labels: list[str]
