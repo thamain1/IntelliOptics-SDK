@@ -1,118 +1,30 @@
+from __future__ import annotations
 
 import json
-
-from typer.testing import CliRunner
-
-from intellioptics.cli import app
-from intellioptics.models import UserIdentity
-
-
-def test_cli_whoami_prints_json(monkeypatch):
-    runner = CliRunner()
-
-    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://api.example.com")
-    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "token")
-
-    class DummyClient:
-        def whoami(self):
-            return UserIdentity(
-                id="user-123",
-                email="user@example.com",
-                name="Example User",
-                tenant="tenant-456",
-                roles=["admin"],
-            )
-
-    monkeypatch.setattr("intellioptics.cli.IntelliOptics", lambda **_: DummyClient())
-
-    result = runner.invoke(app, ["whoami"])
-
-    assert result.exit_code == 0, result.stdout
-    parsed = json.loads(result.stdout)
-    assert parsed["email"] == "user@example.com"
-
-import json
+from typing import Any
 
 import pytest
+import typer
+from typer.testing import CliRunner
 
-try:  # pragma: no cover - optional dependency guard for test environments
-    from typer.testing import CliRunner
-except ModuleNotFoundError:  # pragma: no cover
-    CliRunner = None  # type: ignore
-
-try:  # pragma: no cover
-    from intellioptics.cli import app
-except ModuleNotFoundError as exc:  # pragma: no cover
-    if exc.name == "typer":
-        app = None  # type: ignore
-    else:
-        raise
-
+from intellioptics import cli
 from intellioptics.models import UserIdentity
 
 
-@pytest.mark.skipif(CliRunner is None or app is None, reason="typer is not installed")
-def test_whoami_command_outputs_json(monkeypatch):
-    runner = CliRunner()
-
-    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://example.com")
-    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "secret-token")
-
-    class FakeClient:
-        def whoami(self):
-            return UserIdentity(id="user-123", email="user@example.com")
-
-    monkeypatch.setattr("intellioptics.cli._client", lambda: FakeClient())
-
-    result = runner.invoke(app, ["whoami"])
-
-    assert result.exit_code == 0
-    parsed = json.loads(result.stdout)
-    assert parsed["id"] == "user-123"
-    assert parsed["email"] == "user@example.com"
-
-import sys
-import types
-
-try:  # pragma: no cover - environment setup for tests
-    import typer  # type: ignore  # noqa: F401
-except ModuleNotFoundError:  # pragma: no cover - fallback used in tests
-    class _StubTyperApp:
-import json
-import importlib
-import sys
-import types
-
-try:  # pragma: no cover - executed when Typer is installed
-    import typer  # type: ignore # noqa: F401
-except ModuleNotFoundError:  # pragma: no cover - executed when Typer is missing
-    typer_stub = types.ModuleType("typer")
-
-    class _DummyTyper:  # pragma: no cover - executed in tests
-        def __init__(self, **kwargs):
-            pass
-
-        def command(self, *args, **kwargs):
-            def decorator(func):
-                return func
-
-            return decorator
-
-    sys.modules["typer"] = types.SimpleNamespace(Typer=lambda **kwargs: _StubTyperApp())
-
-from intellioptics import cli
-from intellioptics.client import IntelliOptics
+@pytest.fixture()
+def runner() -> CliRunner:
+    return CliRunner()
 
 
-def test_cli_prefers_documented_token(monkeypatch):
+def test_client_prefers_documented_token(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://api.example.com")
     monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "documented-token")
     monkeypatch.setenv("INTELLIOOPTICS_API_TOKEN", "legacy-token")
 
-    captured = {}
+    captured: dict[str, Any] = {}
 
     class DummyClient:
-        def __init__(self, endpoint=None, api_token=None, **kwargs):
+        def __init__(self, endpoint: str | None = None, api_token: str | None = None, **_: Any) -> None:
             captured["endpoint"] = endpoint
             captured["api_token"] = api_token
 
@@ -125,113 +37,43 @@ def test_cli_prefers_documented_token(monkeypatch):
     assert captured["api_token"] == "documented-token"
 
 
-def test_cli_initializes_with_documented_token(monkeypatch):
-    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://api.example.com")
-    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "documented-token")
+def test_client_requires_token(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
     monkeypatch.delenv("INTELLIOOPTICS_API_TOKEN", raising=False)
 
-    client = cli._client()
+    with pytest.raises(typer.Exit) as exc:
+        cli._client()
 
-    assert isinstance(client, IntelliOptics)
-
-    typer_stub.Typer = _DummyTyper  # type: ignore[attr-defined]
-    sys.modules.setdefault("typer", typer_stub)
-
-cli = importlib.import_module("intellioptics.cli")
-whoami = cli.whoami
-from intellioptics.models import UserIdentity
-
-import sys
-import types
+    assert exc.value.exit_code == 1
 
 
-class _TyperApp:
-    def __init__(self, *args, **kwargs):
-        pass
+@pytest.mark.usefixtures("runner")
+def test_whoami_command_outputs_json(monkeypatch: pytest.MonkeyPatch, runner: CliRunner) -> None:
+    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://api.example.com")
+    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "token")
 
-    def command(self, *args, **kwargs):
-        def decorator(func):
-            return func
-
-        return decorator
-
-
-typer_stub = types.ModuleType("typer")
-typer_stub.Typer = _TyperApp
-sys.modules.setdefault("typer", typer_stub)
-
-from intellioptics.cli import whoami  # noqa: E402
-from intellioptics.models import UserIdentity  # noqa: E402
-
-
-def test_whoami_outputs_json(monkeypatch, capsys):
-    identity = UserIdentity(
-        id="user-123",
-        email="user@example.com",
-        name="Example User",
-        tenant="tenant-789",
-        roles=["admin", "user"],
-    )
-
+    identity = UserIdentity(id="user-123", email="user@example.com", roles=["admin"])
 
     class DummyClient:
-        def whoami(self):
+        def whoami(self) -> UserIdentity:
             return identity
 
-    monkeypatch.setattr("intellioptics.cli._client", lambda: DummyClient())
+    monkeypatch.setattr(cli, "_client", lambda: DummyClient())
 
-    class FakeClient:
-        def whoami(self):
-            return identity
+    result = runner.invoke(cli.app, ["whoami"])
 
-    monkeypatch.setattr("intellioptics.cli._client", lambda: FakeClient())
-
-    whoami()
-
-    captured = capsys.readouterr()
-
-    data = json.loads(captured.out)
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
     serializer = getattr(identity, "model_dump", identity.dict)
-    assert data == serializer()
-
-    output = json.loads(captured.out)
-    assert output["id"] == identity.id
-    assert output["email"] == identity.email
-    assert output["roles"] == identity.roles
-
-import pytest
-
-pytest.importorskip("typer")
-from typer.testing import CliRunner
-
-from intellioptics import cli
-from intellioptics.errors import ApiTokenError
+    assert payload == serializer()
 
 
-def test_cli_whoami_requires_api_token(monkeypatch):
-    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
-    runner = CliRunner()
+@pytest.mark.usefixtures("runner")
+def test_status_command_reports_endpoint(monkeypatch: pytest.MonkeyPatch, runner: CliRunner) -> None:
+    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://api.example.com")
 
-    result = runner.invoke(
-        cli.app,
-        ["whoami"],
-        env={"INTELLIOPTICS_ENDPOINT": "https://api.example.com"},
-    )
+    result = runner.invoke(cli.app, ["status"])
 
-    assert result.exit_code != 0
-    assert isinstance(result.exception, ApiTokenError)
-    assert "INTELLIOPTICS_API_TOKEN" in str(result.exception)
-from typer.testing import CliRunner
-
-from intellioptics.cli import app
-
-
-def test_whoami_requires_api_token(monkeypatch):
-    runner = CliRunner()
-    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
-
-    result = runner.invoke(app, ["whoami"])
-
-    assert result.exit_code == 1
-    assert "INTELLIOPTICS_API_TOKEN environment variable is required" in result.output
-    assert "Traceback" not in result.output
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload == {"ok": True, "endpoint": "https://api.example.com"}
