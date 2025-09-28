@@ -1,46 +1,22 @@
-from __future__ import annotations
-
-import base64
 import asyncio
-from pathlib import Path
-from typing import Any, Dict
+import base64
+from typing import Any
 from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from intellioptics import AsyncIntelliOptics, ExperimentalApi
-from intellioptics.client import IntelliOptics
-from intellioptics.errors import ApiTokenError, ExperimentalFeatureUnavailable
+from intellioptics import AsyncIntelliOptics, ExperimentalApi, IntelliOptics
+from intellioptics.errors import ApiTokenError
 from intellioptics.models import (
-    Action,
-    Condition,
+    ChannelEnum,
     Detector,
-    FeedbackIn,
     ImageQuery,
+    ModeEnum,
+    PaginatedDetectorList,
+    PaginatedImageQueryList,
     QueryResult,
-    Rule,
-    UserIdentity,
+    ROI,
 )
-
-from intellioptics.models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
-
-
-
-def test_init_requires_api_token(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
-
-    with pytest.raises(ApiTokenError):
-        IntelliOptics(endpoint="https://api.example.com")
-
-
-def test_init_uses_environment_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("INTELLIOPTICS_ENDPOINT", "https://example.invalid")
-    monkeypatch.setenv("INTELLIOPTICS_API_TOKEN", "env-token")
-
-    client = IntelliOptics()
-
-    assert client._http.base == "https://example.invalid"  # type: ignore[attr-defined]
-    assert client._http.headers["Authorization"] == "Bearer env-token"  # type: ignore[index]
 
 
 def _make_client() -> IntelliOptics:
@@ -55,129 +31,136 @@ def _make_async_client() -> tuple[AsyncIntelliOptics, Any]:
     http.post_json = AsyncMock()
     http.get_json = AsyncMock()
     http.delete = AsyncMock()
+    http.request_raw = AsyncMock()
     client._http = http  # type: ignore[attr-defined]
     client.experimental = ExperimentalApi(async_client=client)
     return client, http
 
 
+def test_init_requires_api_token(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)
+
+    with pytest.raises(ApiTokenError):
+        IntelliOptics(endpoint="https://api.example.com")
+
+
 def test_create_detector_builds_payload() -> None:
     client = _make_client()
-    response = {
+    client._http.post_json.return_value = {
         "id": "det-123",
         "name": "Inspector",
-        "mode": "binary",
-        "query_text": "Is it OK?",
-        "threshold": 0.8,
-        "status": "active",
+        "query": "Is it OK?",
+        "mode": "BINARY",
     }
-    client._http.post_json.return_value = response
 
-    detector = client.create_detector("Inspector", mode="binary", query_text="Is it OK?", threshold=0.8)
-
-    client._http.post_json.assert_called_once_with(
-        "/v1/detectors",
-        json={
-            "name": "Inspector",
-            "mode": "binary",
-            "query_text": "Is it OK?",
-            "threshold": 0.8,
-        },
+    detector = client.create_detector(
+        "Inspector",
+        "Is it OK?",
+        mode=ModeEnum.BINARY,
+        confidence_threshold=0.8,
+        metadata={"team": "qa"},
     )
-    assert detector == Detector(**response)
+
+    client._http.post_json.assert_called_once()
+    args, kwargs = client._http.post_json.call_args
+    assert args == ("/v1/detectors",)
+    assert kwargs["json"]["name"] == "Inspector"
+    assert kwargs["json"]["mode"] == "BINARY"
+    assert kwargs["json"]["metadata"] == "{\"team\": \"qa\"}"
+    assert detector.id == "det-123"
 
 
-def test_list_detectors_handles_items_key() -> None:
+def test_list_detectors_returns_paginated_list() -> None:
     client = _make_client()
     client._http.get_json.return_value = {
-        "items": [
-            {"id": "det-1", "name": "A"},
-            {"id": "det-2", "name": "B"},
-        ]
+        "count": 2,
+        "next": None,
+        "previous": None,
+        "results": [
+            {"id": "det-1", "name": "A", "query": "foo", "mode": "BINARY"},
+            {"id": "det-2", "name": "B", "query": "bar", "mode": "BINARY"},
+        ],
     }
 
     detectors = client.list_detectors()
 
-    assert [d.id for d in detectors] == ["det-1", "det-2"]
+    assert isinstance(detectors, PaginatedDetectorList)
+    assert [d.id for d in detectors.results] == ["det-1", "det-2"]
 
 
-def test_submit_image_query_form_fields() -> None:
+def test_submit_image_query_includes_optional_fields() -> None:
     client = _make_client()
-    client._http.post_json.return_value = {"id": "iq-123", "status": "PENDING", "detector_id": "det-1"}
+    client._http.post_json.return_value = {"id": "iq-1", "status": "PENDING", "detector_id": "det-1"}
 
-    image_bytes = b"jpeg"
-    result = client.submit_image_query(detector="det-1", image=image_bytes, wait=False)
+    result = client.submit_image_query(
+        detector="det-1",
+        image=b"jpeg-bytes",
+        wait=0.0,
+        patience_time=45.0,
+        confidence_threshold=0.9,
+        human_review="ALWAYS",
+        metadata={"source": "field"},
+        inspection_id="insp-7",
+        image_query_id="iq-custom",
+        want_async=True,
+        request_timeout=60.0,
+    )
 
     assert isinstance(result, ImageQuery)
     call = client._http.post_json.call_args
-    assert call.args == ("/v1/image-queries",)
-    assert call.kwargs["data"] == {"detector_id": "det-1", "wait": "false"}
-    filename, payload, content_type = call.kwargs["files"]["image"]
-    assert filename == "image.jpg"
-    assert payload == image_bytes
-    assert content_type == "image/jpeg"
-
-
-def test_submit_image_query_serializes_optional_fields() -> None:
-    client = _make_client()
-    client._http.post_json.return_value = {"id": "iq-777", "status": "PENDING"}
-
-    result = client.submit_image_query(
-        detector="det-9",
-        prompt="Check the weld",
-        wait=2.5,
-        confidence_threshold=0.85,
-        metadata={"source": "field"},
-        inspection_id="insp-42",
-    )
-
-    call = client._http.post_json.call_args
     form = call.kwargs["data"]
-    assert form["prompt"] == "Check the weld"
-    assert form["wait"] == 2.5
-    assert form["confidence_threshold"] == 0.85
-    assert form["inspection_id"] == "insp-42"
+    assert form["wait"] == 0.0
+    assert form["patience_time"] == 45.0
+    assert form["confidence_threshold"] == 0.9
+    assert form["human_review"] == "ALWAYS"
     assert form["metadata"] == "{\"source\": \"field\"}"
-    assert result.id == "iq-777"
+    assert form["inspection_id"] == "insp-7"
+    assert form["image_query_id"] == "iq-custom"
+    assert form["want_async"] == "true"
 
 
 def test_submit_image_query_json_payload() -> None:
     client = _make_client()
-    client._http.post_json.return_value = {"id": "iq-456", "status": "PENDING"}
+    client._http.post_json.return_value = {"id": "iq-456", "status": "PENDING", "detector_id": "det-2"}
     encoded = base64.b64encode(b"jpeg").decode()
 
-    result = client.submit_image_query_json(detector="det-2", image=encoded, wait=True)
+    client.submit_image_query_json(
+        detector="det-2",
+        image=encoded,
+        wait=1.5,
+        confidence_threshold=0.75,
+        patience_time=20.0,
+        human_review="DEFAULT",
+        inspection_id="insp-9",
+    )
 
     call = client._http.post_json.call_args
-    assert call.args == ("/v1/image-queries-json",)
-    assert call.kwargs["json"] == {"detector_id": "det-2", "image": encoded, "wait": True}
-    assert isinstance(result, ImageQuery)
+    payload = call.kwargs["json"]
+    assert payload["detector_id"] == "det-2"
+    assert payload["wait"] == 1.5
+    assert payload["confidence_threshold"] == 0.75
+    assert payload["patience_time"] == 20.0
+    assert payload["human_review"] == "DEFAULT"
 
 
-def test_submit_image_query_normalizes_legacy_payload() -> None:
+def test_submit_image_query_defaults_match_docs() -> None:
     client = _make_client()
-    client._http.post_json.return_value = {
-        "image_query_id": "iq-legacy",
-        "answer": "YES",
-        "confidence": 0.93,
-        "latency_ms": 410,
-        "model_version": "demo-v1",
-    }
+    client._http.post_json.return_value = {"id": "iq-default", "status": "PENDING", "detector_id": "det-1"}
 
-    query = client.submit_image_query(detector="det-legacy")
+    client.submit_image_query(detector="det-1", image=b"jpeg-bytes")
 
-    assert query.id == "iq-legacy"
-    assert query.status == "DONE"
-    assert query.label == "YES"
-    assert query.extra == {"latency_ms": 410, "model_version": "demo-v1"}
+    form = client._http.post_json.call_args.kwargs["data"]
+    assert form["wait"] == 30.0
+    assert "patience_time" not in form
 
 
-def test_get_result_normalizes_structured_payload() -> None:
+def test_get_result_normalizes_payload() -> None:
     client = _make_client()
     client._http.get_json.return_value = {
         "id": "iq-789",
         "status": "PROCESSING",
         "detector_id": "det-1",
-        "result_type": "binary",
+        "result_type": "BINARY",
         "result": {"label": "NO", "confidence": 0.55, "count": 2},
     }
 
@@ -186,231 +169,64 @@ def test_get_result_normalizes_structured_payload() -> None:
     assert isinstance(result, QueryResult)
     assert result.label == "NO"
     assert result.confidence == 0.55
-    assert result.extra == {"count": 2}
+    assert result.extra == {"count": 2, "detector_id": "det-1"}
 
 
-def test_submit_feedback_accepts_kwargs() -> None:
+def test_add_label_serializes_rois() -> None:
     client = _make_client()
-    client._http.post_json.return_value = {}
+    roi = ROI(label="door", top_left=(0.1, 0.2), bottom_right=(0.3, 0.4))
 
-    response = client.submit_feedback(image_query_id="iq-1", correct_label="NO")
+    client.add_label("iq-1", "YES", rois=[roi])
 
-    client._http.post_json.assert_called_once_with(
-        "/v1/feedback",
-        json={"image_query_id": "iq-1", "correct_label": "NO"},
-    )
-    assert response == {}
+    call = client._http.post_json.call_args
+    payload = call.kwargs["json"]
+    assert payload["image_query_id"] == "iq-1"
+    assert payload["label"] == "YES"
+    assert payload["rois"][0]["label"] == "door"
 
 
-def test_submit_feedback_accepts_model() -> None:
+def test_wait_for_confident_result_uses_nested_confidence(monkeypatch: pytest.MonkeyPatch) -> None:
     client = _make_client()
-    client._http.post_json.return_value = {"status": "ok"}
-    feedback = FeedbackIn(image_query_id="iq-2", correct_label="YES")
-
-    response = client.submit_feedback(feedback)
-
-    client._http.post_json.assert_called_once()
-    assert response == {"status": "ok"}
-
-
-def test_submit_feedback_rejects_mixed_inputs() -> None:
-    client = _make_client()
-
-    with pytest.raises(ValueError):
-        client.submit_feedback(FeedbackIn(image_query_id="iq", correct_label="YES"), correct_label="NO")
-
-
-def test_wait_for_confident_result(monkeypatch: pytest.MonkeyPatch) -> None:
-    client = _make_client()
-
     responses = [
-        ImageQuery(id="iq", status="PROCESSING"),
-        ImageQuery(id="iq", status="DONE", confidence=0.95),
+        {"id": "iq", "status": "PROCESSING", "result": {"confidence": 0.5}},
+        {"id": "iq", "status": "DONE", "result": {"confidence": 0.95}},
     ]
+    client._http.get_json.side_effect = responses
 
-    def fake_get_image_query(image_query_id: str) -> ImageQuery:
-        return responses.pop(0)
-
-    monkeypatch.setattr(client, "get_image_query", fake_get_image_query)
-    monkeypatch.setattr("intellioptics.client.time.sleep", lambda _: None)
-
-    result = client.wait_for_confident_result("iq", timeout_sec=5, poll_interval=0)
+    result = client.wait_for_confident_result("iq", confidence_threshold=0.9, timeout_sec=5, poll_interval=0)
 
     assert isinstance(result, ImageQuery)
-    assert result.status == "DONE"
-    assert result.confidence == 0.95
+    assert result.result.confidence == 0.95  # type: ignore[union-attr]
 
 
-def test_whoami_returns_identity(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ask_ml_uses_documented_wait_default() -> None:
     client = _make_client()
-    identity_payload: Dict[str, Any] = {
-        "id": "user-123",
-        "email": "user@example.com",
-        "name": "Example User",
-        "tenant": "tenant-789",
-        "roles": ["admin", "user"],
-    }
-    client._http.get_json.return_value = identity_payload
+    expected = ImageQuery(id="iq-ml")
+    client.submit_image_query = Mock(return_value=expected)
 
-    identity = client.whoami()
+    result = client.ask_ml("det-1", b"jpeg")
 
-    assert isinstance(identity, UserIdentity)
-    serializer = getattr(identity, "model_dump", identity.dict)
-    assert serializer() == identity_payload
+    assert result is expected
+    kwargs = client.submit_image_query.call_args.kwargs
+    assert kwargs["wait"] == 30.0
 
 
-def test_list_image_queries_returns_models() -> None:
+def test_ask_confident_defaults_to_documented_wait() -> None:
     client = _make_client()
-    client._http.get_json.return_value = {"items": [{"id": "iq-1", "status": "PENDING"}]}
+    query = ImageQuery(id="iq-conf")
+    client.submit_image_query = Mock(return_value=query)
+    client.wait_for_confident_result = Mock(return_value=query)
 
-    queries = client.list_image_queries()
+    result = client.ask_confident("det-1", b"jpeg")
 
-    assert len(queries) == 1
-    assert isinstance(queries[0], ImageQuery)
-
-
-def test_ask_async_aliases_submit(monkeypatch: pytest.MonkeyPatch) -> None:
-    client = _make_client()
-    monkeypatch.setattr(client, "submit_image_query", Mock(return_value="ok"))
-
-    result = client.ask_async("det-1", b"img")
-
-    assert result == "ok"
-    client.submit_image_query.assert_called_once()
+    assert result is query
+    submit_kwargs = client.submit_image_query.call_args.kwargs
+    assert submit_kwargs["wait"] == 30.0
+    wait_kwargs = client.wait_for_confident_result.call_args.kwargs
+    assert wait_kwargs["timeout_sec"] == 30.0
 
 
-def test_experimental_unknown_method_raises() -> None:
-    client = _make_client()
-
-    with pytest.raises(ExperimentalFeatureUnavailable):
-        client.experimental.create_detector_group()  # type: ignore[attr-defined]
-
-
-def test_experimental_create_alert_builds_payload() -> None:
-    client = _make_client()
-    condition = Condition(verb="CHANGED_TO", parameters={"label": "YES"})
-    action = Action(channel="EMAIL", recipient="ops@example.com", include_image=True)
-    serialize_condition = getattr(condition, "model_dump", condition.dict)
-    serialize_action = getattr(action, "model_dump", action.dict)
-
-    client._http.post_json.return_value = {
-        "id": 1,
-        "detector_id": "det-1",
-        "detector_name": "Door",
-        "name": "Door alert",
-        "enabled": True,
-        "snooze_time_enabled": False,
-        "snooze_time_value": 3600,
-        "snooze_time_unit": "SECONDS",
-        "human_review_required": False,
-        "condition": serialize_condition(),
-        "action": serialize_action(),
-        "webhook_action": None,
-    }
-
-    rule = client.experimental.create_alert(
-        "det-1",
-        "Door alert",
-        condition,
-        actions=[action],
-    )
-
-    assert isinstance(rule, Rule)
-    call = client._http.post_json.call_args
-    assert call.args == ("/v1/detectors/det-1/alerts",)
-    payload = call.kwargs["json"]
-    assert payload["name"] == "Door alert"
-    assert payload["condition"]["verb"] == "CHANGED_TO"
-    assert payload["actions"][0]["channel"] == "EMAIL"
-
-
-def test_experimental_create_rule_parses_parameters() -> None:
-    client = _make_client()
-    client._http.post_json.return_value = {
-        "id": 2,
-        "detector_id": "det-9",
-        "detector_name": "Detector",
-        "name": "My rule",
-        "enabled": True,
-        "snooze_time_enabled": False,
-        "snooze_time_value": 3600,
-        "snooze_time_unit": "SECONDS",
-        "human_review_required": False,
-        "condition": {"verb": "CHANGED_TO", "parameters": {"label": "YES"}},
-        "action": {"channel": "EMAIL", "recipient": "ops@example.com", "include_image": False},
-        "webhook_action": None,
-    }
-
-    client.experimental.create_rule(
-        "det-9",
-        "My rule",
-        "email",
-        "ops@example.com",
-        condition_parameters='{"label": "YES"}',
-    )
-
-    payload = client._http.post_json.call_args.kwargs["json"]
-    assert payload["condition"]["parameters"]["label"] == "YES"
-    assert payload["actions"][0]["channel"] == "EMAIL"
-
-
-def test_experimental_create_note_attaches_image(monkeypatch: pytest.MonkeyPatch) -> None:
-    client = _make_client()
-    monkeypatch.setattr("intellioptics.client.to_jpeg_bytes", lambda _: b"img-bytes")
-
-    client.experimental.create_note("det-1", "Review this", image=b"raw")
-
-    call = client._http.post_json.call_args
-    assert call.args == ("/v1/detectors/det-1/notes",)
-    files = call.kwargs["files"]
-    assert files["image"][0] == "note.jpg"
-    assert files["image"][1] == b"img-bytes"
-    assert call.kwargs["data"] == {"note": "Review this"}
-
-
-def test_experimental_delete_all_rules_returns_count() -> None:
-    client = _make_client()
-    client._http.delete.return_value = {"deleted": 5}
-
-    assert client.experimental.delete_all_rules("det-1") == 5
-    client._http.delete.assert_called_once_with("/v1/rules", params={"detector_id": "det-1"})
-
-
-def test_experimental_make_generic_api_request_parses_json() -> None:
-    client = _make_client()
-    response = Mock()
-    response.status_code = 202
-    response.headers = {"Content-Type": "application/json"}
-    response.json.return_value = {"ok": True}
-    client._http.request_raw.return_value = response
-
-    result = client.experimental.make_generic_api_request(
-        endpoint="/v1/ping", method="post", body={"hello": "world"}
-    )
-
-    assert result.status_code == 202
-    assert result.body == {"ok": True}
-    client._http.request_raw.assert_called_once_with(
-        "POST", "/v1/ping", headers=None, json={"hello": "world"}
-    )
-
-
-def test_experimental_download_mlbinary_writes_file(tmp_path: Path) -> None:
-    client = _make_client()
-    response = Mock()
-    response.content = b"binary-data"
-    response.headers = {"Content-Type": "application/octet-stream", "Content-Disposition": 'attachment; filename="model.bin"'}
-    client._http.request_raw.return_value = response
-
-    output_dir = tmp_path / "mlbinary"
-    client.experimental.download_mlbinary("det-5", str(output_dir))
-
-    saved = output_dir.joinpath("model.bin")
-    assert saved.exists()
-    assert saved.read_bytes() == b"binary-data"
-
-
-def test_async_submit_image_query_uses_async_http() -> None:
+def test_async_submit_image_query_returns_image_query() -> None:
     async def run() -> None:
         client, http = _make_async_client()
         http.post_json.return_value = {"id": "iq-async", "status": "PENDING"}
@@ -423,14 +239,111 @@ def test_async_submit_image_query_uses_async_http() -> None:
     asyncio.run(run())
 
 
-def test_async_list_image_queries_handles_items() -> None:
+def test_async_list_image_queries_returns_paginated() -> None:
     async def run() -> None:
         client, http = _make_async_client()
-        http.get_json.return_value = {"items": [{"id": "iq-1", "status": "DONE"}]}
+        http.get_json.return_value = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [{"id": "iq-1", "status": "DONE", "detector_id": "det-1"}],
+        }
 
-        items = await client.list_image_queries()
+        listing = await client.list_image_queries()
 
-        assert [iq.id for iq in items] == ["iq-1"]
-        http.get_json.assert_awaited_once()
+        assert isinstance(listing, PaginatedImageQueryList)
+        assert [iq.id for iq in listing.results] == ["iq-1"]
 
     asyncio.run(run())
+
+
+def test_experimental_create_bounding_box_detector_uses_helper() -> None:
+    client = _make_client()
+    api = ExperimentalApi(sync_client=client)
+    client._http.post_json.return_value = {
+        "id": "det",
+        "name": "bbox",
+        "query": "Locate",
+        "mode": "BOUNDING_BOX",
+    }
+
+    detector = api.create_bounding_box_detector("bbox", "Locate", "person", max_num_bboxes=3)
+
+    assert isinstance(detector, Detector)
+    call = client._http.post_json.call_args
+    payload = call.kwargs["json"]
+    assert payload["mode"] == "BOUNDING_BOX"
+    assert payload["mode_configuration"]["class_name"] == "person"
+
+
+def test_experimental_create_rule_matches_documentation() -> None:
+    client = _make_client()
+    api = ExperimentalApi(sync_client=client)
+    client._http.post_json.return_value = {
+        "id": 42,
+        "detector_id": "det-1",
+        "detector_name": "Door Detector",
+        "name": "Door Open Alert",
+        "enabled": True,
+        "snooze_time_enabled": False,
+        "snooze_time_value": 1800,
+        "snooze_time_unit": "SECONDS",
+        "human_review_required": False,
+        "condition": {"verb": "CHANGED_TO", "parameters": {"label": "YES"}},
+        "action": {"channel": "EMAIL", "recipient": "alerts@example.com", "include_image": True},
+        "webhook_action": None,
+    }
+
+    rule = api.create_rule(
+        detector="det-1",
+        rule_name="Door Open Alert",
+        channel=ChannelEnum.EMAIL,
+        recipient="alerts@example.com",
+        alert_on="CHANGED_TO",
+        include_image=True,
+        condition_parameters={"label": "YES"},
+        snooze_time_value=1800,
+    )
+
+    call = client._http.post_json.call_args
+    assert call.args[0] == "/v1/detectors/det-1/alerts"
+    payload = call.kwargs["json"]
+    assert payload["name"] == "Door Open Alert"
+    assert payload["condition"]["verb"] == "CHANGED_TO"
+    assert payload["actions"][0]["channel"] == "EMAIL"
+    assert payload["actions"][0]["include_image"] is True
+    assert payload["snooze_time_value"] == 1800
+    assert rule.name == "Door Open Alert"
+    assert rule.action is not None
+
+
+def test_experimental_delete_all_rules_without_detector() -> None:
+    client = _make_client()
+    api = ExperimentalApi(sync_client=client)
+    client._http.delete.return_value = {"deleted": 3}
+
+    deleted = api.delete_all_rules()
+
+    client._http.delete.assert_called_once_with("/v1/rules", params=None)
+    assert deleted == 3
+
+
+def test_make_generic_api_request_accepts_files() -> None:
+    client = _make_client()
+    api = ExperimentalApi(sync_client=client)
+    response = Mock()
+    response.status_code = 200
+    response.headers = {"Content-Type": "application/json"}
+    response.json = Mock(return_value={"ok": True})
+    client._http.request_raw.return_value = response
+
+    result = api.make_generic_api_request(
+        endpoint="/v1/detectors", method="post", files={"image": ("photo.jpg", b"data", "image/jpeg")}
+    )
+
+    client._http.request_raw.assert_called_once()
+    kwargs = client._http.request_raw.call_args.kwargs
+    assert "files" in kwargs
+    assert kwargs["files"]["image"][0] == "photo.jpg"
+    assert result.body == {"ok": True}
+
