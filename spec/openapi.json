@@ -162,7 +162,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQuery"
                 }
               }
             }
@@ -200,7 +200,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQuery"
                 }
               }
             }
@@ -239,7 +239,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnswerOut"
+                  "$ref": "#/components/schemas/ImageQuery"
                 }
               }
             }
@@ -370,38 +370,15 @@
   },
   "components": {
     "schemas": {
-      "AnswerOut": {
+      "ImageQuery": {
+        "type": "object",
+        "title": "ImageQuery",
         "properties": {
-          "image_query_id": {
+          "id": {
             "type": "string",
-            "title": "Image Query Id"
+            "title": "Id"
           },
-          "answer": {
-            "type": "string",
-            "enum": [
-              "YES",
-              "NO",
-              "COUNT",
-              "UNCLEAR"
-            ],
-            "title": "Answer"
-          },
-          "confidence": {
-            "type": "number",
-            "title": "Confidence"
-          },
-          "latency_ms": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Latency Ms"
-          },
-          "model_version": {
+          "detector_id": {
             "anyOf": [
               {
                 "type": "string"
@@ -410,17 +387,62 @@
                 "type": "null"
               }
             ],
-            "title": "Model Version",
-            "default": "demo-v0"
+            "title": "Detector Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "result_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Type"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "extra": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra"
           }
         },
-        "type": "object",
         "required": [
-          "image_query_id",
-          "answer",
-          "confidence"
-        ],
-        "title": "AnswerOut"
+          "id",
+          "status"
+        ]
       },
       "Body_image_query_v1_image_queries_post": {
         "properties": {
