@@ -1,3 +1,5 @@
+
+from typing import Any, Dict, List, Type, TypeVar, Union
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union
 
@@ -24,9 +26,14 @@ class DetectorCreate:
     mode: DetectorCreateMode
     query_text: str
     threshold: Union[Unset, float] = 0.75
+    additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+
         name = self.name
 
         mode = self.mode.value
@@ -35,7 +42,11 @@ class DetectorCreate:
 
         threshold = self.threshold
 
+
+        field_dict: Dict[str, Any] = {}
+
         field_dict: dict[str, Any] = {}
+
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
@@ -50,8 +61,8 @@ class DetectorCreate:
         return field_dict
 
     @classmethod
-    def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
-        d = dict(src_dict)
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        d = src_dict.copy()
         name = d.pop("name")
 
         mode = DetectorCreateMode(d.pop("mode"))
@@ -71,7 +82,7 @@ class DetectorCreate:
         return detector_create
 
     @property
-    def additional_keys(self) -> list[str]:
+    def additional_keys(self) -> List[str]:
         return list(self.additional_properties.keys())
 
     def __getitem__(self, key: str) -> Any:

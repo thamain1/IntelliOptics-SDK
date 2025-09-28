@@ -266,6 +266,44 @@
           }
         }
       }
+    },
+    "/v1/labels": {
+      "post": {
+        "summary": "Add Label",
+        "operationId": "add_label_v1_labels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelAck"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -509,6 +547,13 @@
         ],
         "title": "ImageQueryJson"
       },
+      "LabelAck": {
+        "properties": {
+          "label_id": {
+            "type": "string",
+            "title": "Label Id"
+          },
+          "status": {
       "UserIdentity": {
         "properties": {
           "id": {
@@ -524,6 +569,37 @@
                 "type": "null"
               }
             ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label_id"
+        ],
+        "title": "LabelAck"
+      },
+      "LabelCreate": {
+        "properties": {
+          "image_query_id": {
+            "type": "string",
+            "title": "Image Query Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "detector_id": {
             "title": "Email"
           },
           "name": {
@@ -535,6 +611,9 @@
                 "type": "null"
               }
             ],
+            "title": "Detector Id"
+          },
+          "user_id": {
             "title": "Name"
           },
           "tenant": {
@@ -546,6 +625,19 @@
                 "type": "null"
               }
             ],
+            "title": "User Id"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
             "title": "Tenant"
           },
           "roles": {
@@ -559,6 +651,10 @@
         },
         "type": "object",
         "required": [
+          "image_query_id",
+          "label"
+        ],
+        "title": "LabelCreate"
           "id"
         ],
         "title": "UserIdentity",
