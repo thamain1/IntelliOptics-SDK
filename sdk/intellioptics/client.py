@@ -1,11 +1,21 @@
 import os
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 import httpx
 from .types import Answer, Detector
 from .exceptions import AuthError, ApiError
 
-DEFAULT_BASE_URL = os.getenv("INTELLOPTICS_BASE_URL", "https://api.intellioptics.co")
+DEFAULT_BASE_URL = os.getenv(
+    "INTELLOPTICS_BASE_URL", "https://intellioptics-api-37558.azurewebsites.net"
+)
 DEFAULT_TOKEN = os.getenv("INTELLOPTICS_API_TOKEN")
+
+DEFAULT_BASE_URL = os.getenv(
+    "INTELLIOPTICS_BASE_URL", "https://intellioptics-api-37558.azurewebsites.net"
+)
+
+DEFAULT_BASE_URL = os.getenv("INTELLIOPTICS_BASE_URL", "https://api.intellioptics.co")
+
+DEFAULT_TOKEN = os.getenv("INTELLIOPTICS_API_TOKEN")
 
 class IntelliOptics:
     """
@@ -15,7 +25,7 @@ class IntelliOptics:
         self.base_url = base_url.rstrip("/")
         self.api_token = api_token or DEFAULT_TOKEN
         if not self.api_token:
-            raise AuthError("Missing API token. Set INTELLOPTICS_API_TOKEN or pass api_token=...")
+            raise AuthError("Missing API token. Set INTELLIOPTICS_API_TOKEN or pass api_token=...")
         self._client = httpx.Client(
             base_url=self.base_url,
             headers={"Authorization": f"Bearer {self.api_token}"},
@@ -23,20 +33,16 @@ class IntelliOptics:
         )
 
     # --- Detectors ---
-    def create_detector(self, name: str, mode: str, query_text: str, threshold: float = 0.75) -> Detector:
-        payload = {"name": name, "mode": mode, "query_text": query_text, "threshold": threshold}
+    def create_detector(self, name: str, labels: Optional[List[str]] = None) -> Detector:
+        payload = {"name": name, "labels": labels or []}
         r = self._client.post("/v1/detectors", json=payload); _ok(r)
         d = r.json()
-        return Detector(id=d["id"], name=d["name"], mode=d["mode"],
-                        query_text=d["query_text"], threshold=d["threshold"],
-                        status=d.get("status", "active"))
+        return Detector(id=d["id"], name=d["name"], labels=d.get("labels", []))
 
     def get_detector(self, detector_id: str) -> Detector:
         r = self._client.get(f"/v1/detectors/{detector_id}"); _ok(r)
         d = r.json()
-        return Detector(id=d["id"], name=d["name"], mode=d["mode"],
-                        query_text=d["query_text"], threshold=d["threshold"],
-                        status=d.get("status", "active"))
+        return Detector(id=d["id"], name=d["name"], labels=d.get("labels", []))
 
     # --- Image Queries / Answers ---
     def ask_image(self, detector_id: str, image: bytes | str, wait: bool = True) -> Answer:

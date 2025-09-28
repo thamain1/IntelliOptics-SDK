@@ -3,9 +3,14 @@ from .client import IntelliOptics
 app = typer.Typer(add_completion=False)
 
 def _client():
+    api_token = os.getenv("INTELLIOPTICS_API_TOKEN")
+    if not api_token:
+        typer.echo("INTELLIOPTICS_API_TOKEN environment variable is required")
+        raise typer.Exit(code=1)
     return IntelliOptics(
         endpoint=os.getenv("INTELLIOPTICS_ENDPOINT"),
-        api_token=os.getenv("INTELLIOOPTICS_API_TOKEN") or os.getenv("INTELLIOPTICS_API_TOKEN"),
+        api_token=os.getenv("INTELLIOPTICS_API_TOKEN"),
+        api_token=api_token,
     )
 
 @app.command()
