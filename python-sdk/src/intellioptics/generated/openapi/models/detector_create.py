@@ -1,4 +1,11 @@
 
+"""Data model for creating detectors."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any, TypeVar
+
 from typing import Any, Dict, List, Type, TypeVar, Union
 from collections.abc import Mapping
 from typing import Any, TypeVar, Union
@@ -14,6 +21,18 @@ T = TypeVar("T", bound="DetectorCreate")
 
 @_attrs_define
 class DetectorCreate:
+    """Payload accepted by ``POST /v1/detectors``.
+
+    Attributes:
+        name: Human friendly detector name.
+        labels: Optional label hints for the detector.
+    """
+
+    name: str
+    labels: list[str] = _attrs_field(factory=list)
+    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
     """
     Attributes:
         name (str):
@@ -48,6 +67,12 @@ class DetectorCreate:
         field_dict: dict[str, Any] = {}
 
         field_dict.update(self.additional_properties)
+
+        field_dict.update({
+            "name": self.name,
+            "labels": list(self.labels),
+        })
+
         field_dict.update(
             {
                 "name": name,
@@ -65,6 +90,9 @@ class DetectorCreate:
         d = src_dict.copy()
         name = d.pop("name")
 
+        labels = list(d.pop("labels", []))
+
+
         mode = DetectorCreateMode(d.pop("mode"))
 
         query_text = d.pop("query_text")
@@ -73,9 +101,7 @@ class DetectorCreate:
 
         detector_create = cls(
             name=name,
-            mode=mode,
-            query_text=query_text,
-            threshold=threshold,
+            labels=labels,
         )
 
         detector_create.additional_properties = d

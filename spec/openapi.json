@@ -75,6 +75,32 @@
             }
           }
         }
+      },
+      "get": {
+        "summary": "List Detectors",
+        "operationId": "list_detectors_v1_detectors_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetectorList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/detectors/{detector_id}": {
@@ -267,10 +293,45 @@
         }
       }
     },
+
+    "/v1/users/me": {
+      "get": {
+        "summary": "Get Current User",
+        "operationId": "get_current_user_v1_users_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserIdentity"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/labels": {
+      "post": {
+        "summary": "Create Label",
+        "operationId": "create_label_v1_labels_post",
+
     "/v1/labels": {
       "post": {
         "summary": "Add Label",
         "operationId": "add_label_v1_labels_post",
+
         "requestBody": {
           "content": {
             "application/json": {
@@ -287,6 +348,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/LabelRecord"
                   "$ref": "#/components/schemas/LabelAck"
                 }
               }
@@ -391,39 +453,29 @@
         "title": "Body_image_query_v1_image_queries_post"
       },
       "DetectorCreate": {
+        "title": "DetectorCreate",
+        "type": "object",
         "properties": {
           "name": {
             "type": "string",
             "title": "Name"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold",
-            "default": 0.75
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Labels",
+            "default": []
           }
         },
-        "type": "object",
         "required": [
-          "name",
-          "mode",
-          "query_text"
-        ],
-        "title": "DetectorCreate"
+          "name"
+        ]
       },
       "DetectorOut": {
+        "title": "DetectorOut",
+        "type": "object",
         "properties": {
           "id": {
             "type": "string",
@@ -433,38 +485,19 @@
             "type": "string",
             "title": "Name"
           },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "binary",
-              "count",
-              "custom"
-            ],
-            "title": "Mode"
-          },
-          "query_text": {
-            "type": "string",
-            "title": "Query Text"
-          },
-          "threshold": {
-            "type": "number",
-            "title": "Threshold"
-          },
-          "status": {
-            "type": "string",
-            "title": "Status",
-            "default": "active"
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Labels",
+            "default": []
           }
         },
-        "type": "object",
         "required": [
           "id",
-          "name",
-          "mode",
-          "query_text",
-          "threshold"
-        ],
-        "title": "DetectorOut"
+          "name"
+        ]
       },
       "FeedbackIn": {
         "properties": {
@@ -692,6 +725,111 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "DetectorList": {
+        "title": "DetectorList",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetectorOut"
+            },
+            "title": "Items"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "UserIdentity": {
+        "title": "UserIdentity",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "tenant": {
+            "type": "string",
+            "title": "Tenant"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "default": []
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "LabelCreate": {
+        "title": "LabelCreate",
+        "type": "object",
+        "properties": {
+          "image_query_id": {
+            "type": "string",
+            "title": "Image Query Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "detector_id": {
+            "type": "string",
+            "title": "Detector Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "metadata": {
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "required": [
+          "image_query_id",
+          "label"
+        ]
+      },
+      "LabelRecord": {
+        "title": "LabelRecord",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LabelCreate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "Id"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "title": "Created At"
+              }
+            }
+          }
+        ]
       }
     }
   }
