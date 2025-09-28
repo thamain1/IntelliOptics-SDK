@@ -7,5 +7,6 @@ def test_detector_labels_are_independent():
 
     first.labels.append("alpha")
 
+    assert first.labels is not second.labels
     assert first.labels == ["alpha"]
     assert second.labels == []

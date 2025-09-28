@@ -1,42 +1,30 @@
 from http import HTTPStatus
-
 from typing import Any, Dict, Optional, Union
-
-from typing import Any, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.detector_create import DetectorCreate
-from ...models.detector_out import DetectorOut
 from ...models.http_validation_error import HTTPValidationError
+from ...models.label_ack import LabelAck
+from ...models.label_create import LabelCreate
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    body: DetectorCreate,
-
+    body: LabelCreate,
 ) -> Dict[str, Any]:
     headers: Dict[str, Any] = {}
 
     _kwargs: Dict[str, Any] = {
-
-) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
-
-    _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/v1/detectors",
+        "url": "/v1/labels",
     }
 
     _body = body.to_dict()
 
     _kwargs["json"] = _body
-
-    _kwargs["json"] = body.to_dict()
-
     headers["Content-Type"] = "application/json"
 
     _kwargs["headers"] = headers
@@ -45,16 +33,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    if response.status_code == 200:
-        response_200 = DetectorOut.from_dict(response.json())
-
-
+) -> Optional[Union[HTTPValidationError, LabelAck]]:
     if response.status_code == HTTPStatus.OK:
-
-    if response.status_code == 200:
-
-        response_200 = DetectorOut.from_dict(response.json())
+        response_200 = LabelAck.from_dict(response.json())
 
         return response_200
     if response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY:
@@ -69,7 +50,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[Union[DetectorOut, HTTPValidationError]]:
+) -> Response[Union[HTTPValidationError, LabelAck]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -81,19 +62,19 @@ def _build_response(
 def sync_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: DetectorCreate,
-) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    body: LabelCreate,
+) -> Response[Union[HTTPValidationError, LabelAck]]:
+    """Add Label
 
     Args:
-        body (DetectorCreate):
+        body (LabelCreate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DetectorOut, HTTPValidationError]]
+        Response[Union[HTTPValidationError, LabelAck]]
     """
 
     kwargs = _get_kwargs(
@@ -110,19 +91,19 @@ def sync_detailed(
 def sync(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: DetectorCreate,
-) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    body: LabelCreate,
+) -> Optional[Union[HTTPValidationError, LabelAck]]:
+    """Add Label
 
     Args:
-        body (DetectorCreate):
+        body (LabelCreate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[DetectorOut, HTTPValidationError]
+        Union[HTTPValidationError, LabelAck]
     """
 
     return sync_detailed(
@@ -134,19 +115,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: DetectorCreate,
-) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    body: LabelCreate,
+) -> Response[Union[HTTPValidationError, LabelAck]]:
+    """Add Label
 
     Args:
-        body (DetectorCreate):
+        body (LabelCreate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[Union[DetectorOut, HTTPValidationError]]
+        Response[Union[HTTPValidationError, LabelAck]]
     """
 
     kwargs = _get_kwargs(
@@ -161,19 +142,19 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Union[AuthenticatedClient, Client],
-    body: DetectorCreate,
-) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """Create Detector
+    body: LabelCreate,
+) -> Optional[Union[HTTPValidationError, LabelAck]]:
+    """Add Label
 
     Args:
-        body (DetectorCreate):
+        body (LabelCreate):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Union[DetectorOut, HTTPValidationError]
+        Union[HTTPValidationError, LabelAck]
     """
 
     return (
