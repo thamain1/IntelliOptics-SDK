@@ -22,6 +22,9 @@ from intellioptics.models import (
     UserIdentity,
 )
 
+from intellioptics.models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
+
+
 
 def test_init_requires_api_token(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("INTELLIOPTICS_API_TOKEN", raising=False)

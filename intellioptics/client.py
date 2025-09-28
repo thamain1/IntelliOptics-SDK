@@ -12,6 +12,7 @@ import zipfile
 from collections.abc import Mapping, Sequence
 from io import BytesIO
 from pathlib import Path
+from collections.abc import Mapping
 from typing import Any, Dict, IO, Iterable, Optional, Union
 
 from ._http import AsyncHttpClient, HttpClient
@@ -31,6 +32,8 @@ from .models import (
     UserIdentity,
     WebhookAction,
 )
+
+from .models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
 
 
 def _resolve_status(payload: Mapping[str, Any]) -> str:
@@ -734,6 +737,10 @@ class ExperimentalApi:
     backing service omits a feature the helpers raise
     :class:`ExperimentalFeatureUnavailable` rather than exposing partially
     initialised state.
+    The backing API currently exposes a limited set of experimental endpoints. When
+    a method is not implemented by the server this class raises
+    :class:`ExperimentalFeatureUnavailable` with a descriptive error instead of an
+    ``AttributeError``.
     """
 
     def __init__(
@@ -798,6 +805,19 @@ class ExperimentalApi:
         )
 
     def _sync_client_required(self) -> IntelliOptics:
+        *,
+        sync_client: IntelliOptics | None = None,
+        async_client: AsyncIntelliOptics | None = None,
+    ) -> None:
+        if sync_client is None and async_client is None:
+            raise ValueError("ExperimentalApi requires either a sync or async client.")
+        self._sync_client = sync_client
+        self._async_client = async_client
+
+    # ------------------------------------------------------------------
+    # Sync helpers
+    # ------------------------------------------------------------------
+    def _require_sync(self) -> IntelliOptics:
         if self._sync_client is None:
             raise IntelliOpticsClientError(
                 "This ExperimentalApi instance is bound to an async client; use the 'a*' coroutine helpers instead."
@@ -1147,6 +1167,7 @@ class ExperimentalApi:
         cursor: Optional[str] = None,
     ) -> list[ImageQuery]:
         client = self._sync_client_required()
+        client = self._require_sync()
         return client.list_image_queries(
             detector_id=detector_id,
             status=status,
@@ -1157,6 +1178,19 @@ class ExperimentalApi:
     def delete_image_query(self, image_query_id: str) -> None:
         client = self._sync_client_required()
         client.delete_image_query(image_query_id)
+
+        client = self._require_sync()
+        client.delete_image_query(image_query_id)
+
+    # ------------------------------------------------------------------
+    # Async helpers
+    # ------------------------------------------------------------------
+    def _require_async(self) -> AsyncIntelliOptics:
+        if self._async_client is None:
+            raise IntelliOpticsClientError(
+                "This ExperimentalApi instance is bound to a sync client; use the synchronous helpers."
+            )
+        return self._async_client
 
     async def alist_image_queries(
         self,
@@ -1175,6 +1209,17 @@ class ExperimentalApi:
     async def adelete_image_query(self, image_query_id: str) -> None:
         http = self._async_http_client()
         await http.delete(f"/v1/image-queries/{image_query_id}")
+        client = self._require_async()
+        return await client.list_image_queries(
+            detector_id=detector_id,
+            status=status,
+            limit=limit,
+            cursor=cursor,
+        )
+
+    async def adelete_image_query(self, image_query_id: str) -> None:
+        client = self._require_async()
+        await client.delete_image_query(image_query_id)
 
     # ------------------------------------------------------------------
     # Graceful fallback for not-yet-implemented helpers

@@ -32,6 +32,7 @@ class HttpClient:
         self._session = requests.Session()
         self._session.headers.update(self.headers)
 
+
     def request_raw(
         self,
         method: str,
@@ -45,12 +46,17 @@ class HttpClient:
         if headers:
             merged_headers.update(headers)
 
+
+    def _request(self, method: str, path: str, **kwargs: Any) -> Any:
+        url = f"{self.base}{path}"
+
         response = self._session.request(
             method,
             url,
             timeout=self.timeout,
             verify=self.verify,
             headers=merged_headers,
+
             **kwargs,
         )
 
@@ -59,6 +65,7 @@ class HttpClient:
             raise IntelliOpticsClientError(
                 f"{method.upper()} {path} failed with {response.status_code}: {content or 'no body'}"
             )
+
 
         return response
 
@@ -128,16 +135,22 @@ class AsyncHttpClient:
 
         response = await self._client.request(method, path, headers=merged_headers, **kwargs)
 
+    async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
+        response = await self._client.request(method, path, **kwargs)
+
+
         if not response.is_success:
             content = response.text.strip()
             raise IntelliOpticsClientError(
                 f"{method.upper()} {path} failed with {response.status_code}: {content or 'no body'}"
             )
 
+
         return response
 
     async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         response = await self.request_raw(method, path, **kwargs)
+
 
         if response.status_code == 204 or not response.content:
             return {}
