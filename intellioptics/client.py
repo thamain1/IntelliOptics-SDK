@@ -1,6 +1,7 @@
 import os, time
-from typing import Optional, Union, IO, List
+from typing import Optional, Union, IO, List, Dict, Any
 from .errors import ApiTokenError
+from .models import Detector, ImageQuery, QueryResult, FeedbackIn
 from .models import Detector, ImageQuery, QueryResult, UserIdentity
 from ._http import HttpClient
 from ._img import to_jpeg_bytes
@@ -25,8 +26,21 @@ class IntelliOptics:
         return UserIdentity(**data)
 
     # Detectors
-    def create_detector(self, name: str, labels: Optional[List[str]] = None) -> Detector:
-        data = self._http.post_json("/v1/detectors", json={"name": name, "labels": labels or []})
+    def create_detector(
+        self,
+        name: str,
+        mode: str,
+        query_text: str,
+        threshold: Optional[float] = None,
+    ) -> Detector:
+        payload = {
+            "name": name,
+            "mode": mode,
+            "query_text": query_text,
+        }
+        if threshold is not None:
+            payload["threshold"] = threshold
+        data = self._http.post_json("/v1/detectors", json=payload)
         return Detector(**data)
 
     def list_detectors(self) -> List[Detector]:
@@ -54,6 +68,48 @@ class IntelliOptics:
 
         form = {k: v for k, v in form.items() if v is not None}
         return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
+    def submit_image_query(self, detector: Optional[Union[Detector, str]] = None,
+                           image: Optional[Union[str, bytes, IO[bytes]]] = None,
+                           wait: Optional[bool] = None) -> ImageQuery:
+        img = to_jpeg_bytes(image) if image is not None else None
+        files = {"image": ("image.jpg", img, "image/jpeg")} if img is not None else None
+
+        detector_id = None
+        if isinstance(detector, Detector):
+            detector_id = detector.id
+        elif detector is not None:
+            detector_id = str(detector)
+
+        form = {}
+        if detector_id is not None:
+            form["detector_id"] = detector_id
+        if wait is not None:
+            form["wait"] = "true" if wait else "false"
+
+        post_kwargs = {"data": form}
+        if files is not None:
+            post_kwargs["files"] = files
+
+        return ImageQuery(**self._http.post_json("/v1/image-queries", **post_kwargs))
+
+    def submit_image_query_json(self, detector: Optional[Union[Detector, str]] = None,
+                                image: Optional[str] = None,
+                                wait: Optional[bool] = None) -> ImageQuery:
+        detector_id = None
+        if isinstance(detector, Detector):
+            detector_id = detector.id
+        elif detector is not None:
+            detector_id = str(detector)
+
+        payload = {}
+        if detector_id is not None:
+            payload["detector_id"] = detector_id
+        if image is not None:
+            payload["image"] = image
+        if wait is not None:
+            payload["wait"] = wait
+
+        return ImageQuery(**self._http.post_json("/v1/image-queries-json", json=payload))
 
     def submit_image_query_json(
         self,
@@ -74,7 +130,7 @@ class IntelliOptics:
         return QueryResult(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
 
     # Helpers similar to GL
-    def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[float] = 0.0) -> ImageQuery:
+    def ask_ml(self, detector: Union[Detector, str], image, wait: Optional[bool] = None) -> ImageQuery:
         return self.submit_image_query(detector=detector, image=image, wait=wait)
 
     def ask_confident(self, detector: Union[Detector, str], image, confidence_threshold: float = 0.9,
@@ -112,3 +168,21 @@ class IntelliOptics:
         # strip None values
         payload = {k: v for k, v in payload.items() if v is not None}
         return self._http.post_json("/v1/labels", json=payload)
+
+    def submit_feedback(self, feedback: Optional[Union[FeedbackIn, Dict[str, Any]]] = None,
+                        **kwargs) -> Dict[str, Any]:
+        if feedback is not None and kwargs:
+            raise ValueError("Provide feedback as a model/dict or as keyword arguments, not both.")
+
+        if feedback is None:
+            feedback_model = FeedbackIn(**kwargs)
+        elif isinstance(feedback, FeedbackIn):
+            feedback_model = feedback
+        else:
+            feedback_model = FeedbackIn(**feedback)
+
+        if hasattr(feedback_model, "model_dump"):
+            payload = feedback_model.model_dump(exclude_none=True)
+        else:
+            payload = feedback_model.dict(exclude_none=True)
+        return self._http.post_json("/v1/feedback", json=payload)

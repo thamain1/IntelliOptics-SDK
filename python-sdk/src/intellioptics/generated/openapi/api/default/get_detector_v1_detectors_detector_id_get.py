@@ -1,50 +1,36 @@
 from http import HTTPStatus
-from typing import Any, Optional, Union, cast
+from typing import Any, Optional, Union
 
 import httpx
 
-from ...client import AuthenticatedClient, Client
-from ...types import Response, UNSET
 from ... import errors
-
+from ...client import AuthenticatedClient, Client
 from ...models.detector_out import DetectorOut
 from ...models.http_validation_error import HTTPValidationError
-from typing import cast
-
+from ...types import Response
 
 
 def _get_kwargs(
     detector_id: str,
-
 ) -> dict[str, Any]:
-    
-
-    
-
-    
-
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/v1/detectors/{detector_id}".format(detector_id=detector_id,),
+        "url": f"/v1/detectors/{detector_id}",
     }
-
 
     return _kwargs
 
 
-
-def _parse_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Optional[Union[DetectorOut, HTTPValidationError]]:
+def _parse_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Optional[Union[DetectorOut, HTTPValidationError]]:
     if response.status_code == 200:
         response_200 = DetectorOut.from_dict(response.json())
-
-
 
         return response_200
 
     if response.status_code == 422:
         response_422 = HTTPValidationError.from_dict(response.json())
-
-
 
         return response_422
 
@@ -54,7 +40,9 @@ def _parse_response(*, client: Union[AuthenticatedClient, Client], response: htt
         return None
 
 
-def _build_response(*, client: Union[AuthenticatedClient, Client], response: httpx.Response) -> Response[Union[DetectorOut, HTTPValidationError]]:
+def _build_response(
+    *, client: Union[AuthenticatedClient, Client], response: httpx.Response
+) -> Response[Union[DetectorOut, HTTPValidationError]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -67,9 +55,8 @@ def sync_detailed(
     detector_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
 ) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """ Get Detector
+    """Get Detector
 
     Args:
         detector_id (str):
@@ -80,12 +67,10 @@ def sync_detailed(
 
     Returns:
         Response[Union[DetectorOut, HTTPValidationError]]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         detector_id=detector_id,
-
     )
 
     response = client.get_httpx_client().request(
@@ -94,13 +79,13 @@ def sync_detailed(
 
     return _build_response(client=client, response=response)
 
+
 def sync(
     detector_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
 ) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """ Get Detector
+    """Get Detector
 
     Args:
         detector_id (str):
@@ -111,22 +96,20 @@ def sync(
 
     Returns:
         Union[DetectorOut, HTTPValidationError]
-     """
-
+    """
 
     return sync_detailed(
         detector_id=detector_id,
-client=client,
-
+        client=client,
     ).parsed
+
 
 async def asyncio_detailed(
     detector_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
 ) -> Response[Union[DetectorOut, HTTPValidationError]]:
-    """ Get Detector
+    """Get Detector
 
     Args:
         detector_id (str):
@@ -137,27 +120,23 @@ async def asyncio_detailed(
 
     Returns:
         Response[Union[DetectorOut, HTTPValidationError]]
-     """
-
+    """
 
     kwargs = _get_kwargs(
         detector_id=detector_id,
-
     )
 
-    response = await client.get_async_httpx_client().request(
-        **kwargs
-    )
+    response = await client.get_async_httpx_client().request(**kwargs)
 
     return _build_response(client=client, response=response)
+
 
 async def asyncio(
     detector_id: str,
     *,
     client: Union[AuthenticatedClient, Client],
-
 ) -> Optional[Union[DetectorOut, HTTPValidationError]]:
-    """ Get Detector
+    """Get Detector
 
     Args:
         detector_id (str):
@@ -168,11 +147,11 @@ async def asyncio(
 
     Returns:
         Union[DetectorOut, HTTPValidationError]
-     """
+    """
 
-
-    return (await asyncio_detailed(
-        detector_id=detector_id,
-client=client,
-
-    )).parsed
+    return (
+        await asyncio_detailed(
+            detector_id=detector_id,
+            client=client,
+        )
+    ).parsed
