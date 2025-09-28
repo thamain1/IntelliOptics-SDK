@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import base64
+import asyncio
 from typing import Any, Dict
-from unittest.mock import Mock
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from intellioptics import AsyncIntelliOptics, ExperimentalApi
 from intellioptics.client import IntelliOptics
-from intellioptics.errors import ApiTokenError
+from intellioptics.errors import ApiTokenError, ExperimentalFeatureUnavailable
 from intellioptics.models import Detector, FeedbackIn, ImageQuery, QueryResult, UserIdentity
 
 
@@ -32,6 +34,17 @@ def _make_client() -> IntelliOptics:
     client = IntelliOptics(endpoint="https://api.example.com", api_token="token")
     client._http = Mock()
     return client
+
+
+def _make_async_client() -> tuple[AsyncIntelliOptics, Any]:
+    client = AsyncIntelliOptics.__new__(AsyncIntelliOptics)  # type: ignore[call-arg]
+    http = type("_Http", (), {})()
+    http.post_json = AsyncMock()
+    http.get_json = AsyncMock()
+    http.delete = AsyncMock()
+    client._http = http  # type: ignore[attr-defined]
+    client.experimental = ExperimentalApi(async_client=client)
+    return client, http
 
 
 def test_create_detector_builds_payload() -> None:
@@ -231,3 +244,56 @@ def test_whoami_returns_identity(monkeypatch: pytest.MonkeyPatch) -> None:
     assert isinstance(identity, UserIdentity)
     serializer = getattr(identity, "model_dump", identity.dict)
     assert serializer() == identity_payload
+
+
+def test_list_image_queries_returns_models() -> None:
+    client = _make_client()
+    client._http.get_json.return_value = {"items": [{"id": "iq-1", "status": "PENDING"}]}
+
+    queries = client.list_image_queries()
+
+    assert len(queries) == 1
+    assert isinstance(queries[0], ImageQuery)
+
+
+def test_ask_async_aliases_submit(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _make_client()
+    monkeypatch.setattr(client, "submit_image_query", Mock(return_value="ok"))
+
+    result = client.ask_async("det-1", b"img")
+
+    assert result == "ok"
+    client.submit_image_query.assert_called_once()
+
+
+def test_experimental_unknown_method_raises() -> None:
+    client = _make_client()
+
+    with pytest.raises(ExperimentalFeatureUnavailable):
+        client.experimental.create_detector_group()  # type: ignore[attr-defined]
+
+
+def test_async_submit_image_query_uses_async_http() -> None:
+    async def run() -> None:
+        client, http = _make_async_client()
+        http.post_json.return_value = {"id": "iq-async", "status": "PENDING"}
+
+        result = await client.submit_image_query(detector="det-async")
+
+        assert isinstance(result, ImageQuery)
+        http.post_json.assert_awaited_once()
+
+    asyncio.run(run())
+
+
+def test_async_list_image_queries_handles_items() -> None:
+    async def run() -> None:
+        client, http = _make_async_client()
+        http.get_json.return_value = {"items": [{"id": "iq-1", "status": "DONE"}]}
+
+        items = await client.list_image_queries()
+
+        assert [iq.id for iq in items] == ["iq-1"]
+        http.get_json.assert_awaited_once()
+
+    asyncio.run(run())
