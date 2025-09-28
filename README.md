@@ -4,6 +4,14 @@ The IntelliOptics SDK is a lightweight Python client for interacting with the In
 computer-vision platform. It provides both a programmatic API for building rich integrations and
 an ergonomic command line interface (CLI) for quick diagnostics.
 
+## Repository layout
+
+This repository now ships a single authoritative Python package rooted in the `intellioptics/`
+directory. Legacy distributions such as `sdk/`, `python-sdk/`, and `intellioptics-python-sdk/` have
+been retired to avoid version skew between multiple copies of the client. Packaging metadata lives
+alongside the source tree in `pyproject.toml`, and automated tests target the canonical
+implementation in `tests/`.
+
 ## Key features
 
 - **Pythonic client** for creating detectors, submitting image queries, polling for results, and
@@ -24,12 +32,6 @@ python -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -e .
-```
-
-Alternatively, package consumers can install the distributed wheel:
-
-```bash
-pip install intellioptics
 ```
 
 > **Note:** The project declares the following runtime dependencies: `requests`, `pydantic (<3)`,

@@ -8,10 +8,10 @@ New-Item -ItemType Directory -Force -Path $site | Out-Null
 
 # Candidate doc roots
 $candidates = @(
-  "docs\python-sdk\api-reference-docs",
-  "site\python-sdk\api-reference-docs",
-  "api-service\IntelliOptics\docs\python-sdk\api-reference-docs",
-  "api-service\IntelliOptics\site\python-sdk\api-reference-docs"
+  "docs",
+  "docs\api-reference",
+  "site",
+  "site\api-reference"
 )
 
 $existing = $null
@@ -32,7 +32,7 @@ if ($existing -ne $null) {
 } else {
   Write-Host "No docs directories found; writing placeholder site."
   $out = Join-Path $site "index.html"
-  $content = "IntelliOptics docs placeholder. No generated docs in this build. SDK under python-sdk/."
+  $content = "IntelliOptics docs placeholder. No generated docs in this build. The Python package lives under intellioptics/."
   Set-Content -Encoding UTF8 -Path $out -Value $content
   Write-Host ("Placeholder written to " + $out)
 }
