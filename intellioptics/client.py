@@ -52,6 +52,22 @@ class IntelliOptics:
         return Detector(**self._http.get_json(f"/v1/detectors/{detector_id}"))
 
     # Image queries
+    def submit_image_query(
+        self,
+        detector: Optional[Union[Detector, str]] = None,
+        image: Optional[Union[str, bytes, IO[bytes]]] = None,
+        wait: Optional[bool] = None,
+    ) -> ImageQuery:
+        detector_id = detector.id if isinstance(detector, Detector) else detector
+        form = {"detector_id": detector_id}
+        if wait is not None:
+            form["wait"] = "true" if wait else "false"
+
+        img = to_jpeg_bytes(image) if image is not None else None
+        files = {"image": ("image.jpg", img, "image/jpeg")} if img else None
+
+        form = {k: v for k, v in form.items() if v is not None}
+        return ImageQuery(**self._http.post_json("/v1/image-queries", files=files, data=form))
     def submit_image_query(self, detector: Optional[Union[Detector, str]] = None,
                            image: Optional[Union[str, bytes, IO[bytes]]] = None,
                            wait: Optional[bool] = None) -> ImageQuery:
@@ -94,6 +110,18 @@ class IntelliOptics:
             payload["wait"] = wait
 
         return ImageQuery(**self._http.post_json("/v1/image-queries-json", json=payload))
+
+    def submit_image_query_json(
+        self,
+        detector: Optional[Union[Detector, str]] = None,
+        image_base64: Optional[str] = None,
+        wait: Optional[bool] = None,
+    ) -> ImageQuery:
+        detector_id = detector.id if isinstance(detector, Detector) else detector
+        payload = {"detector_id": detector_id, "image": image_base64, "wait": wait}
+        payload = {k: v for k, v in payload.items() if v is not None}
+        return ImageQuery(**self._http.post_json("/v1/image-queries-json", json=payload))
+
 
     def get_image_query(self, image_query_id: str) -> ImageQuery:
         return ImageQuery(**self._http.get_json(f"/v1/image-queries/{image_query_id}"))
