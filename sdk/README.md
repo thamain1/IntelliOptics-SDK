@@ -1,4 +1,4 @@
-# IntelliOptics Python SDK (drop-in Groundlight-style client)
+# IntelliOptics Python SDK 
 from intellioptics import IntelliOptics
 
 # Example:
