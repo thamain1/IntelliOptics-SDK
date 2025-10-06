@@ -23,12 +23,14 @@ need a quick refresher on the supported client implementation, review
 `tests/` contains focused unit tests that exercise the public client surface area and the supporting
 image helpers. Run `pytest` before publishing changes to ensure compatibility across environments.
 
+
 ## Packaging helper
 
 The only maintained script for producing a distributable zip of the SDK is
 [`make_io_sdk_zip.ps1`](../make_io_sdk_zip.ps1). Older throwaway bootstrap scripts (such as the
 duplicate that lived under `intellioptics_sdk/`) have been deleted so that contributors have a single
 trusted entry point when preparing ad-hoc builds.
+
 
 ## Legacy scaffolds
 
