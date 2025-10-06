@@ -35,6 +35,23 @@ pip install intellioptics
 > **Note:** The project declares the following runtime dependencies: `requests`, `pydantic (<3)`,
 > `Pillow`, and `typer`.
 
+## Repository layout
+
+Only the modern SDK that powers the published `intellioptics` package is kept in this repository.
+Legacy scaffolds (`sdk/`, `intellioptics-python-sdk/`, and `python-sdk/`) have been removed so the
+active codebase lives under `intellioptics/` alongside its tests and packaging metadata. See
+[`docs/CLIENT_OVERVIEW.md`](docs/CLIENT_OVERVIEW.md) for a snapshot of the retained client module.
+The streamlined tree now looks like this:
+
+```text
+intellioptics/          # Runtime package (client, HTTP helpers, models, CLI)
+tests/                  # Test suite exercising the public surface area
+pyproject.toml          # Packaging definition for the published SDK
+```
+
+If you need to reference the old iterations, retrieve them from git history prior to this
+consolidation.
+
 ## Configuration
 
 The SDK and CLI are configured through environment variables:
@@ -84,7 +101,7 @@ configured environment variables:
 from intellioptics import IntelliOptics
 
 client = IntelliOptics(
-    endpoint="https:intellioptics-api-37558.azurewebsites.net",
+    endpoint="https://intellioptics-api-37558.azurewebsites.net",
     api_token="your-token",
 )
 
@@ -92,8 +109,12 @@ client = IntelliOptics(
 for detector in client.list_detectors():
     print(detector.id, detector.name)
 
-# Create a new detector with optional label hints
-my_detector = client.create_detector("safety-inspections", labels=["ppe", "no_ppe"])
+# Create a new multiclass detector with label hints
+my_detector = client.create_multiclass_detector(
+    "safety-inspections",
+    "Identify required safety gear",
+    class_names=["ppe", "no_ppe"],
+)
 
 # Submit an image for automated analysis
 with open("inspection.jpg", "rb") as image_file:
@@ -150,7 +171,7 @@ The helper functions `ask_ml` and `ask_confident` wrap common flows for asynchro
 confidence-thresholded queries. When you need ground-truth data, call `add_label` to attach human
 labels (optionally with metadata) to a given image query.
 
-### Image query payloads
+#### Multipart field reference
 
 `POST /v1/image-queries` accepts `multipart/form-data` payloads. The SDK automatically builds the
 multipart body, but when constructing the request manually submit fields using the following
@@ -183,6 +204,21 @@ workflow without writing conversion code yourself.
 - `ApiTokenError` is raised when the client cannot locate an API token during initialization.
 - `IntelliOpticsClientError` wraps HTTP errors returned by the remote API and includes status codes
   and response text to aid debugging.
+
+### Async usage
+
+An asynchronous variant of the client is also available:
+
+```python
+from intellioptics import AsyncIntelliOptics
+
+async def run_check() -> None:
+    async with AsyncIntelliOptics(api_token="your-token") as client:
+        status = await client.whoami()
+        print(status.email)
+
+# asyncio.run(run_check())
+```
 
 ## Testing
 
