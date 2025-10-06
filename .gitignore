@@ -34,10 +34,7 @@ docs/_build/
 fourward/
 IntelliOptics/fourward/
 
-# --- Python SDK build artifacts ---
-python-sdk/dist/
-python-sdk/build/
-python-sdk/*.egg-info/
+# --- Legacy build artifacts ---
 **/__pycache__/
 **/*.pyc
 .venv*/
