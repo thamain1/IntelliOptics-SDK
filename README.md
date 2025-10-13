@@ -35,6 +35,35 @@ pip install intellioptics
 > **Note:** The project declares the following runtime dependencies: `requests`, `pydantic (<3)`,
 > `Pillow`, and `typer`.
 
+### Installing from Git (including Docker builds)
+
+When installing directly from the repository—whether on a workstation or in a Dockerfile—point
+`pip` at the repository root. Earlier iterations of the project kept a `python-sdk/` subdirectory,
+but that folder has been removed; attempting to install via
+`#subdirectory=python-sdk` now fails with `neither 'setup.py' nor 'pyproject.toml' found`.
+
+To install the current SDK straight from GitHub:
+
+```bash
+pip install "intellioptics @ git+https://github.com/thamain1/IntelliOptics.git@main"
+```
+
+Pin to a specific tag or commit when you need a reproducible build:
+
+```bash
+pip install "intellioptics @ git+https://github.com/thamain1/IntelliOptics.git@38533a4c1807583422bdb402599eff5fb81d311d"
+```
+
+In Dockerfiles, a typical snippet looks like:
+
+```dockerfile
+RUN python -m pip install --upgrade pip \
+    && pip install "intellioptics @ git+https://github.com/thamain1/IntelliOptics.git@main"
+```
+
+This ensures `pip` discovers the `pyproject.toml` in the repository root and installs the modern
+package layout.
+
 ## Repository layout
 
 Only the modern SDK that powers the published `intellioptics` package is kept in this repository.
